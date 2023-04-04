@@ -82,5 +82,7 @@ npx express-generator
 - 新增測試檔 (`.spec.ts`) 到 `test` 資料夾
 
 ### 7. Github Actions
+- 在 `.github/workflows` 資料夾建立 `.yml` 檔
+- 新增 badge ([官方文件](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/adding-a-workflow-status-badge))
 
 ### 8. Swagger
