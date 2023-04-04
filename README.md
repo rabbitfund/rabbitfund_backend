@@ -1,3 +1,5 @@
+![example workflow](https://github.com/rabbitfund/rabbitfund_backend/actions/workflows/main.yml/badge.svg)
+
 # rabbitfund_backend
 ## 使用方法
 ### 開發
