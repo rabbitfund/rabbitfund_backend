@@ -7,6 +7,8 @@ import cors from 'cors'
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 
+import './connections'
+
 const app:express.Application = express();
 
 app.use(cors())
