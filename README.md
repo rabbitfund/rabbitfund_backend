@@ -52,6 +52,11 @@ npx express-generator
   ```
 
 ### 5. 調整架構
+- 在 `src/model` 資料夾加入 MongoDB 的 Model
+  > 在此先用教學範例 `post.ts`
+- 在 `src/controllers` 和 `src/routes` 資料夾新增管理 `Post` Model 的檔案
+- 在 `src/service` 新增成功處理與錯誤處理 (`handleSuccess.ts`、`handleError.ts`)
+- 在 `app.ts` 引入上述新增的 `posts` 路由
 
 ### 6. Vitest
 
