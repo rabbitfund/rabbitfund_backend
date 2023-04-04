@@ -25,7 +25,36 @@ npx express-generator
 
 ### 3. 修改 `www`
 - 將 `app.js` 的路徑做修正，改成 typescript 編譯完的檔案路徑
-  ```
+  ```js
   var app = require('../dist/app');
   ```
 
+### 4. MongoDB
+- 安裝 Mongoose 與 dotenv 套件
+  ```
+  npm install mongoose dotenv
+  ```
+- 新增 `connections` 資料夾，以及 `connections/index.ts`
+  > 由於 typescript 不認識 `process.env`，因此需要額外去設定，[查到的做法](https://stackoverflow.com/questions/45194598/using-process-env-in-typescript)大致有兩種：
+  > - 在 `.d.ts` 檔設定 global 的 interface (在此專案為 `environment.d.ts`)
+  > - 在 `process.env` 程式碼之前添加
+  >   ```
+  >   declare var process : {
+  >     env: {
+  >       DATABASE_PASSWORD: string
+  >     }
+  >   }
+  >   ```
+- 新增 `.env` 與 `example.env`，並把 `.env` 加入 `.gitignore`
+- 在 `app.ts` 引入 `connections/index.ts`
+  ```js
+  import './connections'
+  ```
+
+### 5. 調整架構
+
+### 6. Vitest
+
+### 7. Github Actions
+
+### 8. Swagger
