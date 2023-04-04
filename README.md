@@ -34,7 +34,7 @@ npx express-generator
   ```
   npm install mongoose dotenv
   ```
-- 新增 `connections` 資料夾，以及 `connections/index.ts`
+- 新增 `src/connections` 資料夾，以及 `src/connections/index.ts`
   > 由於 typescript 不認識 `process.env`，因此需要額外去設定，[查到的做法](https://stackoverflow.com/questions/45194598/using-process-env-in-typescript)大致有兩種：
   > - 在 `.d.ts` 檔設定 global 的 interface (在此專案為 `environment.d.ts`)
   > - 在 `process.env` 程式碼之前添加
