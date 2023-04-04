@@ -16,9 +16,11 @@
     "@types/http-errors": "^2.0.1",
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.15.11",
+    "@types/supertest": "^2.0.12",
     "@vitest/coverage-c8": "^0.29.8",
     "concurrently": "^8.0.1",
     "nodemon": "^2.0.22",
+    "supertest": "^6.3.3",
     "vitest": "^0.29.8"
   },
   "dependencies": {
