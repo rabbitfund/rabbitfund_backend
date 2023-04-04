@@ -5,6 +5,16 @@
 concurrently 'tsc -w' 'nodemon ./bin/www'
 ```
 
+### 測試
+```
+npm run test
+```
+### 計算測試覆蓋率
+```
+npm run coverage
+```
+> 詳細測試報告在 `/coverage/index.html`
+
 ## 建置流程
 
 ### 0. 新增基本檔案
@@ -59,6 +69,13 @@ npx express-generator
 - 在 `app.ts` 引入上述新增的 `posts` 路由
 
 ### 6. Vitest
+- 安裝 Vitest 套件
+  ```
+  npm install --save-dev vitest @vitest/coverage-c8
+  ```
+  > `@vitest/coverage-c8` 是用來計算測試覆蓋率的
+- 新增 Vitest 設定檔 `vitest.config.ts`
+- 把 `/coverage` 資料夾加入 `.gitignore`
 
 ### 7. Github Actions
 
