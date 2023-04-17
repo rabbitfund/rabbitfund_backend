@@ -11,7 +11,7 @@
 
 ### 開發
 ```
-concurrently 'tsc -w' 'nodemon ./bin/www'
+npm run start
 ```
 
 ### 測試
@@ -82,8 +82,8 @@ npx express-generator
   ```
   npm install --save-dev vitest @vitest/coverage-c8 supertest @types/supertest 
   ```
-  > `@vitest/coverage-c8` 是用來計算測試覆蓋率的
-  > `supertest` 是用到來測試 API 的
+  > - `@vitest/coverage-c8` 是用來計算測試覆蓋率的
+  > - `supertest` 是用到來測試 API 的
 - 新增 Vitest 設定檔 `vitest.config.ts`
 - 把 `/coverage` 資料夾加入 `.gitignore`
 - 新增測試檔 (`.spec.ts`) 到 `test` 資料夾
