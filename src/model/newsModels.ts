@@ -1,0 +1,44 @@
+import mongoose from 'mongoose';
+const newsSchema = new mongoose.Schema({
+  news_parent: {
+    type: mongoose.Schema.Types.ObjectId, // 依附的專案ID(idNum)
+    ref: 'Project',
+    default: 0 // 預設為 0 => 系統層級的最新消息
+  },
+  news_title: { // 最新消息的標題
+    type: String
+  },
+  news_content: { // 最新消息的內容
+    type: String,
+    trim: true
+  },
+  news_cover: { // 最新消息的封面圖片 (非必填)
+    type: String
+    // default: "/img/cover-news.png"
+  },
+  news_status: { // 最新消息的狀態
+    type: Number,
+    default: 0 // 預設 0-進行中 (0-進行中 / 1-過期 / ... )
+  },
+  news_start_date: { // 最新消息的開始日期
+    type: Date
+  },
+  news_end_date: { // 最新消息的結束日期
+    type: Date,
+    default: 9999/12/31 // 預設
+  },
+  news_create_date: { // 最新消息的建立日期
+    type: Date,
+    default: Date.now()
+  },
+  news_update_date: { // 最新消息的更新日期
+    type: Date
+  },
+  enables: {
+    type: Boolean,
+    default: true // (預設為 true-顯示，true-顯示、false-不顯示)
+  }
+});
+const News = mongoose.model('News', newsSchema);
+
+module.exports = News;
