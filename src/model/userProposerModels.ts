@@ -1,12 +1,22 @@
 import mongoose from 'mongoose';
 const userProposerSchema = new mongoose.Schema({
-  proposer: { // 提案方創建專案的人
+  proposer_name: { // 提案方團隊名稱
+    type: String,
+    required: [true, '團隊名稱未填寫']
+  },
+  proposer_create: { // 提案方創建專案的人
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  proposer_group: { // 提案方團隊/廠商名稱
-    type: String,
-    required: [true, '團隊名稱未填寫']
+  proposer_group: { // 提案方團隊 (多人團隊)
+    type: [
+      {
+        proposer_member: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+        }
+      }
+    ]
   },
   proposer_create_date: { // 建立提案的時間
     type: Date,
@@ -47,6 +57,16 @@ const userProposerSchema = new mongoose.Schema({
   },
   proposer_website: { // 相關網站
     type: String
+  },
+  proposer_project: { // 提案方擁有的專案
+    type: [
+      {
+        likeProjects: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Project'
+        }
+      }
+    ]
   },
   proposer_like: { // 追蹤專案
     type: [

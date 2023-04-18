@@ -6,8 +6,8 @@ const userSchema = new mongoose.Schema({
   },
   user_hash_pwd: {
     type: String,
-    minlength: [4, '密碼最少須 4 個字'],
-    maxlength: [20, '密碼最多 20 個字'],
+    // minlength: [4, '密碼最少須 4 個字'],
+    // maxlength: [20, '密碼最多 20 個字'],
     required: [true, '缺少密碼欄位']
   },
   user_email: {
@@ -22,28 +22,20 @@ const userSchema = new mongoose.Schema({
     //   message: '信箱格式不正確'
     // }
   },
-  user_role: { // 身分
-    type: Number,
-    default: 1 // 預設為會員 (0-後台最高權限管理者、1-會員)
+  user_role: { // 身分，可以有多重身分
+    type: [Number],
+    default: [1] // 預設為1-贊助方 (0-管理者、1-贊助方、2-提案方...)
   },
-  is_proposer: { // 是否為提案方
-    type: Boolean,
-    default: false  // 預設為贊助方 (false-贊助方、true-提案方)
+  salt: { // random value
+    type: String
   },
-  oauth: { // 第三方登入資訊（待定）
-    type: String,
+  login_method: { // 登入方式
+    type: [String],
+    enum: ["normal", "google"], // 一般登入 normal ／ 第三方登入 google
+    default: ["normal"] // 預設登入方式為一般登入
   },
-  tokens: { // （待定）
-    type: [
-      {
-        access_token: String,
-        refresh_token: String,
-        jwt: String
-      }
-    ]
-  },
-  is_verified: { // 是否有驗證
-    type: Boolean
+  oauth_google_id: { // 第三方登入資訊（google_id）
+    type: String
   },
   user_create_date: { // 註冊日期
     type: Date,
