@@ -18,7 +18,7 @@ const newsSchema = new mongoose.Schema({
   },
   news_status: { // 最新消息的狀態
     type: Number,
-    default: 0 // 預設 0-進行中 (0-進行中 / 1-過期 / ... )
+    default: 0 // 預設 0-草稿 (0-草稿 / 1-審核中 / 2-進行中 / 3-已結束 / ... )
   },
   news_start_date: { // 最新消息的開始日期
     type: Date
@@ -34,11 +34,15 @@ const newsSchema = new mongoose.Schema({
   news_update_date: { // 最新消息的更新日期
     type: Date
   },
-  enables: {
+  check: { // 管理者審核
     type: Boolean,
-    default: true // (預設為 true-顯示，true-顯示、false-不顯示)
+    default: false // 預設為 false-未審閱 (true-已審閱、false-未審閱)
+  },
+  enables: { // 上下架與否
+    type: Boolean,
+    default: false // 預設為 false-下架 (true-上架、false-下架)
   }
 });
 const News = mongoose.model('News', newsSchema);
 
-module.exports = News;
+export default News;

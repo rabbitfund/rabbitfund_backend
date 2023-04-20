@@ -61,7 +61,7 @@ const userProposerSchema = new mongoose.Schema({
   proposer_project: { // 提案方擁有的專案
     type: [
       {
-        likeProjects: {
+        projects: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Project'
         }
@@ -81,4 +81,4 @@ const userProposerSchema = new mongoose.Schema({
 });
 const UserProposer = mongoose.model('UserProposer', userProposerSchema);
 
-module.exports = UserProposer;
+export default UserProposer;

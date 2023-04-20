@@ -28,7 +28,7 @@ const optionSchema = new mongoose.Schema({
   },
   option_status: { // 回饋方案狀態
     type: Number,
-    default: 0 // 預設 0-進行中 (0-進行中 / 1-已額滿 / ... )
+    default: 0 // 預設 0-草稿 (0-草稿 / 1-審核中 / 2-進行中 / 3-已額滿 / ... )
   },
   option_start_date: { // 回饋方案的開始日期
     type: Date
@@ -46,4 +46,4 @@ const optionSchema = new mongoose.Schema({
 });
 const Option = mongoose.model('Option', optionSchema);
 
-module.exports = Option;
+export default Option;
