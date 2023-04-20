@@ -23,7 +23,7 @@ const orderInfoSchema = new mongoose.Schema({
   // },
   payment_status: { // 付款狀態
     type: Number,
-    default: 3 // 預設 3-等待付款 (0-付款失敗 / 1-已完成 / 2-取消交易 / 3-等待付款 ... )
+    default: 3 // 預設 0-未付款 (0-未付款 / 1-待付款 / 2-付款完成 / 3-付款失敗 / 4-取消交易 ... )
   },
   invoice_number: { // 發票號碼
     type: String

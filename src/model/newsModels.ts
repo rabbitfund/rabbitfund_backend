@@ -18,7 +18,7 @@ const newsSchema = new mongoose.Schema({
   },
   news_status: { // 最新消息的狀態
     type: Number,
-    default: 0 // 預設 0-進行中 (0-進行中 / 1-過期 / ... )
+    default: 0 // 預設 0-草稿 (0-草稿 / 1-審核中 / 2-進行中 / 3-已結束 / ... )
   },
   news_start_date: { // 最新消息的開始日期
     type: Date
