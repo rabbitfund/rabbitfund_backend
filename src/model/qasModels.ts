@@ -20,11 +20,15 @@ const qasSchema = new mongoose.Schema({
   qas_update_date: { // 常見問答的更新日期
     type: Date
   },
-  enables: {
+  check: { // 管理者審核
     type: Boolean,
-    default: true // (預設為 true-顯示，true-顯示、false-不顯示)
+    default: false // 預設為 false-未審閱 (true-已審閱、false-未審閱)
+  },
+  enables: { // 上下架與否
+    type: Boolean,
+    default: false // 預設為 false-下架 (true-上架、false-下架)
   }
 });
 const Qas = mongoose.model('Qas', qasSchema);
 
-module.exports = Qas;
+export default Qas;

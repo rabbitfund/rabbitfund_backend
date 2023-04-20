@@ -4,17 +4,6 @@ const orderInfoSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  adress: {
-    type: [
-      {
-        street: String,
-        city: String,
-        state: String,
-        country: String,
-        postalCode: String
-      }
-    ]
-  },
   payment_price: { // 關聯訂單總金額
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Order',
@@ -24,14 +13,14 @@ const orderInfoSchema = new mongoose.Schema({
     enum: ['信用卡', 'ATM', '信用卡分期'],
     required: true
   },
-  payment_note: { // 因應不同方式的註記
-    type: String,
-    trim: true
-  },
-  payment_service: { // 客服註記 (進線紀錄 or 退款紀錄)
-    type: String,
-    trim: true
-  },
+  // payment_note: { // 因應不同方式的註記
+  //   type: String,
+  //   trim: true
+  // },
+  // payment_service: { // 客服註記 (進線紀錄 or 退款紀錄)
+  //   type: String,
+  //   trim: true
+  // },
   payment_status: { // 付款狀態
     type: Number,
     default: 3 // 預設 3-等待付款 (0-付款失敗 / 1-已完成 / 2-取消交易 / 3-等待付款 ... )
@@ -61,4 +50,4 @@ const orderInfoSchema = new mongoose.Schema({
 });
 const OrderInfo = mongoose.model('OrderInfo', orderInfoSchema);
 
-module.exports = OrderInfo;
+export default OrderInfo;

@@ -1,16 +1,6 @@
 import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
-  user_name: {
-    type: String,
-    required: [true, '帳號未填寫']
-  },
-  user_hash_pwd: {
-    type: String,
-    // minlength: [4, '密碼最少須 4 個字'],
-    // maxlength: [20, '密碼最多 20 個字'],
-    required: [true, '缺少密碼欄位']
-  },
-  user_email: {
+  user_email: { // 電子郵件 = 帳號
     type: String,
     required: [true, '電子郵件未填寫'],
     unique: true
@@ -21,6 +11,13 @@ const userSchema = new mongoose.Schema({
     //   },
     //   message: '信箱格式不正確'
     // }
+  },
+  user_hash_pwd: {
+    type: String,
+    required: [true, '缺少密碼欄位']
+  },
+  user_name: { // 個人名稱(顯示用)
+    type: String
   },
   user_role: { // 身分，可以有多重身分
     type: [Number],
@@ -51,6 +48,17 @@ const userSchema = new mongoose.Schema({
   },
   user_phone: { // 行動電話
     type: String
+  },
+  user_adress: {
+    type: [
+      {
+        street: String,
+        city: String,
+        state: String,
+        country: String,
+        postalCode: String
+      }
+    ]
   },
   user_intro: { // 自我介紹
     type: String,
@@ -89,4 +97,4 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+export default User;

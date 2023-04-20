@@ -12,7 +12,8 @@ const projectSchema = new mongoose.Schema({
     trim: true
   },
   project_category: { // 專案類別
-    type: Number, //  (1-校園、2-公益、3-市集)
+    type: [String],
+    enum: ["校園", "公益", "市集"],
     required: true
   },
   project_target: { // 募資目標金額
@@ -42,6 +43,9 @@ const projectSchema = new mongoose.Schema({
   project_update_date: { // 專案更新日期
     type: Date
   },
+  project_update_final_member: { // 專案最後更新人員
+    type: String
+  },
   project_cover: { // 封面圖片連結
     type: String,
     required: true
@@ -52,9 +56,6 @@ const projectSchema = new mongoose.Schema({
   project_risks: { // 風險與變數
     type: String,
     trim: true
-  },
-  project_thanks: { // 給贊助者的話 (Ex: 達標感言)
-    type: String
   },
   ownerInfo: { // 提案方資訊
     type: mongoose.Schema.Types.ObjectId,
@@ -103,4 +104,4 @@ const projectSchema = new mongoose.Schema({
 });
 const Project = mongoose.model('Project', projectSchema);
 
-module.exports = Project;
+export default Project;
