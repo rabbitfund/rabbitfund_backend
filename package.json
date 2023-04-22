@@ -3,20 +3,23 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "concurrently \"tsc -w\" \"nodemon ./bin/www\"",
-    "build": "tsc",
+    "start": "concurrently \"npx tsc -w\" \"nodemon ./bin/www\"",
+    "build": "npx tsc",
     "test": "vitest",
     "coverage": "vitest --coverage"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
     "@types/debug": "^4.1.7",
     "@types/express": "^4.17.13",
     "@types/http-errors": "^2.0.1",
+    "@types/jsonwebtoken": "^9.0.1",
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.15.11",
     "@types/supertest": "^2.0.12",
+    "@types/validator": "^13.7.15",
     "@vitest/coverage-c8": "^0.29.8",
     "concurrently": "^8.0.1",
     "nodemon": "^2.0.22",
@@ -24,6 +27,7 @@
     "vitest": "^0.29.8"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -31,8 +35,10 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.3",
     "morgan": "~1.9.1",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.3",
+    "validator": "^13.9.0"
   }
 }
