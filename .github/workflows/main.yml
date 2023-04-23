@@ -23,4 +23,12 @@ jobs:
           node-version: 16.17.1
   
       - run: npm install
-      - run: npm run test 
+      - name: run test
+        env:
+          NODE_ENV: ${{ secrets.NODE_ENV}}
+          MONGODB_USER: ${{ secrets.MONGODB_USER }}
+          MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+          MONGODB_DATABASE: ${{ secrets.MONGODB_DATABASE }}
+          MONGODB_CONNECT_STRING: ${{ secrets.MONGODB_CONNECT_STRING }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: npm run test
