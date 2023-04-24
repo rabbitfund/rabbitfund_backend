@@ -30,11 +30,12 @@ app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
   // set locals, only providing error in development
   res.locals = {}; // clear res.locals
   res.locals.ok = false;
-  res.locals.message = err.message;
+  res.locals.msg = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {}; // NODE_ENV in .env file
 
   // render the error page
   res.status(err.status || 500);
+  // console.log(res.locals);
   res.send(res.locals);
 });
 

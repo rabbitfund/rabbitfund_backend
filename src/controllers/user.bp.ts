@@ -2,6 +2,8 @@ import validator from "validator";
 import { User, UserRole } from "../model/userModels";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+// todo: mix http status code and busincess logic error code is not a good practice.
+import createError from "http-errors";
 
 type UserSignUpInput = {
   email: string; //must
@@ -40,7 +42,7 @@ const verifyUserSignUpData = (data: UserSignUpInput): boolean => {
 async function doSignUp(data: UserSignUpInput) {
   const newUser = await User.create({
     user_email: data.email,
-    user_hash_pwd: bcrypt.hashSync(data.pass, 12),
+    user_hash_pwd: bcrypt.hashSync(data.pass || "", 12),
     user_name: data.name,
     user_role: [UserRole.SUPPORTER],
     login_method: [data.method],
@@ -95,17 +97,18 @@ async function doLogIn(data: UserLogInInput) {
     oauth_google_id: 1,
   });
   if (!user) {
-    throw new Error("帳號或密碼錯誤");
+    // throw new Error("帳號或密碼錯誤");
+    throw createError(401, "帳號或密碼錯誤");
   }
   if (data.method === 0) {
     const match = bcrypt.compareSync(data.pass, user.user_hash_pwd);
     if (!match) {
-      throw new Error("帳號或密碼錯誤");
+      throw createError(401, "帳號或密碼錯誤");
     }
   }
   if (data.method === 1) {
     if (user.oauth_google_id !== data.oauth_google_id) {
-      throw new Error("帳號或密碼錯誤");
+      throw createError(401, "帳號或密碼錯誤");
     }
   }
 
@@ -136,7 +139,8 @@ async function doGetMeUser(userId: string) {
   if (!!user) {
     return user;
   }
-  throw new Error("找不到會員");
+  // throw new Error("找不到會員");
+  throw createError(400, "找不到會員");
 }
 
 type UserUpdateInput = {
@@ -174,7 +178,8 @@ async function doUpdateMeUser(userId: string, data: UserUpdateInput) {
     { new: true }
   );
   if (!newestUser) {
-    throw new Error("找不到會員");
+    // throw new Error("找不到會員");
+    throw createError(400, "找不到會員");
   }
 
   const { user_hash_pwd: _, ...user } = newestUser.toObject();
