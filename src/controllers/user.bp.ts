@@ -61,14 +61,14 @@ async function doSignUp(data: UserSignUpInput) {
   return user;
 }
 
-type UserSignInInput = {
+type UserLogInInput = {
   method: number;
   email: string;
   pass: string;
   oauth_google_id: string;
   forget: boolean;
 };
-function verifyUserSignInData(data: UserSignInInput): boolean {
+function verifyUserLogInData(data: UserLogInInput): boolean {
   return (
     (data.method === 0 &&
       !isEmpty(data.email) &&
@@ -82,7 +82,7 @@ function verifyUserSignInData(data: UserSignInInput): boolean {
       !validator.isEmpty(data.oauth_google_id))
   );
 }
-async function doSignIn(data: UserSignInInput) {
+async function doLogIn(data: UserLogInInput) {
   // find user by email
   // validate password
   // generate JWT token
@@ -188,13 +188,13 @@ const isEmpty = (text: string): boolean => {
 
 export {
   UserSignUpInput,
-  UserSignInInput,
+  UserLogInInput,
   UserUpdateInput,
   doSignUp,
-  doSignIn,
+  doLogIn,
   doGetMeUser,
   doUpdateMeUser,
   verifyUserSignUpData,
-  verifyUserSignInData,
+  verifyUserLogInData,
   verifyUserUpdateData,
 };

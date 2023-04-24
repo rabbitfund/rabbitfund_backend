@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use("/", indexRouter);
 app.use("/me", meRouter);
 
-// catch 404 and forward to error handler
+// catch 404 (NOT FOUND) and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {
   next(createError(404));
 });
@@ -28,12 +28,14 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // error handler
 app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
   // set locals, only providing error in development
+  res.locals = {}; // clear res.locals
+  res.locals.ok = false;
   res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+  res.locals.error = req.app.get("env") === "development" ? err : {}; // NODE_ENV in .env file
 
   // render the error page
   res.status(err.status || 500);
-  res.send("error");
+  res.send(res.locals);
 });
 
 module.exports = app;

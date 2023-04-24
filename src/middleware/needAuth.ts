@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-
+import createError from "http-errors";
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const authStr = req.headers.authorization;
   if (!authStr) {
-    return res.status(401).send({ message: "No token provided." });
+    // return res.status(401).send({ message: "No token provided." });
+    return next(createError(401, "No token provided."));
   }
   let token = authStr.trim().replace("Bearer", "").trimStart();
 
@@ -15,7 +16,8 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     next();
   } catch (err: any) {
     // console.log(err);
-    return res.status(401).send({ message: "Unauthorized!" });
+    // return res.status(401).send({ message: "Unauthorized!" });
+    return next(createError(401));
   }
 };
 
