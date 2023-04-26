@@ -21,7 +21,7 @@ const handleSuccess = (
     })
     .end();
 };
-
+// deprecated use createError instead
 const handleError = (res: Response, err?: Error) => {
   let message = "error";
   if (err) {
@@ -36,7 +36,7 @@ const handleError = (res: Response, err?: Error) => {
     })
     .end();
 };
-
+// deprecated use createError instead
 const handle401Error = (res: Response, msg: string = "Unauthorized") => {
   res
     .status(401)

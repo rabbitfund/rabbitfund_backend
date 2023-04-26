@@ -1,0 +1,154 @@
+{
+	"info": {
+		"_postman_id": "25bdd27a-dc11-405c-b442-2f4f5385c88f",
+		"name": "倍而兔募資平台",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1683798"
+	},
+	"item": [
+		{
+			"name": "S1-註冊",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"c3@test.com\",\n    \"pass\" : \"\",\n    \"name\": \"a2\",\n    \"method\": 1,\n    \"oauth_google_id\":\"123\",\n    \"cover\": \"\",\n    \"phone\":\"988123123\",\n    \"intro\":\"hello user introduction\",\n    \"website\":\"\",\n    \"interests\":[\"dance\",\"sing\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/signup",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "S2-登入",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"method\": 1,\n    \"email\": \"c3@test.com\",\n    \"pass\": \"123123123\",\n    \"oauth_google_id\": \"123\",\n    \"forget\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C3-更新我的會員資料",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDVmMjIwMzRlM2FlMTJmYWUwOGU2ZSIsImVtYWlsIjoiYzNAdGVzdC5jb20iLCJyb2xlcyI6WzBdLCJpYXQiOjE2ODIzMDU2OTIsImV4cCI6MTY4MjMwOTI5Mn0.Zm9KYw-tab9fIGMLkUyqnbkIJj073zpG8xjV_pUUxRI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"c3x\",    \n    \"cover\": \"https://img.com/b2xx\",\n    \"phone\":\"988123123\",\n    \"intro\":\"hello user introduction2\",\n    \"website\":\"\",\n    \"interests\":[\"dance\",\"sing\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/me/profile",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"me",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C4-取得我的會員資料",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDVmMjIwMzRlM2FlMTJmYWUwOGU2ZSIsImVtYWlsIjoiYzNAdGVzdC5jb20iLCJyb2xlcyI6WzBdLCJpYXQiOjE2ODIzMDY1ODksImV4cCI6MTY4MjMxMDE4OX0.75lUoYf3AUEjRekWh6HzYwtaqsxyF7hIsCwey6ETV2Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/me/profile",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"me",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}

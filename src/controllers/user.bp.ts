@@ -2,6 +2,8 @@ import validator from "validator";
 import { User, UserRole } from "../model/userModels";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+// todo: mix http status code and busincess logic error code is not a good practice.
+import createError from "http-errors";
 
 type UserSignUpInput = {
   email: string; //must
@@ -40,7 +42,7 @@ const verifyUserSignUpData = (data: UserSignUpInput): boolean => {
 async function doSignUp(data: UserSignUpInput) {
   const newUser = await User.create({
     user_email: data.email,
-    user_hash_pwd: bcrypt.hashSync(data.pass, 12),
+    user_hash_pwd: bcrypt.hashSync(data.pass || "", 12),
     user_name: data.name,
     user_role: [UserRole.SUPPORTER],
     login_method: [data.method],
@@ -61,14 +63,14 @@ async function doSignUp(data: UserSignUpInput) {
   return user;
 }
 
-type UserSignInInput = {
+type UserLogInInput = {
   method: number;
   email: string;
   pass: string;
   oauth_google_id: string;
   forget: boolean;
 };
-function verifyUserSignInData(data: UserSignInInput): boolean {
+function verifyUserLogInData(data: UserLogInInput): boolean {
   return (
     (data.method === 0 &&
       !isEmpty(data.email) &&
@@ -82,7 +84,7 @@ function verifyUserSignInData(data: UserSignInInput): boolean {
       !validator.isEmpty(data.oauth_google_id))
   );
 }
-async function doSignIn(data: UserSignInInput) {
+async function doLogIn(data: UserLogInInput) {
   // find user by email
   // validate password
   // generate JWT token
@@ -95,17 +97,18 @@ async function doSignIn(data: UserSignInInput) {
     oauth_google_id: 1,
   });
   if (!user) {
-    throw new Error("帳號或密碼錯誤");
+    // throw new Error("帳號或密碼錯誤");
+    throw createError(401, "帳號或密碼錯誤");
   }
   if (data.method === 0) {
     const match = bcrypt.compareSync(data.pass, user.user_hash_pwd);
     if (!match) {
-      throw new Error("帳號或密碼錯誤");
+      throw createError(401, "帳號或密碼錯誤");
     }
   }
   if (data.method === 1) {
     if (user.oauth_google_id !== data.oauth_google_id) {
-      throw new Error("帳號或密碼錯誤");
+      throw createError(401, "帳號或密碼錯誤");
     }
   }
 
@@ -136,7 +139,8 @@ async function doGetMeUser(userId: string) {
   if (!!user) {
     return user;
   }
-  throw new Error("找不到會員");
+  // throw new Error("找不到會員");
+  throw createError(400, "找不到會員");
 }
 
 type UserUpdateInput = {
@@ -174,7 +178,8 @@ async function doUpdateMeUser(userId: string, data: UserUpdateInput) {
     { new: true }
   );
   if (!newestUser) {
-    throw new Error("找不到會員");
+    // throw new Error("找不到會員");
+    throw createError(400, "找不到會員");
   }
 
   const { user_hash_pwd: _, ...user } = newestUser.toObject();
@@ -188,13 +193,13 @@ const isEmpty = (text: string): boolean => {
 
 export {
   UserSignUpInput,
-  UserSignInInput,
+  UserLogInInput,
   UserUpdateInput,
   doSignUp,
-  doSignIn,
+  doLogIn,
   doGetMeUser,
   doUpdateMeUser,
   verifyUserSignUpData,
-  verifyUserSignInData,
+  verifyUserLogInData,
   verifyUserUpdateData,
 };
