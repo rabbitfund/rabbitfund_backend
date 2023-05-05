@@ -7,6 +7,7 @@ import cors from "cors";
 import indexRouter from "./routes/index";
 import meRouter from "./routes/me";
 import ownerProjectRouter from "./routes/ownerProject";
+import projectRouter from "./routes/project";
 
 import "./connections";
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use("/", indexRouter);
 app.use("/me", meRouter);
 app.use("/owner/projects", ownerProjectRouter);
+app.use("/projects", projectRouter);
 
 // catch 404 (NOT FOUND) and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {

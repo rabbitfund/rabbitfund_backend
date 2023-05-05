@@ -150,6 +150,24 @@ async function doPostOwnerProjectOptions(projectId: string) {
 
 
 
+async function doGetProject(projectId: string) {
+  const project = await Project.findById(projectId)
+  if (!!project) {
+    return project;
+  }
+  // TODO: 過濾掉不傳的內容
+  throw createError(400, "找不到專案");
+}
+
+async function doGetProjectOptions(projectId: string) {
+  // TODO: 透過 user ID 找出 Project 們
+  const project = await Project.findById(projectId)
+  if (!!project) {
+    return project;
+  }
+  throw createError(400, "找不到專案");
+}
+
 function verifyProjectId(projectId: string): boolean {
   // not sure if there is more restrictions
   return projectId.length === 24;
@@ -163,5 +181,7 @@ export {
   doDeleteOwnerProject,
   doGetOwnerProjectOptions,
   doPostOwnerProjectOptions,
+  doGetProject,
+  doGetProjectOptions,
   verifyProjectId
 }

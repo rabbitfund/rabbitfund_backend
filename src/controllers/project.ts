@@ -10,6 +10,8 @@ import {
   doDeleteOwnerProject,
   doGetOwnerProjectOptions,
   doPostOwnerProjectOptions,
+  doGetProject,
+  doGetProjectOptions,
   verifyProjectId
 } from "./project.bp";
 
@@ -116,5 +118,39 @@ export const postOwnerProjectOptions: RequestHandler = async (
   }
 
   const project = await doPostOwnerProjectOptions(prjectId);
+  return handleSuccess(res, project);
+};
+
+
+
+export const getProject: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // const userId = res.locals.user.id;
+  const prjectId = req.params.pid
+
+  if (!verifyProjectId(prjectId)) {
+    return next(createError(400, "找不到專案"));
+  }
+
+  const project = await doGetProject(prjectId);
+  return handleSuccess(res, project);
+};
+
+export const getProjectOptions: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // const userId = res.locals.user.id;
+  const prjectId = req.params.pid
+
+  if (!verifyProjectId(prjectId)) {
+    return next(createError(400, "找不到專案"));
+  }
+
+  const project = await doGetProjectOptions(prjectId);
   return handleSuccess(res, project);
 };
