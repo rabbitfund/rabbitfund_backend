@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import { signUp, login } from "../controllers/user";
+import { createOrder } from "../controllers/order";
 import { handleErrorAsync } from "../service/handleErrorAsync";
 import { needAuth } from "../middleware/needAuth";
 
@@ -17,6 +18,6 @@ router.post("/signin", handleErrorAsync(login));
 router.post("/login", handleErrorAsync(login));
 
 // 訂單相關
-router.post("/ordesr", needAuth, handleErrorAsync(createOrder));
+router.post("/orders", needAuth, handleErrorAsync(createOrder));
 
 export default router;
