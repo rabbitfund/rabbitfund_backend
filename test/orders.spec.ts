@@ -73,14 +73,7 @@ beforeAll(async () => {
   newOption1.option_parent = newProject._id;
   newOption2.option_parent = newProject._id;
 
-  newProject.option = [
-    {
-      option: newOption1._id,
-    },
-    {
-      option: newOption2._id,
-    },
-  ];
+  newProject.option = [newOption1._id, newOption2._id];
   await newProposer.save();
   await newProject.save();
   await newOption1.save();
