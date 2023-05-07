@@ -1,19 +1,24 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { handleSuccess, handleError } from "../service/handleReply";
 import createError from "http-errors";
+import { isValidObjectId } from "../utils/objectIdValidator";
 
 import {
+  ProjectCreateInput,
+  ProjectUpdateInput,
   doGetOwnerProjects,
   doPostOwnerProject,
   doGetOwnerProject,
   doPutOwnerProject,
   doDeleteOwnerProject,
+  doGetProject 
+} from "./project.bp";
+
+import {
   doGetOwnerProjectOptions,
   doPostOwnerProjectOptions,
-  doGetProject,
-  doGetProjectOptions,
-  verifyProjectId
-} from "./project.bp";
+  doGetProjectOptions
+} from "./option.bp"
 
 
 export const getOwnerProjects: RequestHandler = async (
@@ -29,12 +34,14 @@ export const getOwnerProjects: RequestHandler = async (
 };
 
 export const postOwnerProjects: RequestHandler = async (
-  req: Request,
+  req: Request<{}, {}, ProjectCreateInput>,
   res: Response,
   next: NextFunction
 ) => {
   const userId = res.locals.user.id;
   const data = req.body;
+
+  // TODO: verify data
 
   const project = await doPostOwnerProject(userId, data);
   return handleSuccess(res, project);
@@ -48,7 +55,7 @@ export const getOwnerProject: RequestHandler = async (
   const userId = res.locals.user.id;
   const prjectId = req.params.pid
 
-  if (!verifyProjectId(prjectId)) {
+  if (!isValidObjectId(prjectId)) {
     return next(createError(400, "找不到專案"));
   }
 
@@ -62,12 +69,14 @@ export const putOwnerProject: RequestHandler = async (
   next: NextFunction
 ) => {
   const userId = res.locals.user.id;
-  const prjectId = req.params.pid
+  const prjectId = req.params.pid;
   const data = req.body;
 
-  if (!verifyProjectId(prjectId)) {
+  if (!isValidObjectId(prjectId)) {
     return next(createError(400, "找不到專案"));
   }
+
+  // TODO: verify data
 
   const project = await doPutOwnerProject(userId, prjectId, data);
   return handleSuccess(res, project);
@@ -81,7 +90,7 @@ export const deleteOwnerProject: RequestHandler = async (
   const userId = res.locals.user.id;
   const prjectId = req.params.pid
 
-  if (!verifyProjectId(prjectId)) {
+  if (!isValidObjectId(prjectId)) {
     return next(createError(400, "找不到專案"));
   }
 
@@ -97,7 +106,7 @@ export const getOwnerProjectOptions: RequestHandler = async (
   const userId = res.locals.user.id;
   const prjectId = req.params.pid
 
-  if (!verifyProjectId(prjectId)) {
+  if (!isValidObjectId(prjectId)) {
     return next(createError(400, "找不到專案"));
   }
 
@@ -111,14 +120,17 @@ export const postOwnerProjectOptions: RequestHandler = async (
   next: NextFunction
 ) => {
   const userId = res.locals.user.id;
-  const prjectId = req.params.pid
+  const prjectId = req.params.pid;
+  const data = req.body;
 
-  if (!verifyProjectId(prjectId)) {
+  if (!isValidObjectId(prjectId)) {
     return next(createError(400, "找不到專案"));
   }
 
-  const project = await doPostOwnerProjectOptions(prjectId);
-  return handleSuccess(res, project);
+  // TODO: verify data
+
+  const option = await doPostOwnerProjectOptions(prjectId, data);
+  return handleSuccess(res, option);
 };
 
 
@@ -131,7 +143,7 @@ export const getProject: RequestHandler = async (
   // const userId = res.locals.user.id;
   const prjectId = req.params.pid
 
-  if (!verifyProjectId(prjectId)) {
+  if (!isValidObjectId(prjectId)) {
     return next(createError(400, "找不到專案"));
   }
 
@@ -147,7 +159,7 @@ export const getProjectOptions: RequestHandler = async (
   // const userId = res.locals.user.id;
   const prjectId = req.params.pid
 
-  if (!verifyProjectId(prjectId)) {
+  if (!isValidObjectId(prjectId)) {
     return next(createError(400, "找不到專案"));
   }
 
