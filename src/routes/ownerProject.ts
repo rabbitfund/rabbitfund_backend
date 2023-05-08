@@ -11,8 +11,8 @@ router.get("/:pid", needAuth, handleErrorAsync(getOwnerProject));
 router.put("/:pid", needAuth, handleErrorAsync(putOwnerProject));
 router.delete("/:pid", needAuth, handleErrorAsync(deleteOwnerProject));
 
-router.get("/:pid/options", needAuth, handleErrorAsync(getOwnerProjectOptions)); // TODO
-router.post("/:pid/options", needAuth, handleErrorAsync(postOwnerProjectOptions)); // TODO
+router.get("/:pid/options", needAuth, handleErrorAsync(getOwnerProjectOptions));
+router.post("/:pid/options", needAuth, handleErrorAsync(postOwnerProjectOptions));
 
 // B2, GET, /owner/projects
 // B1, POST, /owner/projects

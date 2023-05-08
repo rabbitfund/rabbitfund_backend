@@ -33,8 +33,8 @@ type ProjectUpdateInput = {
   target?: Number;   // must
   progress?: Number;   // must
   status?: Number;
-  start_date?: Date;    // not required ?!
-  end_date?: Date;   // not required ?!
+  start_date?: Date;
+  end_date?: Date;
   // create_date: Date;
   // update_date: Date;
   // update_final_member: String;
@@ -132,56 +132,33 @@ async function doDeleteOwnerProject(projectId: string) {
   throw createError(400, "找不到專案");
 }
 
-async function doGetOwnerProjectOptions(projectId: string) {
-  const project = await Project.findById(projectId)
-  if (!!project) {
-    return project;
-  }
-  throw createError(400, "找不到專案");
-}
-
-async function doPostOwnerProjectOptions(projectId: string) {
-  const project = await Project.findById(projectId)
-  if (!!project) {
-    return project;
-  }
-  throw createError(400, "找不到專案");
-}
 
 
 
 async function doGetProject(projectId: string) {
   const project = await Project.findById(projectId)
   if (!!project) {
-    return project;
+    // filtered out specific info 
+    const {
+      project_update_date: _,
+      project_update_final_member: __,
+      ...filteredProject
+    } = project.toObject();
+
+    return filteredProject;
   }
-  // TODO: 過濾掉不傳的內容
+
   throw createError(400, "找不到專案");
 }
 
-async function doGetProjectOptions(projectId: string) {
-  // TODO: 透過 user ID 找出 Project 們
-  const project = await Project.findById(projectId)
-  if (!!project) {
-    return project;
-  }
-  throw createError(400, "找不到專案");
-}
-
-function verifyProjectId(projectId: string): boolean {
-  // not sure if there is more restrictions
-  return projectId.length === 24;
-}
 
 export {
+  ProjectCreateInput,
+  ProjectUpdateInput,
   doGetOwnerProjects,
   doPostOwnerProject,
   doGetOwnerProject,
   doPutOwnerProject,
   doDeleteOwnerProject,
-  doGetOwnerProjectOptions,
-  doPostOwnerProjectOptions,
   doGetProject,
-  doGetProjectOptions,
-  verifyProjectId
 }
