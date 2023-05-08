@@ -86,7 +86,7 @@ async function doPostOwnerProject(userId: string, data: ProjectCreateInput) {
     qas: data.qas || [],
     order: data.order || [],
     delete: false,
-    delete_member: ""
+    delete_member: null,
   })
   return projects
 }
