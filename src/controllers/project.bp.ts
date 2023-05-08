@@ -127,13 +127,16 @@ async function doPutOwnerProject(userId: string, projectId: string, data: Projec
   throw createError(400, "找不到專案");
 }
 
-async function doDeleteOwnerProject(projectId: string) {
-  // 也可以用 findByIdAndDelete，回傳值比較長
-  const result = await Project.deleteOne({_id: projectId})
-  // { acknowledged: true, deletedCount: 1 }
-  if (result.deletedCount === 1) {
-    return result;
+async function doDeleteOwnerProject(userId: string, projectId: string) {
+  const project = await Project.findByIdAndUpdate(projectId, {
+    delete: true,
+    delete_member:userId
+  })
+
+  if (!!project) {
+    return project;
   }
+  
   throw createError(400, "找不到專案");
 }
 
