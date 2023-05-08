@@ -76,6 +76,15 @@ const projectSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserProposer",
   },
+  deleted: {
+    // 被刪除
+    type: Boolean,
+    default: false,
+  },
+  deleted_member: {
+    // 刪除人員
+    type: mongoose.Schema.Types.ObjectId,
+  },
   option: {
     // 回饋方案
     type: [
@@ -91,10 +100,10 @@ const projectSchema = new mongoose.Schema({
     // 最新消息
     type: [
       {
-        news: {
+        // news: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "News",
-        },
+        // },
       },
     ],
   },
@@ -102,10 +111,10 @@ const projectSchema = new mongoose.Schema({
     // 常見問答
     type: [
       {
-        qas: {
+        // qas: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Qas",
-        },
+        // },
       },
     ],
   },
@@ -113,10 +122,10 @@ const projectSchema = new mongoose.Schema({
     // 訂單資訊
     type: [
       {
-        order: {
+        // order: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Order",
-        },
+        // },
       },
     ],
   },
