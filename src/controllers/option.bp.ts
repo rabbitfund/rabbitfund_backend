@@ -22,12 +22,13 @@ type OptionCreateInput = {
 
 async function doGetOwnerProjectOptions(projectId: string) {
   const project = await Project.findById(projectId)
-  if (!project) {
+  if (!project || project.delete) {
     throw createError(400, "找不到專案");
   }
   
   const option = await Option.find({
-    option_parent: projectId
+    option_parent: projectId,
+    delete: false
   }).exec();
   
   if (!option || option.length === 0) {
@@ -38,7 +39,7 @@ async function doGetOwnerProjectOptions(projectId: string) {
 
 async function doPostOwnerProjectOptions(projectId: string, data: OptionCreateInput) {
   const project = await Project.findById(projectId)
-  if (!project) {
+  if (!project || project.delete) {
     throw createError(400, "找不到專案");
   }
 
@@ -63,12 +64,13 @@ async function doPostOwnerProjectOptions(projectId: string, data: OptionCreateIn
 
 async function doGetProjectOptions(projectId: string) {
   const project = await Project.findById(projectId)
-  if (!project) {
+  if (!project || project.delete) {
     throw createError(400, "找不到專案");
   }
 
   const options = await Option.find({
-    option_parent: projectId
+    option_parent: projectId,
+    delete: false
   }).exec();
   
   if (!options || options.length === 0) {
