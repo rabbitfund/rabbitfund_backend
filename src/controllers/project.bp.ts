@@ -119,7 +119,8 @@ async function doPutOwnerProject(userId: string, projectId: string, data: Projec
     news: data.news,
     qas: data.qas,
     order: data.order
-  })
+  },
+  { new: true })
 
   if (!!project) {
     return project;
@@ -131,12 +132,13 @@ async function doDeleteOwnerProject(userId: string, projectId: string) {
   const project = await Project.findByIdAndUpdate(projectId, {
     delete: true,
     delete_member:userId
-  })
+  },
+  { new: true });
 
-  if (!!project) {
+  if (project?.delete) {
     return project;
-  }
-  
+  };
+
   throw createError(400, "找不到專案");
 }
 
