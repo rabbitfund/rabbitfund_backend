@@ -42,7 +42,16 @@ const optionSchema = new mongoose.Schema({
   },
   option_update_date: { // 回饋方案的更新日期
     type: Date
-  }
+  },
+  deleted: {
+    // 被刪除
+    type: Boolean,
+    default: false,
+  },
+  deleted_member: {
+    // 刪除人員
+    type: mongoose.Schema.Types.ObjectId,
+  },
 });
 const Option = mongoose.model('Option', optionSchema);
 
