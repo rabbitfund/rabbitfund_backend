@@ -96,9 +96,9 @@ async function doGetOwnerProject(projectId: string) {
   throw createError(400, "找不到專案");
 }
 
-async function doPutOwnerProject(userId: string, prjectId: string, data: ProjectUpdateInput) {
+async function doPutOwnerProject(userId: string, projectId: string, data: ProjectUpdateInput) {
   // will return previous version
-  const project = await Project.findByIdAndUpdate(prjectId, {
+  const project = await Project.findByIdAndUpdate(projectId, {
     project_title: data.title,
     project_summary: data.summary,
     project_content: data.content,
