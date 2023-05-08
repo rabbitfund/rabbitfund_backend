@@ -55,7 +55,8 @@ type ProjectUpdateInput = {
 
 
 async function doGetOwnerProjects(userId: string) {
-  // TODO: 透過 user ID 找出 Project 們
+  // TODO: 透過 user ID 找出 Owner 們 (UserProposer)
+  // 再透過 Owner 找出 Projects (需過濾已刪除的專案)
   const projects = await Project.findById(userId).select({
     
   })
@@ -94,7 +95,7 @@ async function doPostOwnerProject(userId: string, data: ProjectCreateInput) {
 async function doGetOwnerProject(projectId: string) {
   const project = await Project.findById(projectId)
   if (!!project) {
-    return project;
+    if (!project.delete) return project;
   }
   throw createError(400, "找不到專案");
 }
@@ -152,16 +153,18 @@ async function doDeleteOwnerProject(userId: string, projectId: string) {
 async function doGetProject(projectId: string) {
   const project = await Project.findById(projectId)
   if (!!project) {
-    // filtered out specific info 
-    const {
-      project_update_date: _,
-      project_update_final_member: __,
-      delete: ___,
-      delete_member: ____,
-      ...filteredProject
-    } = project.toObject();
+    if (!project.delete) {
+      // filtered out specific info 
+      const {
+        project_update_date: _,
+        project_update_final_member: __,
+        delete: ___,
+        delete_member: ____,
+        ...filteredProject
+      } = project.toObject();
 
-    return filteredProject;
+      return filteredProject;
+    }
   }
 
   throw createError(400, "找不到專案");
