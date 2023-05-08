@@ -15,6 +15,8 @@ type OptionCreateInput = {
   end_date: Date;
   // create_date: Date;
   // update_date: Date;
+  delete: Boolean;
+  delete_member: String;
 }
 
 
@@ -51,7 +53,9 @@ async function doPostOwnerProjectOptions(projectId: string, data: OptionCreateIn
     option_start_date: data.start_date || "",
     option_end_date: data.end_date || "",
     option_create_date: Date.now(),
-    option_update_date: Date.now()
+    option_update_date: Date.now(),
+    delete: false,
+    delete_member: ""
   })
 
   return option;
@@ -76,6 +80,8 @@ async function doGetProjectOptions(projectId: string) {
     const {
       option_create_date: _,
       option_update_date: __,
+      delete: ___,
+      delete_member: ____,
       ...filteredOption
     } = option.toObject();
     return filteredOption

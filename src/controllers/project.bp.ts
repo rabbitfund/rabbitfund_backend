@@ -1,5 +1,4 @@
 import Project from "../model/projectModels";
-import mongoose from 'mongoose';
 import createError from "http-errors";
 
 type ProjectCreateInput = {
@@ -18,11 +17,13 @@ type ProjectCreateInput = {
   cover: String;   // must
   video: String;
   risks: String;
-  owner: mongoose.Schema.Types.ObjectId;
-  option: [mongoose.Schema.Types.ObjectId];
-  news: [mongoose.Schema.Types.ObjectId];
-  qas: [mongoose.Schema.Types.ObjectId];
-  order: [mongoose.Schema.Types.ObjectId]
+  owner: String;
+  option: [String];
+  news: [String];
+  qas: [String];
+  order: [String];
+  delete: Boolean;
+  delete_member: String;
 }
 
 type ProjectUpdateInput = {
@@ -41,11 +42,13 @@ type ProjectUpdateInput = {
   cover?: String;   // must
   video?: String;
   risks?: String;
-  owner?: mongoose.Schema.Types.ObjectId;
-  option?: [mongoose.Schema.Types.ObjectId];
-  news?: [mongoose.Schema.Types.ObjectId];
-  qas?: [mongoose.Schema.Types.ObjectId];
-  order?: [mongoose.Schema.Types.ObjectId]
+  owner?: String;
+  option?: [String];
+  news?: [String];
+  qas?: [String];
+  order?: [String];
+  // delete: Boolean;
+  // delete_member: String;
 }
 
 
@@ -78,7 +81,9 @@ async function doPostOwnerProject(userId: string, data: ProjectCreateInput) {
     option: data.option || [],
     news: data.news || [],
     qas: data.qas || [],
-    order: data.order || []
+    order: data.order || [],
+    delete: false,
+    delete_member: ""
   })
   return projects
 }
@@ -142,6 +147,8 @@ async function doGetProject(projectId: string) {
     const {
       project_update_date: _,
       project_update_final_member: __,
+      delete: ___,
+      delete_member: ____,
       ...filteredProject
     } = project.toObject();
 
