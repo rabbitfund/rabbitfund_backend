@@ -55,7 +55,7 @@ async function doPostOwnerProjectOptions(projectId: string, data: OptionCreateIn
     option_create_date: Date.now(),
     option_update_date: Date.now(),
     delete: false,
-    delete_member: ""
+    delete_member: null,
   })
 
   return option;

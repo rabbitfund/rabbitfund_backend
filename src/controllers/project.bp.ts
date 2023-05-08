@@ -17,6 +17,7 @@ type ProjectCreateInput = {
   cover: String;   // must
   video: String;
   risks: String;
+  tag: [String];
   owner: String;
   option: [String];
   news: [String];
@@ -42,6 +43,7 @@ type ProjectUpdateInput = {
   cover?: String;   // must
   video?: String;
   risks?: String;
+  tag?: [String];
   owner?: String;
   option?: [String];
   news?: [String];
@@ -77,6 +79,7 @@ async function doPostOwnerProject(userId: string, data: ProjectCreateInput) {
     project_cover: data.cover,
     project_video: data.video || "",
     project_risks: data.risks || "",
+    project_tag: data.tag || [],
     ownerInfo: data.owner || "",
     option: data.option || [],
     news: data.news || [],
@@ -114,6 +117,7 @@ async function doPutOwnerProject(userId: string, projectId: string, data: Projec
     project_cover: data.cover,
     project_video: data.video,
     project_risks: data.risks,
+    project_tag: data.tag,
     ownerInfo: data.owner,
     option: data.option,
     news: data.news,

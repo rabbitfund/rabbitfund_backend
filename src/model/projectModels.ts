@@ -71,6 +71,10 @@ const projectSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  project_tag: {
+    // 標籤
+    type: [String]
+  },
   ownerInfo: {
     // 提案方資訊
     type: mongoose.Schema.Types.ObjectId,
