@@ -76,12 +76,12 @@ const projectSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserProposer",
   },
-  deleted: {
+  delete: {
     // 被刪除
     type: Boolean,
     default: false,
   },
-  deleted_member: {
+  delete_member: {
     // 刪除人員
     type: mongoose.Schema.Types.ObjectId,
   },
