@@ -96,7 +96,7 @@ afterAll(async () => {
 let newUser, newProject, newProposer, newOption1, newOption2;
 
 const user_normal = {
-  email: "c1_12345678@test.com",
+  email: "c_order@test.com",
   pass: "12345678",
   method: 0,
 };
