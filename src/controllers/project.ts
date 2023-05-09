@@ -95,7 +95,7 @@ export const deleteOwnerProject: RequestHandler = async (
     return next(createError(400, "找不到專案"));
   }
 
-  const result = await doDeleteOwnerProject(prjectId);
+  const result = await doDeleteOwnerProject(userId, prjectId);
   return handleSuccess(res, result);
 };
 

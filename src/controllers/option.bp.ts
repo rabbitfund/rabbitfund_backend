@@ -15,17 +15,20 @@ type OptionCreateInput = {
   end_date: Date;
   // create_date: Date;
   // update_date: Date;
+  delete: Boolean;
+  delete_member: String;
 }
 
 
 async function doGetOwnerProjectOptions(projectId: string) {
   const project = await Project.findById(projectId)
-  if (!project) {
+  if (!project || project.delete) {
     throw createError(400, "找不到專案");
   }
   
   const option = await Option.find({
-    option_parent: projectId
+    option_parent: projectId,
+    delete: false
   }).exec();
   
   if (!option || option.length === 0) {
@@ -36,7 +39,7 @@ async function doGetOwnerProjectOptions(projectId: string) {
 
 async function doPostOwnerProjectOptions(projectId: string, data: OptionCreateInput) {
   const project = await Project.findById(projectId)
-  if (!project) {
+  if (!project || project.delete) {
     throw createError(400, "找不到專案");
   }
 
@@ -51,7 +54,9 @@ async function doPostOwnerProjectOptions(projectId: string, data: OptionCreateIn
     option_start_date: data.start_date || "",
     option_end_date: data.end_date || "",
     option_create_date: Date.now(),
-    option_update_date: Date.now()
+    option_update_date: Date.now(),
+    delete: false,
+    delete_member: null,
   })
 
   return option;
@@ -59,12 +64,13 @@ async function doPostOwnerProjectOptions(projectId: string, data: OptionCreateIn
 
 async function doGetProjectOptions(projectId: string) {
   const project = await Project.findById(projectId)
-  if (!project) {
+  if (!project || project.delete) {
     throw createError(400, "找不到專案");
   }
 
   const options = await Option.find({
-    option_parent: projectId
+    option_parent: projectId,
+    delete: false
   }).exec();
   
   if (!options || options.length === 0) {
@@ -76,6 +82,8 @@ async function doGetProjectOptions(projectId: string) {
     const {
       option_create_date: _,
       option_update_date: __,
+      delete: ___,
+      delete_member: ____,
       ...filteredOption
     } = option.toObject();
     return filteredOption

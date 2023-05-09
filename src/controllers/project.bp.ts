@@ -1,5 +1,4 @@
 import Project from "../model/projectModels";
-import mongoose from 'mongoose';
 import createError from "http-errors";
 
 type ProjectCreateInput = {
@@ -18,11 +17,14 @@ type ProjectCreateInput = {
   cover: String;   // must
   video: String;
   risks: String;
-  owner: mongoose.Schema.Types.ObjectId;
-  option: [mongoose.Schema.Types.ObjectId];
-  news: [mongoose.Schema.Types.ObjectId];
-  qas: [mongoose.Schema.Types.ObjectId];
-  order: [mongoose.Schema.Types.ObjectId]
+  tag: [String];
+  owner: String;
+  option: [String];
+  news: [String];
+  qas: [String];
+  order: [String];
+  delete: Boolean;
+  delete_member: String;
 }
 
 type ProjectUpdateInput = {
@@ -41,16 +43,20 @@ type ProjectUpdateInput = {
   cover?: String;   // must
   video?: String;
   risks?: String;
-  owner?: mongoose.Schema.Types.ObjectId;
-  option?: [mongoose.Schema.Types.ObjectId];
-  news?: [mongoose.Schema.Types.ObjectId];
-  qas?: [mongoose.Schema.Types.ObjectId];
-  order?: [mongoose.Schema.Types.ObjectId]
+  tag?: [String];
+  owner?: String;
+  option?: [String];
+  news?: [String];
+  qas?: [String];
+  order?: [String];
+  // delete: Boolean;
+  // delete_member: String;
 }
 
 
 async function doGetOwnerProjects(userId: string) {
-  // TODO: 透過 user ID 找出 Project 們
+  // TODO: 透過 user ID 找出 Owner 們 (UserProposer)
+  // 再透過 Owner 找出 Projects (需過濾已刪除的專案)
   const projects = await Project.findById(userId).select({
     
   })
@@ -74,11 +80,14 @@ async function doPostOwnerProject(userId: string, data: ProjectCreateInput) {
     project_cover: data.cover,
     project_video: data.video || "",
     project_risks: data.risks || "",
+    project_tag: data.tag || [],
     ownerInfo: data.owner || "",
     option: data.option || [],
     news: data.news || [],
     qas: data.qas || [],
-    order: data.order || []
+    order: data.order || [],
+    delete: false,
+    delete_member: null,
   })
   return projects
 }
@@ -86,14 +95,14 @@ async function doPostOwnerProject(userId: string, data: ProjectCreateInput) {
 async function doGetOwnerProject(projectId: string) {
   const project = await Project.findById(projectId)
   if (!!project) {
-    return project;
+    if (!project.delete) return project;
   }
   throw createError(400, "找不到專案");
 }
 
-async function doPutOwnerProject(userId: string, prjectId: string, data: ProjectUpdateInput) {
+async function doPutOwnerProject(userId: string, projectId: string, data: ProjectUpdateInput) {
   // will return previous version
-  const project = await Project.findByIdAndUpdate(prjectId, {
+  const project = await Project.findByIdAndUpdate(projectId, {
     project_title: data.title,
     project_summary: data.summary,
     project_content: data.content,
@@ -109,12 +118,14 @@ async function doPutOwnerProject(userId: string, prjectId: string, data: Project
     project_cover: data.cover,
     project_video: data.video,
     project_risks: data.risks,
+    project_tag: data.tag,
     ownerInfo: data.owner,
     option: data.option,
     news: data.news,
     qas: data.qas,
     order: data.order
-  })
+  },
+  { new: true })
 
   if (!!project) {
     return project;
@@ -122,13 +133,17 @@ async function doPutOwnerProject(userId: string, prjectId: string, data: Project
   throw createError(400, "找不到專案");
 }
 
-async function doDeleteOwnerProject(projectId: string) {
-  // 也可以用 findByIdAndDelete，回傳值比較長
-  const result = await Project.deleteOne({_id: projectId})
-  // { acknowledged: true, deletedCount: 1 }
-  if (result.deletedCount === 1) {
-    return result;
-  }
+async function doDeleteOwnerProject(userId: string, projectId: string) {
+  const project = await Project.findByIdAndUpdate(projectId, {
+    delete: true,
+    delete_member:userId
+  },
+  { new: true });
+
+  if (project?.delete) {
+    return project;
+  };
+
   throw createError(400, "找不到專案");
 }
 
@@ -138,14 +153,18 @@ async function doDeleteOwnerProject(projectId: string) {
 async function doGetProject(projectId: string) {
   const project = await Project.findById(projectId)
   if (!!project) {
-    // filtered out specific info 
-    const {
-      project_update_date: _,
-      project_update_final_member: __,
-      ...filteredProject
-    } = project.toObject();
+    if (!project.delete) {
+      // filtered out specific info 
+      const {
+        project_update_date: _,
+        project_update_final_member: __,
+        delete: ___,
+        delete_member: ____,
+        ...filteredProject
+      } = project.toObject();
 
-    return filteredProject;
+      return filteredProject;
+    }
   }
 
   throw createError(400, "找不到專案");
