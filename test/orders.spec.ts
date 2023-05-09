@@ -18,7 +18,6 @@ import Option from "../src/model/optionModels";
 import UserProposer from "../src/model/userProposerModels";
 
 import bcrypt from "bcryptjs";
-import { log } from "console";
 
 import Order from "../src/model/orderModels";
 import OrderInfo from "../src/model/orderInfoModels";
