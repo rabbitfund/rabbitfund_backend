@@ -45,6 +45,7 @@ async function doOrderCreate(data: OrderCreateInput) {
   const project = await Project.find({
     _id: data.project_id,
     project_status: 2, //must 2-進行中
+    delete: false,
   }).exec();
   if (!project || project.length === 0) {
     throw createError(400, "找不到專案");
@@ -52,7 +53,12 @@ async function doOrderCreate(data: OrderCreateInput) {
 
   console.log(project);
 
-  const option = await Option.findById(data.option_id);
+  // const option = await Option.findById(data.option_id);
+  const option = (await Option.find({
+    _id: data.option_id,
+    option_status: 2, //must 2-進行中
+    delete: false,
+  }).exec()) as any;
   if (!option) {
     throw createError(400, "找不到方案");
   }
