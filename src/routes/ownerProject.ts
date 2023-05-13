@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { postOwnerProjects, getOwnerProjects, getOwnerProject, putOwnerProject, deleteOwnerProject, getOwnerProjectOptions, postOwnerProjectOptions } from "../controllers/project";
+import { postOwnerProjects, getOwnerProjects, getOwnerProject, putOwnerProject, deleteOwnerProject, getOwnerProjectOptions, postOwnerProjectOptions, patchProjectOptions } from "../controllers/project";
 import { needAuth } from "../middleware/needAuth";
 import { handleErrorAsync } from "../service/handleErrorAsync";
 
@@ -13,6 +13,7 @@ router.delete("/:pid", needAuth, handleErrorAsync(deleteOwnerProject));
 
 router.get("/:pid/options", needAuth, handleErrorAsync(getOwnerProjectOptions));
 router.post("/:pid/options", needAuth, handleErrorAsync(postOwnerProjectOptions));
+router.patch("/:pid/options/:optid", needAuth, handleErrorAsync(patchProjectOptions));
 
 // B2, GET, /owner/projects
 // B1, POST, /owner/projects

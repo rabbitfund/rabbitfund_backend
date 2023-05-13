@@ -18,6 +18,21 @@ type OptionCreateInput = {
   delete: Boolean;
   delete_member: String;
 }
+type OptionUpdateInput = {
+  // parent: String;   // must
+  name?: String;
+  price?: Number;
+  total?: Number;
+  content?: String;
+  cover?: String;
+  status?: Number;
+  start_date?: Date;
+  end_date?: Date;
+  // create_date: Date;
+  update_date?: Date;
+  // delete?: Boolean;
+  // delete_member?: String;
+}
 
 
 async function doGetOwnerProjectOptions(projectId: string) {
@@ -92,9 +107,66 @@ async function doGetProjectOptions(projectId: string) {
   return filteredOptions
 }
 
+async function doPatchProjectOptions(projectId: string, optionId: string, data: OptionUpdateInput) {
+  const project = await Project.findById(projectId)
+  if (!project || project.delete) {
+    throw createError(400, "找不到專案");
+  }
+
+  const options = await Option.find({
+    option_parent: projectId,
+    delete: false
+  }).exec();
+  
+  if (!options || options.length === 0) {
+    throw createError(400, "找不到方案");
+  }
+
+  // const option = {
+  //   option_name: data.name,
+  //   option_price: data.price,
+  //   option_total: data.total,
+  //   option_content: data.content,
+  //   option_cover: data.cover,
+  //   option_status: data.status,
+  //   option_start_date: data.start_date,
+  //   option_end_date: data.end_date,
+  //   // option_create_date: '',
+  //   option_update_date: Date.now(),
+  //   // option_update_date: data.update_date,
+  //   // delete: data.delete,
+  //   // delete_member: data.delete_member,
+  // }
+
+  const updateOption = await Option.findByIdAndUpdate( optionId, {
+    option_name: data.name,
+    option_price: data.price,
+    option_total: data.total,
+    option_content: data.content,
+    option_cover: data.cover,
+    option_status: data.status,
+    option_start_date: data.start_date,
+    option_end_date: data.end_date,
+    // option_create_date: '',
+    option_update_date: Date.now(),
+    // option_update_date: data.update_date,
+    // delete: data.delete,
+    // delete_member: data.delete_member,
+    }, { new: true }
+  )
+
+  if (!!updateOption) {
+    return updateOption;
+  }
+
+  throw createError(400, "找不到專案");
+}
+
 export {
   OptionCreateInput,
+  OptionUpdateInput,
   doGetOwnerProjectOptions,
   doPostOwnerProjectOptions,
-  doGetProjectOptions
+  doGetProjectOptions,
+  doPatchProjectOptions
 }
