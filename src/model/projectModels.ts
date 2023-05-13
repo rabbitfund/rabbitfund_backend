@@ -88,6 +88,7 @@ const projectSchema = new mongoose.Schema({
   delete_member: {
     // 刪除人員
     type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
   option: {
     // 回饋方案
