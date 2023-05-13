@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "2c6b075c-52cc-4a53-94ea-3f97e587eaee",
+		"_postman_id": "6f78fb95-b961-4e2b-b0ae-2694774fdd3b",
 		"name": "倍而兔募資平台",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "22739180"
+		"_exporter_id": "25930895"
 	},
 	"item": [
 		{
@@ -47,12 +47,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{url}}/login",
+					"raw": "{{url}}/signin",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
-						"login"
+						"signin"
 					]
 				}
 			},
@@ -66,7 +66,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDIwNDcxZTk0NWEzN2Q2NGNiYWU3YSIsImVtYWlsIjoiYzFAdGVzdC5jb20iLCJyb2xlcyI6WzBdLCJpYXQiOjE2ODIwNDgxMjUsImV4cCI6MTY4MjA1MTcyNX0.gcVtTbEXdxSMmsHobKsdrb_8VqGH3owYQxuyYE8ISDQ",
+							"value": "{{user_token}}",
 							"type": "string"
 						}
 					]
@@ -75,7 +75,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"b4x\",    \n    \"cover\": \"https://img.com/b2xx\",\n    \"phone\":\"988123123\",\n    \"intro\":\"hello user introduction2\",\n    \"website\":\"\",\n    \"interests\":[\"dance\",\"sing\"]\n}",
+					"raw": "{\n    \"name\": \"AAnne\",    \n    \"cover\": \"https://showanne.github.io/src/img/avatar_Anne.jpg\",\n    \"phone\":\"988123123\",\n    \"intro\":\"hello Anne\",\n    \"website\":\"https://showanne.github.io/\",\n    \"interests\":[\"read\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -103,7 +103,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDIwNDcxZTk0NWEzN2Q2NGNiYWU3YSIsImVtYWlsIjoiYzFAdGVzdC5jb20iLCJyb2xlcyI6WzBdLCJpYXQiOjE2ODIwNDgxMjUsImV4cCI6MTY4MjA1MTcyNX0.gcVtTbEXdxSMmsHobKsdrb_8VqGH3owYQxuyYE8ISDQ",
+							"value": "{{user_token}}",
 							"type": "string"
 						}
 					]
@@ -124,31 +124,23 @@
 			"response": []
 		},
 		{
-			"name": "B2-列出專案",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/owner/projects",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"owner",
-						"projects"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "B1-新增專案內容",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"title\": \"標題123\",\r\n  \"summary\": \"project summary\",\r\n  \"content\": \"project content\",\r\n  \"category\": [\"校園\"], // must\r\n  \"target\": 12000,   // must\r\n  \"progress\": 0,   // must\r\n  \"status\": 0,\r\n  \"start_date\": \"2023-01-23\",\r\n  \"end_date\": \"2023-04-23\",\r\n//   \"create_date\": Date;\r\n  \"update_date\": \"2023-01-23\",\r\n  \"update_final_member\": \"member\",\r\n  \"cover\": \"cover URL\",   // must\r\n  \"video\": \"project video URL\",\r\n  \"risks\": \"the risks\",\r\n  \"tag\": [\"long\"],\r\n  \"owner\": \"6453d211c6ab8c4bfc26717d\", // fake\r\n  \"option\": [\"6453d211c6ab8c4bfc26717d\"]\r\n}",
+					"raw": "{\r\n  \"title\": \"標題\",\r\n  \"summary\": \"project summary\",\r\n  \"content\": \"project content\",\r\n  \"category\": [\"校園\"], // must\r\n  \"target\": 12000,   // must\r\n  \"progress\": 0,   // must\r\n  \"status\": 0,\r\n//   \"start_date\": \"2023-01-23\",\r\n//   \"end_date\": \"2023-04-23\",\r\n//   \"create_date\": Date;\r\n  \"update_date\": \"2023-01-23\",\r\n  \"update_final_member\": \"member\",\r\n  \"cover\": \"cover URL\",   // must\r\n  \"video\": \"project video URL\",\r\n  \"risks\": \"the risks\",\r\n  \"owner\": \"6453d211c6ab8c4bfc26717d\", // fake,\r\n  \"option\": [\"6453d211c6ab8c4bfc26717d\"]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -169,8 +161,46 @@
 			"response": []
 		},
 		{
+			"name": "B2-列出專案",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/owner/projects",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"owner",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "B3-取得專案詳細內容",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -190,11 +220,21 @@
 		{
 			"name": "B4-修改專案內容",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"title\": \"標題12345\",\r\n  \"summary\": \"project summary\",\r\n  \"content\": \"project content\",\r\n  \"category\": [\"校園\"], // must\r\n  \"target\": 12000,   // must\r\n  \"progress\": 0,   // must\r\n  \"status\": 0,\r\n  \"start_date\": \"2023-01-23\",\r\n  \"end_date\": \"2023-04-23\",\r\n//   \"create_date\": Date;\r\n  \"update_date\": \"2023-01-23\",\r\n  \"update_final_member\": \"member\",\r\n  \"cover\": \"cover URL\",   // must\r\n  \"video\": \"project video URL\",\r\n  \"risks\": \"the risks\",\r\n  \"tag\": [\"long\"]\r\n}",
+					"raw": "{\r\n  \"title\": \"修改標題\"\r\n//   \"summary\": \"project summary\",\r\n//   \"content\": \"project content\",\r\n//   \"category\": [\"校園\"], // must\r\n//   \"target\": 12000,   // must\r\n//   \"progress\": 0,   // must\r\n//   \"status\": 0,\r\n//   \"start_date\": \"2023-01-23\",\r\n//   \"end_date\": \"2023-04-23\",\r\n//   \"create_date\": Date;\r\n//   \"update_date\": \"2023-01-23\",\r\n//   \"update_final_member\": \"member\",\r\n//   \"cover\": \"cover URL\",   // must\r\n//   \"video\": \"project video URL\",\r\n//   \"risks\": \"the risks\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -264,12 +304,31 @@
 			"response": []
 		},
 		{
-			"name": "B7-列出專案之方案內容",
+			"name": "B9-修改某方案內容",
 			"request": {
-				"method": "GET",
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"方案名稱2-2\"   // must\r\n//   \"price\": 1000,   // must\r\n//   \"total\": 50,   // must\r\n//   \"content\": \"說明\",\r\n//   \"cover\": \"cover URL\",\r\n//   \"start_date\": \"2023-01-23\",\r\n//   \"end_date\": \"2023-04-23\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{url}}/owner/projects/{{projectId}}/options",
+					"raw": "{{url}}/owner/projects/{{projectId}}/options/645f33361357264aa70629ca",
 					"host": [
 						"{{url}}"
 					],
@@ -277,7 +336,8 @@
 						"owner",
 						"projects",
 						"{{projectId}}",
-						"options"
+						"options",
+						"645f33361357264aa70629ca"
 					]
 				}
 			},
@@ -319,6 +379,137 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "B7-列出專案之方案內容",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/owner/projects/{{projectId}}/options",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"owner",
+						"projects",
+						"{{projectId}}",
+						"options"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C7-收藏專案",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pid\": \"6459fab141b8f20460c5856d\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/me/likes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"me",
+						"likes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C12-取得我的收藏專案",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/me/likes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"me",
+						"likes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C11-刪除收藏專案",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/me/likes/{{pid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"me",
+						"likes",
+						"{{pid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C1-贊助專案",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"user_id\": \"6459f9ce41b8f20460c58565\",\n  \"project_id\": \"6459fa5341b8f20460c58569\",\n  \"option_id\": \"645a123041b8f20460c5858f\",\n  \"order_option_quantity\": 1,\n  \"order_extra\": 0,\n  \"order_total\": 1000,\n  \"order_note\": \"testing orders\",\n  \"payment_method\": \"信用卡\",\n  \"invoice_type\": \"紙本發票\",\n  \"invoice_carrier\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/orders",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
@@ -326,7 +517,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NTkxMDM4Y2VlODhkNzAxNjcxMzM4MyIsImVtYWlsIjoiYzFfMTIzNDU2NzhAdGVzdC5jb20iLCJyb2xlcyI6WzBdLCJpYXQiOjE2ODM1NTg0NTgsImV4cCI6MTY4MzU2MjA1OH0.N1CsVUVwl_IF6QgNNdUC9XTI_zDiUFbBvcb2VjFsxTQ",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NThlNzA3Yzg1YWNmMDAxMTg0MjQ2MCIsImVtYWlsIjoiYzFfMTIzNDU2NzhAdGVzdC5jb20iLCJyb2xlcyI6WzBdLCJpYXQiOjE2ODM1NDc5MTQsImV4cCI6MTY4MzU1MTUxNH0.xX7_zc1LELEJYZ9J4Y2iVunGYESkEOXAIF2_KdV_pB0",
 				"type": "string"
 			}
 		]
@@ -358,7 +549,17 @@
 			"type": "string"
 		},
 		{
+			"key": "user_token",
+			"value": "",
+			"type": "string"
+		},
+		{
 			"key": "projectId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "optionId",
 			"value": "",
 			"type": "string"
 		}

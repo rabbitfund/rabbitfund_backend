@@ -18,6 +18,7 @@ import {
   doGetOwnerProjectOptions,
   doPostOwnerProjectOptions,
   doGetProjectOptions,
+  doPatchProjectOptions
 } from "./option.bp";
 
 export const getOwnerProjects: RequestHandler = async (
@@ -131,6 +132,28 @@ export const postOwnerProjectOptions: RequestHandler = async (
   // TODO: verify data
 
   const option = await doPostOwnerProjectOptions(prjectId, data);
+  return handleSuccess(res, option);
+};
+
+export const patchProjectOptions: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = res.locals.user.id;
+  const prjectId = req.params.pid;
+  const optionId = req.params.optid;
+  const data = req.body;
+  
+  if (!isValidObjectId(prjectId)) {
+    return next(createError(400, "找不到專案"));
+  }
+  
+  if (!isValidObjectId(optionId)) {
+    return next(createError(400, "找不到方案"));
+  }
+
+  const option = await doPatchProjectOptions(prjectId, optionId, data);
   return handleSuccess(res, option);
 };
 
