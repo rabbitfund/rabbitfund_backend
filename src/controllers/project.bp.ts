@@ -1,4 +1,5 @@
 import Project from "../model/projectModels";
+import UserProposer from "../model/userProposerModels";
 import createError from "http-errors";
 
 type ProjectCreateInput = {
@@ -55,12 +56,21 @@ type ProjectUpdateInput = {
 
 
 async function doGetOwnerProjects(userId: string) {
-  // TODO: 透過 user ID 找出 Owner 們 (UserProposer)
-  // 再透過 Owner 找出 Projects (需過濾已刪除的專案)
-  const projects = await Project.findById(userId).select({
+  const proposers = await UserProposer.find({
+    proposer_create: userId
+    // 先不處理 proposer_group 
+  }).exec();
+  
+  const totalProjects = []
+  for (let proposer of proposers) {
+    const projects = await Project.find({
+      ownerInfo: proposer
+    }).exec();
     
-  })
-  return projects
+    totalProjects.push(...projects)
+  }
+
+  return totalProjects
 }
 
 async function doPostOwnerProject(userId: string, data: ProjectCreateInput) {
@@ -81,7 +91,7 @@ async function doPostOwnerProject(userId: string, data: ProjectCreateInput) {
     project_video: data.video || "",
     project_risks: data.risks || "",
     project_tag: data.tag || [],
-    ownerInfo: data.owner || "",
+    ownerInfo: data.owner || null,
     option: data.option || [],
     news: data.news || [],
     qas: data.qas || [],
