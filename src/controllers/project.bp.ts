@@ -150,6 +150,32 @@ async function doDeleteOwnerProject(userId: string, projectId: string) {
 
 
 
+async function doGetProjects(parameters: any, page: string) {
+  const pageNum = parseInt(page);
+  const perPage = 10;
+  const projects = await Project.find(parameters)
+    .limit(perPage)
+    .skip(perPage*(pageNum-1));
+
+  if (!projects || projects.length === 0) {
+    throw createError(400, "找不到專案");
+  }
+
+  // filtered out specific info 
+  const filteredProjects = projects.map(project => {
+    const {
+      project_update_date: _,
+      project_update_final_member: __,
+      delete: ___,
+      delete_member: ____,
+      ...filteredProject
+    } = project.toObject();
+    return filteredProject
+  })
+
+  return filteredProjects
+}
+
 async function doGetProject(projectId: string) {
   const project = await Project.findById(projectId)
   if (!!project) {
@@ -179,5 +205,6 @@ export {
   doGetOwnerProject,
   doPutOwnerProject,
   doDeleteOwnerProject,
+  doGetProjects,
   doGetProject,
 }

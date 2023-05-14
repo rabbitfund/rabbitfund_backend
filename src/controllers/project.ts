@@ -11,6 +11,7 @@ import {
   doGetOwnerProject,
   doPutOwnerProject,
   doDeleteOwnerProject,
+  doGetProjects,
   doGetProject,
 } from "./project.bp";
 
@@ -133,6 +134,34 @@ export const postOwnerProjectOptions: RequestHandler = async (
 
   const option = await doPostOwnerProjectOptions(prjectId, data);
   return handleSuccess(res, option);
+};
+
+export const getProjects: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = res.locals.user.id;
+  const type = req.query.type
+  const keyword = req.query.k
+  const page = req.query.page as string
+  const tag = req.query.tag
+
+  let parameters
+  if (!!tag) {
+    parameters = {
+      project_tag: tag
+    }
+  } else if (!!type && !!keyword) {
+    parameters = {
+      project_category: [type],
+      project_title: keyword,
+    }
+  }
+  
+  const projects = await doGetProjects(parameters, page);
+
+  return handleSuccess(res, projects || {});
 };
 
 export const patchProjectOptions: RequestHandler = async (

@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "6f78fb95-b961-4e2b-b0ae-2694774fdd3b",
+		"_postman_id": "708932f4-9a53-41ea-a616-e38b5439cdec",
 		"name": "倍而兔募資平台",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25930895"
+		"_exporter_id": "22739180"
 	},
 	"item": [
 		{
@@ -344,6 +344,43 @@
 			"response": []
 		},
 		{
+			"name": "S4-列出專案(列表)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/projects?page=1&tag=long",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"projects"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "tag",
+							"value": "long"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "S5-取得專案內容",
 			"request": {
 				"method": "GET",
@@ -375,6 +412,43 @@
 						"projects",
 						"{{projectId}}",
 						"options"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "S7-搜尋專案",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/projects?type=校園&k=標題",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"projects"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "校園"
+						},
+						{
+							"key": "k",
+							"value": "標題"
+						}
 					]
 				}
 			},
@@ -517,7 +591,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NThlNzA3Yzg1YWNmMDAxMTg0MjQ2MCIsImVtYWlsIjoiYzFfMTIzNDU2NzhAdGVzdC5jb20iLCJyb2xlcyI6WzBdLCJpYXQiOjE2ODM1NDc5MTQsImV4cCI6MTY4MzU1MTUxNH0.xX7_zc1LELEJYZ9J4Y2iVunGYESkEOXAIF2_KdV_pB0",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWZiNjA2YWNjYWZmOWZlNTFlZjQ5MCIsImVtYWlsIjoiYzFfMTIzNDU2NzhAdGVzdC5jb20iLCJyb2xlcyI6WzBdLCJpYXQiOjE2ODM5OTQxMjEsImV4cCI6MTY4Mzk5NzcyMX0.0oVAOGh5oPJ8MVSc69tngNluAUtuv43myhwjLpo56R0",
 				"type": "string"
 			}
 		]

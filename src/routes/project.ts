@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { getProject, getProjectOptions } from "../controllers/project";
+import { getProject, getProjects, getProjectOptions } from "../controllers/project";
 import { needAuth } from "../middleware/needAuth";
 import { handleErrorAsync } from "../service/handleErrorAsync";
 
 const router = Router();
 
-// router.get("", needAuth, handleErrorAsync(getProjects));
+router.get("", needAuth, handleErrorAsync(getProjects));
 router.get("/:pid", needAuth, handleErrorAsync(getProject));
 router.get("/:pid/options", needAuth, handleErrorAsync(getProjectOptions));
 
