@@ -180,7 +180,6 @@ describe("orders", () => {
       invoice_type: "紙本發票",
       invoice_carrier: "",
     };
-    // console.log(JSON.stringify(testPayload, null, 2));
 
     const res = await request(app)
       .post("/orders")

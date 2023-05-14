@@ -6,6 +6,7 @@ import Project from "../model/projectModels";
 import Option from "../model/optionModels";
 import Order from "../model/orderModels";
 import OrderInfo from "../model/orderInfoModels";
+import { log } from "console";
 
 type OrderCreateInput = {
   user_id: string;
@@ -51,21 +52,19 @@ async function doOrderCreate(data: OrderCreateInput) {
     throw createError(400, "找不到專案");
   }
 
-  console.log(project);
-
   // const option = await Option.findById(data.option_id);
   const option = (await Option.find({
     _id: data.option_id,
     option_status: 2, //must 2-進行中
     delete: false,
-  }).exec()) as any;
-  if (!option) {
+  })) as any;
+  if (!option || option.length === 0) {
     throw createError(400, "找不到方案");
   }
 
   // confirm order_total
   const orderTotal =
-    option.option_price * data.order_option_quantity + data.order_extra;
+    option[0].option_price * data.order_option_quantity + data.order_extra;
   if (orderTotal !== data.order_total) {
     throw createError(400, "訂單總金額錯誤");
   }
