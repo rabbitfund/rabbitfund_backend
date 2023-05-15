@@ -1,5 +1,15 @@
 import { Router } from "express";
-import { postOwnerProjects, getOwnerProjects, getOwnerProject, putOwnerProject, deleteOwnerProject, getOwnerProjectOptions, postOwnerProjectOptions, patchProjectOptions } from "../controllers/project";
+import {
+  postOwnerProjects,
+  getOwnerProjects,
+  getOwnerProject,
+  putOwnerProject,
+  deleteOwnerProject,
+  getOwnerProjectOptions,
+  postOwnerProjectOptions,
+  patchProjectOptions,
+  getProjectSupporters,
+} from "../controllers/project";
 import { needAuth } from "../middleware/needAuth";
 import { handleErrorAsync } from "../service/handleErrorAsync";
 
@@ -12,8 +22,16 @@ router.put("/:pid", needAuth, handleErrorAsync(putOwnerProject));
 router.delete("/:pid", needAuth, handleErrorAsync(deleteOwnerProject));
 
 router.get("/:pid/options", needAuth, handleErrorAsync(getOwnerProjectOptions));
-router.post("/:pid/options", needAuth, handleErrorAsync(postOwnerProjectOptions));
-router.patch("/:pid/options/:optid", needAuth, handleErrorAsync(patchProjectOptions));
+router.post(
+  "/:pid/options",
+  needAuth,
+  handleErrorAsync(postOwnerProjectOptions)
+);
+router.patch(
+  "/:pid/options/:optid",
+  needAuth,
+  handleErrorAsync(patchProjectOptions)
+);
 
 // B2, GET, /owner/projects
 // B1, POST, /owner/projects
@@ -28,7 +46,11 @@ router.patch("/:pid/options/:optid", needAuth, handleErrorAsync(patchProjectOpti
 // B8, PUT, /owner/projects/{pid}/options
 // B9, PATCH, /owner/projects/{pid}/options/{optId}
 // B10, GET, /owner/projects/{pid}/supporters
+router.get(
+  "/:pid/supporters",
+  needAuth,
+  handleErrorAsync(getProjectSupporters)
+);
 // B11, GET, /owner/projects/{pid}/status
-
 
 export default router;

@@ -40,14 +40,14 @@ beforeAll(async () => {
     user_email: user_normal.email,
     user_hash_pwd: bcrypt.hashSync(user_normal.pass || "", 12),
     user_name: "c1_12345678",
-    user_role: [0],
+    user_roles: [0],
     login_method: [0],
   });
   await User.create({
     user_email: user_google.email,
     user_hash_pwd: bcrypt.hashSync("", 12),
     user_name: "c9_12345678",
-    user_role: [0],
+    user_roles: [0],
     login_method: [1],
     oauth_google_id: user_google.oauth_google_id || "",
   });
