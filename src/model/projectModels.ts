@@ -74,7 +74,9 @@ const projectSchema = new mongoose.Schema(
     },
     project_tag: {
       // 標籤
-      type: [String],
+      type: String,
+      enum: ["hot", "recent", "long"],
+      default: "recent"
     },
     ownerInfo: {
       // 提案方資訊
