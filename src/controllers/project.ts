@@ -2,7 +2,8 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import { handleSuccess, handleError } from "../service/handleReply";
 import createError from "http-errors";
 import { isValidObjectId } from "../utils/objectIdValidator";
-
+import { isEmptyStr } from "../utils/isEmpty";
+import { UserRole } from "../model/userModels";
 import {
   ProjectCreateInput,
   ProjectUpdateInput,
@@ -13,13 +14,14 @@ import {
   doDeleteOwnerProject,
   doGetProjects,
   doGetProject,
+  doGetProjectSupporters,
 } from "./project.bp";
 
 import {
   doGetOwnerProjectOptions,
   doPostOwnerProjectOptions,
   doGetProjectOptions,
-  doPatchProjectOptions
+  doPatchProjectOptions,
 } from "./option.bp";
 
 export const getOwnerProjects: RequestHandler = async (
@@ -142,23 +144,23 @@ export const getProjects: RequestHandler = async (
   next: NextFunction
 ) => {
   const userId = res.locals.user.id;
-  const type = req.query.type
-  const keyword = req.query.k
-  const page = req.query.page as string
-  const tag = req.query.tag
+  const type = req.query.type;
+  const keyword = req.query.k;
+  const page = req.query.page as string;
+  const tag = req.query.tag;
 
-  let parameters
+  let parameters;
   if (!!tag) {
     parameters = {
-      project_tag: tag
-    }
+      project_tag: tag,
+    };
   } else if (!!type && !!keyword) {
     parameters = {
       project_category: [type],
       project_title: keyword,
-    }
+    };
   }
-  
+
   const projects = await doGetProjects(parameters, page);
 
   return handleSuccess(res, projects || {});
@@ -173,11 +175,11 @@ export const patchProjectOptions: RequestHandler = async (
   const prjectId = req.params.pid;
   const optionId = req.params.optid;
   const data = req.body;
-  
+
   if (!isValidObjectId(prjectId)) {
     return next(createError(400, "找不到專案"));
   }
-  
+
   if (!isValidObjectId(optionId)) {
     return next(createError(400, "找不到方案"));
   }
@@ -216,4 +218,26 @@ export const getProjectOptions: RequestHandler = async (
 
   const project = await doGetProjectOptions(prjectId);
   return handleSuccess(res, project);
+};
+
+// B10: 取得專案贊助人列表
+export const getProjectSupporters: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = res.locals.user.id;
+  // check user's role
+  if (!res.locals.user.roles.includes(UserRole.PROVIDER)) {
+    return next(createError(403, "非專案發起人"));
+  }
+
+  const projectId = req.params.pid;
+  if (isEmptyStr(projectId) || !isValidObjectId(projectId)) {
+    return next(createError(400, "欄位填寫不完整或格式錯誤"));
+  }
+
+  const supporters = await doGetProjectSupporters(userId, projectId);
+
+  handleSuccess(res, supporters);
 };
