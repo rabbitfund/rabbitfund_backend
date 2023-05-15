@@ -158,7 +158,7 @@ export const getProjects: RequestHandler = async (
     };
   } else if (!!type && !!keyword) {
     parameters = {
-      project_category: [type],
+      project_category: type,
       project_title: keyword,
     };
   }

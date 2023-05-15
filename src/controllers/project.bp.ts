@@ -7,7 +7,7 @@ type ProjectCreateInput = {
   title: String; // must
   summary: String;
   content: String;
-  category: [String]; // must
+  category: String; // must
   target: Number; // must
   progress: Number; // must
   // status: Number;
@@ -33,7 +33,7 @@ type ProjectUpdateInput = {
   title?: String; // must
   summary?: String;
   content?: String;
-  category?: [String]; // must
+  category?: String; // must
   target?: Number; // must
   progress?: Number; // must
   status?: Number;

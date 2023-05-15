@@ -40,7 +40,7 @@ const project = {
   project_title: "test project",
   project_summary: "test project summary",
   project_content: "test project content",
-  project_category: ["公益"],
+  project_category: "公益",
   project_target: 100000,
   project_progress: 0,
   project_status: 2,
