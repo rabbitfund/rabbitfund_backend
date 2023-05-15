@@ -46,7 +46,7 @@ const projectOwnerInfo = {
   proposer_name: "提案方 proposer - like",
   // proposer_create: "", // --> user
   proposer_email: "proposer_like@test.com",
-  proposer_tax_id: "12345678",
+  proposer_tax_id: "123456789",
 };
 const projectOption1 = {
   // option_parent: "", // --> project
@@ -101,7 +101,7 @@ beforeAll(async () => {
     user_email: user_normal.email,
     user_hash_pwd: bcrypt.hashSync(user_normal.pass || "", 12),
     user_name: user_normal.user_name,
-    user_role: user_normal.user_roles,
+    user_roles: user_normal.user_roles,
     login_method: user_normal.login_method,
     user_intro: user_normal.user_intro,
   });
@@ -109,7 +109,7 @@ beforeAll(async () => {
     user_email: user2_normal.email,
     user_hash_pwd: bcrypt.hashSync(user2_normal.pass || "", 12),
     user_name: user2_normal.user_name,
-    user_role: user2_normal.user_roles,
+    user_roles: user2_normal.user_roles,
     login_method: user2_normal.login_method,
     user_intro: user2_normal.user_intro,
   });

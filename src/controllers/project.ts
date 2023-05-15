@@ -77,6 +77,8 @@ export const putOwnerProject: RequestHandler = async (
   const prjectId = req.params.pid;
   const data = req.body;
 
+  console.log("putOwnerProject=", prjectId);
+
   if (!isValidObjectId(prjectId)) {
     return next(createError(400, "找不到專案"));
   }
@@ -227,6 +229,7 @@ export const getProjectSupporters: RequestHandler = async (
   next: NextFunction
 ) => {
   const userId = res.locals.user.id;
+
   // check user's role
   if (!res.locals.user.roles.includes(UserRole.PROVIDER)) {
     return next(createError(403, "非專案發起人"));

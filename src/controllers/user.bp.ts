@@ -44,7 +44,7 @@ async function doSignUp(data: UserSignUpInput) {
     user_email: data.email,
     user_hash_pwd: bcrypt.hashSync(data.pass || "", 12),
     user_name: data.name,
-    user_role: [UserRole.SUPPORTER],
+    user_roles: [UserRole.SUPPORTER],
     login_method: [data.method],
     oauth_google_id: data.oauth_google_id || "",
     user_cover: data.cover || "",

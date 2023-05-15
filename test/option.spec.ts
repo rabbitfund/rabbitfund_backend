@@ -57,12 +57,12 @@ beforeAll(async () => {
     user_email: user_normal.email,
     user_hash_pwd: bcrypt.hashSync(user_normal.pass || "", 12),
     user_name: "c1_12345678",
-    user_role: [0],
+    user_roles: [0],
     login_method: [0],
   });
 
   newProject = await Project.create(project);
-  projectId = newProject._id
+  projectId = newProject._id;
 
   await newProject.save();
 });
@@ -105,7 +105,7 @@ const option = {
   option_price: 1000,
   option_total: 50,
   option_content: "test option content",
-  option_cover: 
+  option_cover:
     "https://images.unsplash.com/photo-1533206482744-b9766a45e98a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1035&q=80",
   option_start_date: new Date(),
   option_end_date: new Date(new Date().getTime() + 90 * 24 * 60 * 60 * 1000),
@@ -126,12 +126,12 @@ describe("projects", () => {
     expect(res.body.msg).toEqual("success");
     expect(res.body.data.token.length).toBeGreaterThan(0);
     token = res.body.data.token;
-    console.log(token);
+    // console.log(token);
   });
 
   afterAll(async () => {
     await Project.deleteOne({ _id: projectId });
-    await Option.deleteOne({ _id: optionId })
+    await Option.deleteOne({ _id: optionId });
   });
 
   test("create option", async () => {
@@ -142,52 +142,52 @@ describe("projects", () => {
       content: option.option_content,
       cover: option.option_cover,
       start_date: option.option_start_date,
-      end_date: option.option_end_date
+      end_date: option.option_end_date,
     };
 
     const res = await request(app)
       .post(`/owner/projects/${projectId}/options`)
       .set("Authorization", `Bearer ${token}`)
       .send(testPayload);
-    
+
     expect(res.status).toEqual(200);
     expect(res.body.ok).toEqual(true);
     expect(res.body.msg).toEqual("success");
     expect(res.body.data).toHaveProperty("_id");
     expect(res.body.data.option_parent).toEqual(projectId.toString());
-    
+
     optionId = res.body.data._id;
-  })
+  });
 
   test("get options (owner)", async () => {
     const res = await request(app)
       .get(`/owner/projects/${projectId}/options`)
-      .set("Authorization", `Bearer ${token}`)
-      console.log(res.body)
+      .set("Authorization", `Bearer ${token}`);
+    // console.log(res.body);
     expect(res.status).toEqual(200);
     expect(res.body.ok).toEqual(true);
     expect(res.body.msg).toEqual("success");
-    
+
     expect(res.body.data.length).toEqual(1);
     expect(res.body.data[0]).toHaveProperty("_id");
     expect(res.body.data[0]._id).toEqual(optionId.toString());
-  })
+  });
 
   test("get options (normal user)", async () => {
     const res = await request(app)
       .get(`/projects/${projectId}/options`)
-      .set("Authorization", `Bearer ${token}`)
-      console.log(res.body)
+      .set("Authorization", `Bearer ${token}`);
+    // console.log(res.body);
     expect(res.status).toEqual(200);
     expect(res.body.ok).toEqual(true);
     expect(res.body.msg).toEqual("success");
-    
+
     expect(res.body.data.length).toEqual(1);
     expect(res.body.data[0]).toHaveProperty("_id");
     expect(res.body.data[0]._id).toEqual(optionId.toString());
-    expect(res.body.data[0]).not.toHaveProperty("option_create_date")
-    expect(res.body.data[0]).not.toHaveProperty("option_update_date")
-    expect(res.body.data[0]).not.toHaveProperty("delete")
-    expect(res.body.data[0]).not.toHaveProperty("delete_member")
-  })
+    expect(res.body.data[0]).not.toHaveProperty("option_create_date");
+    expect(res.body.data[0]).not.toHaveProperty("option_update_date");
+    expect(res.body.data[0]).not.toHaveProperty("delete");
+    expect(res.body.data[0]).not.toHaveProperty("delete_member");
+  });
 });

@@ -235,11 +235,7 @@ async function doGetProjectSupporters(userId: string, projectId: string) {
       payment_status: 1,
     });
 
-  if (!orders || orders.length === 0) {
-    throw createError(400, "找不到贊助者");
-  }
-
-  return orders;
+  return orders || [];
 }
 
 export {

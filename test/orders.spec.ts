@@ -93,7 +93,7 @@ beforeAll(async () => {
     user_email: user_normal.email,
     user_hash_pwd: bcrypt.hashSync(user_normal.pass || "", 12),
     user_name: user_normal.user_name,
-    user_role: user_normal.user_roles,
+    user_roles: user_normal.user_roles,
     login_method: user_normal.login_method,
   });
 
@@ -130,6 +130,41 @@ describe("orders", () => {
   let orderId: string;
   let orderInfoId: string;
 
+  async function createOrder() {
+    // console.log("create order");
+    const orderPayload = {
+      user_id: newUser._id,
+      project_id: newProject._id,
+      option_id: newOption1._id,
+      order_option_quantity: 1,
+      order_extra: 0,
+      order_total: 1000,
+      order_note: "testing orders",
+      payment_method: "信用卡",
+      invoice_type: "紙本發票",
+      invoice_carrier: "",
+    };
+
+    const res = await request(app)
+      .post("/orders")
+      .set("Authorization", `Bearer ${token}`)
+      .send(orderPayload);
+    // console.log(JSON.stringify(res.body, null, 2));
+
+    expect(res.status).toEqual(200);
+    expect(res.body.ok).toEqual(true);
+    expect(res.body.msg).toEqual("success");
+    orderId = res.body.data._id;
+    orderInfoId = res.body.data.order_info;
+    // update order_status =2
+    const newOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { order_status: 2 },
+      { new: true }
+    );
+    expect(newOrder).not.toBeNull();
+    expect(newOrder?.order_status).toEqual(2);
+  }
   // signin
   beforeEach(async () => {
     const res = await request(app).post("/signin").send({
@@ -179,27 +214,19 @@ describe("orders", () => {
     expect(res.body.data).toHaveProperty("_id");
     orderId = res.body.data._id;
     orderInfoId = res.body.data.order_info;
+  });
 
-    //
-    const orders = await Order.find({
-      user: newUser._id,
-      project: newProject._id,
-      // order_status: 2,
-    })
-      .populate("user", { _id: 1, user_name: 1, user_email: 1 })
-      .populate("option", {
-        _id: 1,
-        option_name: 1,
-        option_price: 1,
-        option_content: 1,
-      })
-      .populate("order_info", {
-        _id: 1,
-        payment_price: 1,
-        payment_method: 1,
-        payment_status: 1,
-      });
+  test("B10: get project's supporters", async () => {
+    await createOrder();
+    const res = await request(app)
+      .get(`/owner/projects/${newProject._id}/supporters`)
+      .set("Authorization", `Bearer ${token}`);
+    // console.log(JSON.stringify(res.body, null, 2));
 
-    console.log(JSON.stringify(orders, null, 2));
+    expect(res.status).toEqual(200);
+    expect(res.body.ok).toEqual(true);
+    expect(res.body.msg).toEqual("success");
+    expect(res.body.data.length).toEqual(1);
+    expect(res.body.data[0]).toHaveProperty("_id");
   });
 });

@@ -49,7 +49,7 @@ beforeAll(async () => {
     user_email: user_normal.email,
     user_hash_pwd: bcrypt.hashSync(user_normal.pass || "", 12),
     user_name: "c2_12345678",
-    user_role: [0],
+    user_roles: [0],
     login_method: [0],
     user_intro: user_normal.user_intro,
   });
@@ -57,7 +57,7 @@ beforeAll(async () => {
     user_email: user_google.email,
     user_hash_pwd: bcrypt.hashSync("", 12),
     user_name: "c8_12345678",
-    user_role: [0],
+    user_roles: [0],
     login_method: [1],
     oauth_google_id: user_google.oauth_google_id || "",
     user_intro: user_google.user_intro,
@@ -94,7 +94,7 @@ describe("user normal login", () => {
     expect(res.body.msg).toEqual("success");
     expect(res.body.data.token.length).toBeGreaterThan(0);
     token = res.body.data.token;
-    console.log(token);
+    // console.log(token);
   });
 
   test("get user data", async () => {
