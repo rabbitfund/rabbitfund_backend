@@ -3,6 +3,7 @@ import { updateMeUser, getMeUser } from "../controllers/user";
 import { needAuth } from "../middleware/needAuth";
 import { handleErrorAsync } from "../service/handleErrorAsync";
 import { createMeLikes, getMeLikes, deleteMeLikes } from "../controllers/likes";
+import { getMeOrders } from "../controllers/order";
 
 const router = Router();
 
@@ -18,5 +19,7 @@ router.put("/profile", needAuth, handleErrorAsync(updateMeUser));
 router.post("/likes", needAuth, handleErrorAsync(createMeLikes));
 router.get("/likes", needAuth, handleErrorAsync(getMeLikes));
 router.delete("/likes/:pid", needAuth, handleErrorAsync(deleteMeLikes));
+
+router.get("/orders", needAuth, handleErrorAsync(getMeOrders));
 
 export default router;
