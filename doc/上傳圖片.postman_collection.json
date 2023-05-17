@@ -1,0 +1,114 @@
+{
+	"info": {
+		"_postman_id": "64f9b189-7adf-41b9-9eee-34914a0a4b6a",
+		"name": "上傳圖片",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25930895"
+	},
+	"item": [
+		{
+			"name": "上傳圖片",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "",
+							"type": "file",
+							"src": "/Users/yc/Desktop/截圖 2023-05-09 下午11.17.58.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/upload/Image",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"upload",
+						"Image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "取得所有圖片",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/upload/Image",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"upload",
+						"Image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "取得特定圖片",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/upload/Image/{{id}}",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"upload",
+						"Image",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刪除特定圖片",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/upload/Image/{{id}}",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"upload",
+						"Image",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

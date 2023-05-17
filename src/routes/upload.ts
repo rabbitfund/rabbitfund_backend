@@ -12,12 +12,12 @@ import {
 const router = Router()
 
 // 取得所有圖片
-router.get('/Image', handleErrorAsync(getImages))
+router.get('/Image', needAuth, handleErrorAsync(getImages))
 // 取得特定圖片
-router.get('/Image/:pid', handleErrorAsync(getImage))
+router.get('/Image/:pid', needAuth, handleErrorAsync(getImage))
 // 上傳圖片
-router.post('/Image', imageValidation, handleErrorAsync(uploadImage))
+router.post('/Image', needAuth, imageValidation, handleErrorAsync(uploadImage))
 // 刪除圖片
-router.delete('/Image/:pid', handleErrorAsync(deleteImage))
+router.delete('/Image/:pid', needAuth, handleErrorAsync(deleteImage))
 
 export default router
