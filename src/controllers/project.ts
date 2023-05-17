@@ -159,7 +159,7 @@ export const getProjects: RequestHandler = async (
   } else if (!!type && !!keyword) {
     parameters = {
       project_category: type,
-      project_title: keyword,
+      project_title: { $regex: keyword},
     };
   }
 
