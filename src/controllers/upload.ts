@@ -1,5 +1,5 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express'
-import { multer, MulterRequest } from 'multer'
+import { NextFunction, Express, Request, RequestHandler, Response } from 'express'
+// import { multer, MulterRequest } from 'multer'
 import { v4 as uuidv4 } from 'uuid'
 import { handleSuccess, handleError } from '../service/handleReply'
 import createError from 'http-errors'
@@ -29,26 +29,28 @@ export const getImage: RequestHandler = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const fileId = req.params.pid
-  console.log(fileId);
+  const fileId = req.params.pid;
+  // console.log(fileId);
 
   if (!verifyFileId(fileId)) {
-    return next(createError(400, '找不到檔案'))
+    return next(createError(400, '找不到檔案'));
   }
 
-  const file = await doGetFile(fileId)
-  return handleSuccess(res, file)
+  const file = await doGetFile(fileId);
+  return handleSuccess(res, file);
 }
 
 export const uploadImage: RequestHandler = async (
-  req: MulterRequest,
+  // req: MulterRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  if (!req.files.length) {
-    return next(createError(400, '尚未上傳檔案', next))
-  }
-  const file = req.files[0] as multer.File
+  if (!req.files) {
+    throw createError(400, '尚未上傳檔案', next);
+  } 
+  const files = req.files as Express.Multer.File[];
+  const file = files[0];
 
   const bucket = firebaseAdmin.storage().bucket()
   const path = `images/${uuidv4()}.${file.originalname.split('.').pop()}`
@@ -62,13 +64,13 @@ export const uploadImage: RequestHandler = async (
     }
     blob.getSignedUrl(config, async (err, fileUrl) => {
       if (fileUrl) {
-        console.log(fileUrl)
+        // console.log(fileUrl)
         const imageCreate: ImageCreate = {
           url: fileUrl,
           path: path,
         }
         const file = await doImageCreate(imageCreate)
-        console.log("test", file)
+        // console.log("test", file)
         res.send({
           file
         })
@@ -93,35 +95,35 @@ export const deleteImage: RequestHandler = async (
   next: NextFunction,
 ) => {
   const fileId = req.params.pid
-  console.log(fileId);
+  // console.log(fileId);
   if (!verifyFileId(fileId)) {
-    return next(createError(400, '找不到檔案'))
+    throw createError(400, '找不到檔案');
   }
 
   const file = await doGetFile(fileId);  
-  console.log(file);
+  // console.log(file);
   if (!file) {
-    return next(createError(400, '找不到檔案'))
+    throw createError(400, '找不到檔案');
   }
 
   const bucket = firebaseAdmin.storage().bucket()
   const path: string = file.file_path
-  console.log(path)
-  try {
-    const result = await bucket.file(path).delete()
-    console.log(result)
-    const imageDelete: ImageDelete = {
-      // file_Id: path,
-      file_Id: file._id.toString(),
-    }
-    doImageDelete(imageDelete)
-    return handleSuccess(res, `File ${path} has been deleted.`)
-  } catch (error) {
-    const err: Error = {
-      name: '',
-      message: `Failed to delete file ${path}:${error.message}`,
-    }
-    console.error(error);
-    return handleError(res, err)
+  // console.log(path)
+  // try {
+  const result = await bucket.file(path).delete()
+  // console.log(result)
+  const imageDelete: ImageDelete = {
+    // file_Id: path,
+    file_Id: file._id.toString(),
   }
+  doImageDelete(imageDelete)
+  return handleSuccess(res, `File ${path} has been deleted.`)
+  // } catch (error) {
+  //   const err: Error = {
+  //     name: '',
+  //     message: `Failed to delete file ${path}:${error.message}`,
+  //   }
+  //   console.error(error);
+  //   return handleError(res, err)
+  // }
 }
