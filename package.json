@@ -27,6 +27,7 @@
     "@vitest/coverage-c8": "^0.29.8",
     "concurrently": "^8.0.1",
     "nodemon": "^2.0.22",
+    "postman-to-openapi": "^3.0.1",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.1",
     "vitest": "^0.29.8"
