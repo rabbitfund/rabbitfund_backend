@@ -6,7 +6,8 @@
     "start": "concurrently \"npx tsc -w\" \"nodemon ./bin/www\"",
     "build": "npx tsc",
     "test": "vitest",
-    "coverage": "vitest --coverage"
+    "coverage": "vitest --coverage",
+    "swagger": "npx ts-node ./src/swagger.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
