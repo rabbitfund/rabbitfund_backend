@@ -17,7 +17,7 @@ const serviceAccount = {
 };
 
 firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.cert(serviceAccount),
+  credential: firebaseAdmin.credential.cert(serviceAccount as firebaseAdmin.ServiceAccount),
   storageBucket: `${process.env.FIREBASE_PROJECT_ID}.appspot.com`,
 });
 
