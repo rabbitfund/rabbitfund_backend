@@ -10,6 +10,9 @@ import ownerProjectRouter from "./routes/ownerProject";
 import projectRouter from "./routes/project";
 import uploadRouter from "./routes/upload";
 
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from '../swagger_output.json';
+
 import "./connections";
 
 const app: express.Application = express();
@@ -25,6 +28,8 @@ app.use("/me", meRouter);
 app.use("/owner/projects", ownerProjectRouter);
 app.use("/projects", projectRouter);
 app.use("/upload", uploadRouter);
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 // catch 404 (NOT FOUND) and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {
