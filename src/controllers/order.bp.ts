@@ -1,7 +1,8 @@
 import validator from "validator";
 import createError from "http-errors";
 import * as crypto from 'crypto';
-import https from 'https';
+import axios from 'axios';
+// import https from 'https';
 import { isValidObjectId } from "../utils/objectIdValidator";
 import { User } from "../model/userModels";
 import Project from "../model/projectModels";
@@ -29,7 +30,6 @@ interface OrderDataInput {
     _id: string;
     user_name: string;
     user_email: string;
-    user_phone: string;
   };
   project: {
     _id: string;
@@ -45,7 +45,6 @@ interface OrderDataInput {
     newebpay_timeStamp: string;
   };
 }
-
 
 type OrderCheckInput = {
   order_id: string;
@@ -149,34 +148,87 @@ async function doOrderCheck(orderId: string) {
   // console.log('doOrderCheck', orderId);
   // THINK: 待思考還需要檢查什麼資料？還是前一步驟已經檢查就不要再多檢查了？
   const order = await Order.findById(orderId).exec();
+  // console.log('doOrderCheck order:', order);
   if (!order) {
     throw createError(400, "找不到訂單");
   }
-  // console.log('doOrderCheck order:', order);
   
   try {
-      const orderData : OrderDataInput = await Order.findById(orderId)
-        .populate('user', 'user_name user_email user_phone')
-        .populate('project', 'project_title')
-        .populate('option', 'option_name')
-        .populate('order_info', 'newebpay_timeStamp')
-        .select('order_total')
-        .exec();
-      console.log('doOrderCheck full order:', orderData);
-      
-    // if (!!orderData) {
-    //   return orderData;
+    // async function getOrderData(orderId: string) {
+    //   const orderData : OrderDataInput = await Order.findById(orderId)
+    //     .populate('user', { user_name: 1, user_email: 1 })
+    //     .populate('project', { project_title: 1 })
+    //     .populate('option', { option_name: 1 })
+    //     .populate('order_info', { newebpay_timeStamp: 1 })
+    //     .select('order_total')
+    //     .lean()
+    //     .exec();
+    
+    //   return orderData || null;
     // }
-    const orderDataItem: OrderCheckInput = {
-      order_id: orderData._id,
-      user_name: orderData.user.user_name,
-      user_email: orderData.user.user_email,
-      amt: orderData.order_total,
-      itemDesc: orderData.project.project_title,
-      timeStamp: orderData.order_info.newebpay_timeStamp,
+    
+    async function getOrderData(orderId: string) {
+      const orderData: OrderDataInput = await Order.findById(orderId)
+        .populate('user', { user_name: 1, user_email: 1 })
+        .populate('project', { project_title: 1 })
+        .populate('option', { option_name: 1 })
+        .populate('order_info', { newebpay_timeStamp: 1 })
+        .select('order_total')
+        .lean()
+        .exec();
+    
+      if (!orderData) {
+        throw createError(400, "找不到訂單資料");
+      }
+    
+      return orderData;
     }
+    
+    // async function processOrderData(orderId: string) {
+      const orderData = await getOrderData(orderId);
+    
+      console.log(orderData);
+      
+      if (!orderData) {
+        console.log('Order not found');
+        return;
+      }
+    
+    //   console.log('Order Data:', orderData);
+    
+    //   // const orderDataItem: OrderCheckInput = {
+    //   //   order_id: orderData._id.toString(),
+    //   //   user_name: orderData.user?.user_name || '',
+    //   //   user_email: orderData.user?.user_email || '',
+    //   //   amt: orderData.order_total,
+    //   //   itemDesc: orderData.project?.project_title || '',
+    //   //   timeStamp: orderData.order_info?.newebpay_timeStamp || 0,
+    //   // };
+    
+    //   // console.log('Order Data Item:', orderDataItem);
+    
+    //   // Call your further processing functions here with orderDataItem
+    // }
+    
+    // processOrderData(orderId);
+    
 
-    console.log(orderDataItem);
+    // Call your further processing functions here with orderDataItem
+    const orderDataItem: OrderCheckInput = {
+      order_id: orderData._id.toString(),
+      user_name: orderData.user?.user_name || '',
+      user_email: orderData.user?.user_email || '',
+      amt: orderData.order_total,
+      itemDesc: orderData.project?.project_title || '',
+      timeStamp: orderData.order_info?.newebpay_timeStamp || '',
+    };
+
+    // const aesEncrypt = create_mpg_aes_encrypt(orderDataItem); // 交易資料
+    // const shaEncrypt = create_mpg_sha_encrypt(aesEncrypt); // 交易驗證用
+
+    // 傳送資料至藍新金流
+    // sendOrderDataToNewebpay(orderDataItem);
+
 
     const aesEncrypt = create_mpg_aes_encrypt(orderDataItem) // 交易資料
     console.log('aesEncrypt：', aesEncrypt);
@@ -211,46 +263,25 @@ async function doOrderCheck(orderId: string) {
     }
 
     // 將 orderDataItem 加密後整合並傳送至藍新金流
-    function sendOrderDataToNewebpay(orderDataItem: OrderCheckInput) {
+    async function sendOrderDataToNewebpay(orderDataItem: OrderCheckInput) {
       const encryptedOrderData = encryptOrderData(orderDataItem);
       console.log('sendOrderDataToNewebpay', encryptedOrderData);
-      
+          
       // 將 encryptedOrderData 傳送給藍新金流相關處理
-      const postData = JSON.stringify(encryptedOrderData);
-      const postNewebpay = {
-        hostname: 'ccore.newebpay.com',
-        path: '/MPG/mpg_gateway',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(postData),
-        },
-      };
-
-      const req = https.request(postNewebpay, (res) => {
-        let responseData = '';
-
-        res.on('data', (chunk) => {
-          responseData += chunk;
+      try {
+        const response = await axios.post('https://ccore.newebpay.com/MPG/mpg_gateway', encryptedOrderData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
 
-        res.on('end', () => {
-          // 處理藍新金流回應的邏輯
-          // ...
-          console.log('Response:', responseData);
-        });
-      });
-
-      // req.on('error', (error) => {
-      //   // 處理錯誤情況
-      //   console.error('Error:', error);
-      // });
-
-      // req.write(postData);
-      // req.end();
+        // 處理藍新金流回應的邏輯
+        console.log('sendOrderDataToNewebpay Response:', response.data);
+      } catch (error) {
+        // 處理錯誤情況
+        console.error('sendOrderDataToNewebpay Error:', error);
+      }
     }
-
-
 
     // 傳送資料至藍新金流
     sendOrderDataToNewebpay(orderDataItem);
@@ -274,8 +305,11 @@ function genDataChain(order: OrderCheckInput | null): string {
     return '';
   }
   console.log('genDataChain(order):', order);
-  const orderData: string = `MerchantID=${process.env.Newebpay_MerchantID}&RespondType=JSON&TimeStamp=${order.timeStamp}&Version=${process.env.Newebpay_Version}&MerchantOrderNo=${order.order_id}&Amt=${order.amt}&ItemDesc=${encodeURIComponent(order.itemDesc)}&Email=${encodeURIComponent(order.user_email)}`;
+ 
+  const orderData: string = `MerchantID=${process.env.Newebpay_MerchantID}&RespondType=JSON&TimeStamp=${order.timeStamp}&Version=${process.env.Newebpay_Version}&MerchantOrderNo=${order.order_id}&Amt=${order.amt}&ItemDesc=${encodeURIComponent(order.itemDesc)}&Email=${encodeURIComponent(order.user_email)}`
+  
   console.log('genDataChain:', orderData);
+
   // TODO: 有空再實作 "CustomerURL 商店取號網址"，要將此資訊加入 TradeInfo，一起傳給藍新
   return orderData;
 }
@@ -307,4 +341,4 @@ function create_mpg_aes_decrypt(TradeInfo: string): any {
   return JSON.parse(result);
 }
 
-export { OrderCreateInput, verifyOrderCreateData, doOrderCreate, doGetMeOrders, doOrderCheck };
+export { OrderCreateInput, OrderDataInput, OrderCheckInput, verifyOrderCreateData, doOrderCreate, doGetMeOrders, doOrderCheck };

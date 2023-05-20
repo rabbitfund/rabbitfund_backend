@@ -4,10 +4,11 @@ import createError from "http-errors";
 import { isValidObjectId } from "../utils/objectIdValidator";
 import {
   OrderCreateInput,
-  // OrderCheckInput,
+  OrderDataInput,
+  OrderCheckInput,
   verifyOrderCreateData,
   doOrderCreate,
-  doOrderCheck
+  doOrderCheck,
   doGetMeOrders
 } from "./order.bp";
 
@@ -40,6 +41,7 @@ export const getMeOrders: RequestHandler = async (
   handleSuccess(res, order);
 };
 
+
 export const checkOrder: RequestHandler = async (
   req: Request,
   res: Response,
@@ -53,7 +55,7 @@ export const checkOrder: RequestHandler = async (
   }
 
   
-  const order = await doOrderCheck(orderId);
+  const order : OrderCheckInput = await doOrderCheck(orderId);
 
   handleSuccess(res, order);
 };
