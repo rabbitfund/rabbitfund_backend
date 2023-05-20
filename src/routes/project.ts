@@ -5,9 +5,9 @@ import { handleErrorAsync } from "../service/handleErrorAsync";
 
 const router = Router();
 
-router.get("", needAuth, handleErrorAsync(getProjects));
-router.get("/:pid", needAuth, handleErrorAsync(getProject));
-router.get("/:pid/options", needAuth, handleErrorAsync(getProjectOptions));
+router.get("", handleErrorAsync(getProjects));
+router.get("/:pid", handleErrorAsync(getProject));
+router.get("/:pid/options", handleErrorAsync(getProjectOptions));
 
 
 // S5, GET, /projects/{pid}
