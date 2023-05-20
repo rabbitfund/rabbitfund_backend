@@ -1,5 +1,7 @@
 import validator from "validator";
 import createError from "http-errors";
+import * as crypto from 'crypto';
+import https from 'https';
 import { isValidObjectId } from "../utils/objectIdValidator";
 import { User } from "../model/userModels";
 import Project from "../model/projectModels";
@@ -21,6 +23,41 @@ type OrderCreateInput = {
   invoice_carrier: string;
 };
 
+interface OrderDataInput {
+  _id: string;
+  user: {
+    _id: string;
+    user_name: string;
+    user_email: string;
+    user_phone: string;
+  };
+  project: {
+    _id: string;
+    project_title: string;
+  };
+  option: {
+    _id: string;
+    option_name: string;
+  };
+  order_total: number;
+  order_info: {
+    _id: string;
+    newebpay_timeStamp: string;
+  };
+}
+
+
+type OrderCheckInput = {
+  order_id: string;
+  user_name: string;
+  user_email: string;
+  itemDesc: string;
+  timeStamp: string;
+  amt: number;
+  newebpay_aes_encrypt?: string;
+  newebpay_sha_encrypt?: string;
+};
+
 const verifyOrderCreateData = (data: OrderCreateInput): boolean => {
   console.log(data);
   return (
@@ -31,8 +68,8 @@ const verifyOrderCreateData = (data: OrderCreateInput): boolean => {
     data.order_extra >= 0 &&
     data.order_total >= 0 &&
     data.order_note.length <= 100 &&
-    !isEmpty(data.payment_method) &&
-    validator.isIn(data.payment_method, ["信用卡", "ATM", "信用卡分期"]) &&
+    // !isEmpty(data.payment_method) &&
+    validator.isIn(data.payment_method, ["WEBATM", "CREDIT"]) &&
     validator.isIn(data.invoice_type, ["紙本發票", "電子載具", "三聯式發票"])
   );
 };
@@ -72,7 +109,8 @@ async function doOrderCreate(data: OrderCreateInput) {
   const orderInfo = await OrderInfo.create({
     user: data.user_id,
     payment_price: data.order_total,
-    payment_method: data.payment_method,
+    // payment_method: data.payment_method,
+    newebpay_timeStamp: Math.round(new Date().getTime() / 1000), // NOTE: 藍新金流有限制時間戳長度 10 位數
     invoice_type: data.invoice_type,
     invoice_carrier: data.invoice_carrier,
   });
@@ -92,22 +130,166 @@ async function doOrderCreate(data: OrderCreateInput) {
   return order;
 }
 
-async function doGetMeOrders(userId: string, page: string) {
-  const pageNum = parseInt(page);
-  const perPage = 10;
+async function doOrderCheck(orderId: string) {
+  // console.log('doOrderCheck', orderId);
+  // THINK: 待思考還需要檢查什麼資料？還是前一步驟已經檢查就不要再多檢查了？
+  const order = await Order.findById(orderId).exec();
+  if (!order) {
+    throw createError(400, "找不到訂單");
+  }
+  // console.log('doOrderCheck order:', order);
+  
+  try {
+      const orderData : OrderDataInput = await Order.findById(orderId)
+        .populate('user', 'user_name user_email user_phone')
+        .populate('project', 'project_title')
+        .populate('option', 'option_name')
+        .populate('order_info', 'newebpay_timeStamp')
+        .select('order_total')
+        .exec();
+      console.log('doOrderCheck full order:', orderData);
+      
+    // if (!!orderData) {
+    //   return orderData;
+    // }
+    const orderDataItem: OrderCheckInput = {
+      order_id: orderData._id,
+      user_name: orderData.user.user_name,
+      user_email: orderData.user.user_email,
+      amt: orderData.order_total,
+      itemDesc: orderData.project.project_title,
+      timeStamp: orderData.order_info.newebpay_timeStamp,
+    }
 
-  const orders = await Order.find({ user: userId })
-    .limit(perPage)
-    .skip(perPage*(pageNum-1));
+    console.log(orderDataItem);
 
-  if (!orders || orders.length === 0) {
-    throw createError(400, "找不到贊助紀錄");
+    const aesEncrypt = create_mpg_aes_encrypt(orderDataItem) // 交易資料
+    console.log('aesEncrypt：', aesEncrypt);
+    
+    const shaEncrypt = create_mpg_sha_encrypt(aesEncrypt) // 交易驗證用
+    console.log('shaEncrypt：', shaEncrypt);
+  
+    // 2. 取得 orderInfoId
+    // const orderInfoId = order.order_info;
+
+    // 3. 使用 orderInfoId 更新 OrderInfo 資料
+    const checkOrder = await OrderInfo.findOneAndUpdate(
+      { _id: orderData.order_info._id },
+      { $set: {
+        newebpay_aes_encrypt: aesEncrypt,
+        newebpay_sha_encrypt: shaEncrypt,
+      } },
+      { new: true }
+    );
+
+    console.log('checkOrder: ', checkOrder);
+
+    // 建立加密函式
+    function encryptOrderData(orderDataItem: OrderCheckInput): OrderCheckInput {
+      // const aesEncrypt = create_mpg_aes_encrypt(orderDataItem);
+      // const shaEncrypt = create_mpg_sha_encrypt(orderDataItem);
+      return {
+        ...orderDataItem,
+        newebpay_aes_encrypt: aesEncrypt,
+        newebpay_sha_encrypt: shaEncrypt,
+      };
+    }
+
+    // 將 orderDataItem 加密後整合並傳送至藍新金流
+    function sendOrderDataToNewebpay(orderDataItem: OrderCheckInput) {
+      const encryptedOrderData = encryptOrderData(orderDataItem);
+      console.log('sendOrderDataToNewebpay', encryptedOrderData);
+      
+      // 將 encryptedOrderData 傳送給藍新金流相關處理
+      const postData = JSON.stringify(encryptedOrderData);
+      const postNewebpay = {
+        hostname: 'ccore.newebpay.com',
+        path: '/MPG/mpg_gateway',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(postData),
+        },
+      };
+
+      const req = https.request(postNewebpay, (res) => {
+        let responseData = '';
+
+        res.on('data', (chunk) => {
+          responseData += chunk;
+        });
+
+        res.on('end', () => {
+          // 處理藍新金流回應的邏輯
+          // ...
+          console.log('Response:', responseData);
+        });
+      });
+
+      // req.on('error', (error) => {
+      //   // 處理錯誤情況
+      //   console.error('Error:', error);
+      // });
+
+      // req.write(postData);
+      // req.end();
+    }
+
+
+
+    // 傳送資料至藍新金流
+    sendOrderDataToNewebpay(orderDataItem);
+
+  } catch (error) {
+    console.error(error);
+    // throw createError(400, "找不到訂單資料");
   }
 
-  return orders
 }
 
 const isEmpty = (text: string): boolean => {
   return text ? false : true;
 };
-export { OrderCreateInput, verifyOrderCreateData, doOrderCreate, doGetMeOrders };
+
+
+// 組成藍新金流所需字串 - 特別注意轉換字串時，ItemDesc、Email 會出現問題，要使用 encode 來轉換成藍新金流要的格式
+function genDataChain(order: OrderCheckInput | null): string {
+  if (order === null) {
+    // 處理 null 的情況
+    return '';
+  }
+  console.log('genDataChain(order):', order);
+  const orderData: string = `MerchantID=${process.env.Newebpay_MerchantID}&RespondType=JSON&TimeStamp=${order.timeStamp}&Version=${process.env.Newebpay_Version}&MerchantOrderNo=${order.order_id}&Amt=${order.amt}&ItemDesc=${encodeURIComponent(order.itemDesc)}&Email=${encodeURIComponent(order.user_email)}`;
+  console.log('genDataChain:', orderData);
+  // TODO: 有空再實作 "CustomerURL 商店取號網址"，要將此資訊加入 TradeInfo，一起傳給藍新
+  return orderData;
+}
+
+// 使用 aes 加密
+// $edata1=bin2hex(openssl_encrypt($data1, "AES-256-CBC", $key, OPENSSL_RAW_DATA, $iv));
+function create_mpg_aes_encrypt(TradeInfo: OrderCheckInput): string {
+  const encrypt = crypto.createCipheriv('aes256', process.env.Newebpay_HashKey!, process.env.Newebpay_HashIV!); // 製作加密資料
+  const enc = encrypt.update(genDataChain(TradeInfo), 'utf8', 'hex'); // 將訂單內容加密
+  return enc + encrypt.final('hex');
+}
+
+// sha256 加密
+// $hashs="HashKey=".$key."&".$edata1."&HashIV=".$iv;
+function create_mpg_sha_encrypt(aesEncrypt: string): string {
+  const sha = crypto.createHash('sha256');
+  const plainText: string = `HashKey=${process.env.Newebpay_HashKey}&${aesEncrypt}&HashIV=${process.env.Newebpay_HashIV}`;
+
+  return sha.update(plainText).digest('hex').toUpperCase();
+}
+
+// 將 aes 解密
+function create_mpg_aes_decrypt(TradeInfo: string): any {
+  const decrypt = crypto.createDecipheriv('aes256', process.env.Newebpay_HashKey!, process.env.Newebpay_HashIV!);
+  decrypt.setAutoPadding(false);
+  const text = decrypt.update(TradeInfo, 'hex', 'utf8');
+  const plainText = text + decrypt.final('utf8');
+  const result = plainText.replace(/[\x00-\x20]+/g, '');
+  return JSON.parse(result);
+}
+
+export { OrderCreateInput, verifyOrderCreateData, doOrderCreate, doOrderCheck };

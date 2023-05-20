@@ -1,11 +1,13 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { handleSuccess, handleError } from "../service/handleReply";
 import createError from "http-errors";
+import { isValidObjectId } from "../utils/objectIdValidator";
 import {
   OrderCreateInput,
+  // OrderCheckInput,
   verifyOrderCreateData,
   doOrderCreate,
-  doGetMeOrders
+  doOrderCheck
 } from "./order.bp";
 
 export const createOrder: RequestHandler = async (
@@ -24,15 +26,20 @@ export const createOrder: RequestHandler = async (
   handleSuccess(res, order);
 };
 
-export const getMeOrders: RequestHandler = async (
+export const checkOrder: RequestHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const userId = res.locals.user.id;
-  const page = req.query.page as string
+  const orderId = req.params.orderid;
+  console.log(req.params, orderId);
 
-  const order = await doGetMeOrders(userId, page);
+  if (!isValidObjectId(orderId)) {
+    return next(createError(400, "找不到訂單"));
+  }
+
+  
+  const order = await doOrderCheck(orderId);
 
   handleSuccess(res, order);
 };
