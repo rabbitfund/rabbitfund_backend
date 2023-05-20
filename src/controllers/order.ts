@@ -8,6 +8,7 @@ import {
   verifyOrderCreateData,
   doOrderCreate,
   doOrderCheck
+  doGetMeOrders
 } from "./order.bp";
 
 export const createOrder: RequestHandler = async (
@@ -22,6 +23,19 @@ export const createOrder: RequestHandler = async (
   }
 
   const order = await doOrderCreate(data);
+
+  handleSuccess(res, order);
+};
+
+export const getMeOrders: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = res.locals.user.id;
+  const page = req.query.page as string
+
+  const order = await doGetMeOrders(userId, page);
 
   handleSuccess(res, order);
 };

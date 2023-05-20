@@ -130,6 +130,21 @@ async function doOrderCreate(data: OrderCreateInput) {
   return order;
 }
 
+async function doGetMeOrders(userId: string, page: string) {
+  const pageNum = parseInt(page);
+  const perPage = 10;
+
+  const orders = await Order.find({ user: userId })
+    .limit(perPage)
+    .skip(perPage*(pageNum-1));
+
+  if (!orders || orders.length === 0) {
+    throw createError(400, "找不到贊助紀錄");
+  }
+
+  return orders
+}
+
 async function doOrderCheck(orderId: string) {
   // console.log('doOrderCheck', orderId);
   // THINK: 待思考還需要檢查什麼資料？還是前一步驟已經檢查就不要再多檢查了？
@@ -292,4 +307,4 @@ function create_mpg_aes_decrypt(TradeInfo: string): any {
   return JSON.parse(result);
 }
 
-export { OrderCreateInput, verifyOrderCreateData, doOrderCreate, doOrderCheck };
+export { OrderCreateInput, verifyOrderCreateData, doOrderCreate, doGetMeOrders, doOrderCheck };
