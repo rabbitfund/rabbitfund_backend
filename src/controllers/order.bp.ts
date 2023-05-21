@@ -162,35 +162,96 @@ async function doGetMeOrders(userId: string, page: string) {
 }
 
 async function getOrderData(orderId: string) {
-  const orderData = await Order.findById(orderId)
-    .populate<{ user: IUser }>('user', { user_name: 1, user_email: 1 })
-    .populate<{ project: IProject }>('project', { project_title: 1 })
-    .populate<{ option: IOption }>('option', { option_name: 1 })
-    .populate<{ order_info: IOrderInfo }>('order_info', { newebpay_timeStamp: 1 })
-    .select('order_total')
-    .lean()
-    .exec();
+  try {
+    const orderData = await Order.findById(orderId)
+      .populate<{ user: IUser }>('user', { user_name: 1, user_email: 1 })
+      .populate<{ project: IProject }>('project', { project_title: 1 })
+      .populate<{ option: IOption }>('option', { option_name: 1 })
+      .populate<{ order_info: IOrderInfo }>('order_info', { newebpay_timeStamp: 1 })
+      .select('order_total')
+      .lean()
+      .exec();
 
     console.log('getOrderData', orderId, orderData);
-    
-  if (!orderData) {
-    throw createError(400, "找不到訂單資料");
-  }
+      
+    if (!orderData) {
+      throw createError(400, "找不到訂單資料");
+    }
 
-  const aesEncrypt = create_mpg_aes_encrypt(orderData) // 交易資料
+    const aesEncrypt = create_mpg_aes_encrypt(orderData) // 交易資料
     console.log('aesEncrypt：', aesEncrypt);
-    
-  const shaEncrypt = create_mpg_sha_encrypt(aesEncrypt) // 交易驗證用
+      
+    const shaEncrypt = create_mpg_sha_encrypt(aesEncrypt) // 交易驗證用
     console.log('shaEncrypt：', shaEncrypt);
 
-  return orderData;
+    const UpdateOrderInfo = await OrderInfo.findOneAndUpdate(
+      { _id: orderData.order_info },
+      {
+        $set: {
+          newebpay_aes_encrypt: aesEncrypt,
+          newebpay_sha_encrypt: shaEncrypt
+        }
+      },
+      { new: true }
+    )
+
+    console.log('UpdateOrderInfo: ', UpdateOrderInfo)
+
+  // return orderData
+  // let order = {}
+  // return order = {
+  //   ...orderData,
+  //   aesEncrypt,
+  //   shaEncrypt
+  // };
+
+    const orderDataItem: OrderCheckInput = {
+      order_id: orderData._id.toString(),
+      user_name: orderData.user?.user_name || '',
+      user_email: orderData.user?.user_email || '',
+      amt: orderData.order_total || 0,
+      itemDesc: orderData.project?.project_title || '',
+      timeStamp: orderData.order_info.newebpay_timeStamp.toString(),
+      newebpay_aes_encrypt: aesEncrypt,
+      newebpay_sha_encrypt: shaEncrypt
+    };
+
+    console.log('Order Data Item:', orderDataItem);
+    // 傳送資料至藍新金流
+    sendOrderDataToNewebpay(orderDataItem)
+  } catch (error) {
+    console.error(error)
+    // throw createError(400, "找不到訂單資料");
+  }
 }
 
 async function doOrderCheck(orderId: string) {
-  const order = await Order.findById(orderId).exec();
-  // console.log('doOrderCheck order:', order);
-  if (!order) {
-    throw createError(400, "找不到訂單");
+  // const orderData = await getOrderData(orderId)
+  // console.log("doOrderCheck orderData", orderData);
+}
+
+// 將 orderDataItem 傳送至藍新金流
+async function sendOrderDataToNewebpay(orderDataItem: OrderCheckInput) {
+  // const encryptedOrderData = encryptOrderData(orderDataItem)
+  // console.log('sendOrderDataToNewebpay', encryptedOrderData)
+
+  // 將 encryptedOrderData 傳送給藍新金流相關處理
+  try {
+    const response = await axios.post(
+      'https://ccore.newebpay.com/MPG/mpg_gateway',
+      orderDataItem,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+
+    // 處理藍新金流回應的邏輯
+    console.log('sendOrderDataToNewebpay Response:', response.data)
+  } catch (error) {
+    // 處理錯誤情況
+    console.error('sendOrderDataToNewebpay Error:', error)
   }
 }
 

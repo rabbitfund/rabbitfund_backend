@@ -42,7 +42,6 @@ export const getMeOrders: RequestHandler = async (
   handleSuccess(res, order);
 };
 
-
 export const checkOrder: RequestHandler = async (
   req: Request,
   res: Response,
@@ -56,7 +55,47 @@ export const checkOrder: RequestHandler = async (
   }
 
   
-  const order = await getOrderData(orderId);
+  const order : any = await getOrderData(orderId);
 
   handleSuccess(res, order);
+};
+
+export const orderReturn: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log('orderReturn:',req.body);
+  
+  // const orderId = req.params.orderid;
+  // console.log(req.params, orderId);
+
+  // if (!isValidObjectId(orderId)) {
+  //   return next(createError(400, "找不到訂單"));
+  // }
+
+  
+  // const order = await getOrderData(orderId);
+
+  // handleSuccess(res, order);
+};
+
+export const orderNotify: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log('orderNotify:', req.body);
+  
+  // const orderId = req.params.orderid;
+  // console.log(req.params, orderId);
+
+  // if (!isValidObjectId(orderId)) {
+  //   return next(createError(400, "找不到訂單"));
+  // }
+
+  
+  // const order = await getOrderData(orderId);
+
+  // handleSuccess(res, order);
 };
