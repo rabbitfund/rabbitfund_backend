@@ -20,7 +20,7 @@ router.post("/login", handleErrorAsync(login));
 // 訂單相關
 router.post("/orders", needAuth, handleErrorAsync(createOrder));
 router.get("/order/:orderid", needAuth, handleErrorAsync(checkOrder));
-router.post("/orders/return", needAuth, handleErrorAsync(orderReturn));
-router.post("/orders/notify", needAuth, handleErrorAsync(orderNotify));
+router.post("/orders/return", handleErrorAsync(orderReturn));
+router.post("/orders/notify", handleErrorAsync(orderNotify));
 
 export default router;
