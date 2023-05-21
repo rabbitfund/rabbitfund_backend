@@ -307,7 +307,8 @@ async function doOrderReturn(orderReturn: any) {
   
     // 將解密後的資料轉換為字串形式
     const queryString = new URLSearchParams(info.Result).toString();
-  
+    console.log('doOrderReturn', queryString);
+    
     const orderId = info.Result.MerchantOrderNo
     const order = await Order.findById(orderId)
     // 檢查該筆訂單存不存在
@@ -345,10 +346,12 @@ async function doOrderNotify(orderNotify: any) {
       throw createError(400, '找不到訂單')
     }
 
+    console.log('doOrderNotify order', order);
+
     // 取出訂單資料並將藍新金流回傳的交易結果更新
     // console.log(orders[info.Result.MerchantOrderNo]);
-    const updateOrder = await OrderInfo.findOneAndUpdate(
-      { order_id: order.order_info },
+    const updateOrder = await OrderInfo.findById(
+      order.order_info,
       {
         $set: {
           order_status: 2, // 更新訂單狀態為 2-已完成
