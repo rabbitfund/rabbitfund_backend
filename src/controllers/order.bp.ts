@@ -309,8 +309,7 @@ async function doOrderReturn(orderReturn: any) {
     const queryString = new URLSearchParams(info.Result).toString();
   
     const orderId = info.Result.MerchantOrderNo
-    const order = await Order.findOne({ order_id: orderId })
-  
+    const order = await Order.findById(orderId)
     // 檢查該筆訂單存不存在
     if (!order) {
       throw createError(400, '找不到訂單')
@@ -334,13 +333,13 @@ async function doOrderNotify(orderNotify: any) {
   try {
     // 將回傳的資料解密
     const info = create_mpg_aes_decrypt(orderNotify.TradeInfo)
-    console.log('/mpg_gateway_notify_url', info.Result);
+    // console.log('/mpg_gateway_notify_url', info.Result);
 
-    const order_id = info.Result.MerchantOrderNo
+    const orderId = info.Result.MerchantOrderNo
 
     // 檢查該筆訂單存不存在
     // console.log(info, info.Result.MerchantOrderNo);
-    const order = await Order.findOne({ order_id: order_id })
+    const order = await Order.findById(orderId)
     .populate<{ order_info: IOrderInfo }>('order_info')
     if (!order) {
       throw createError(400, '找不到訂單')
