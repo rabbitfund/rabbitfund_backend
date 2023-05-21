@@ -217,8 +217,10 @@ async function getOrderData(orderId: string) {
     };
 
     console.log('Order Data Item:', orderDataItem);
+
+    return orderDataItem
     // 傳送資料至藍新金流
-    sendOrderDataToNewebpay(orderDataItem)
+    // sendOrderDataToNewebpay(orderDataItem)
   } catch (error) {
     console.error(error)
     // throw createError(400, "找不到訂單資料");
@@ -228,32 +230,72 @@ async function getOrderData(orderId: string) {
 async function doOrderCheck(orderId: string) {
   // const orderData = await getOrderData(orderId)
   // console.log("doOrderCheck orderData", orderData);
+  
+  const order = await Order.findById(orderId).exec()
+  console.log('doOrderCheck order:', order);
+
+  if (!order) {
+    throw createError(400, '找不到訂單')
+  }
+  try {
+    // const checkOrder = await OrderInfo.findOneAndUpdate(
+    //   { _id: orderData.order_info },
+    //   {
+    //     $set: {
+    //       newebpay_aes_encrypt: orderData.aesEncrypt,
+    //       newebpay_sha_encrypt: orderData.shaEncrypt
+    //     }
+    //   },
+    //   { new: true }
+    // )
+
+    // console.log('checkOrder: ', checkOrder)
+
+    // const orderDataItem: OrderCheckInput = {
+    //   order_id: orderData._id.toString(),
+    //   user_name: orderData.user?.user_name || '',
+    //   user_email: orderData.user?.user_email || '',
+    //   amt: orderData.order_total || 0,
+    //   itemDesc: orderData.project?.project_title || '',
+    //   timeStamp: orderData.order_info.newebpay_timeStamp.toString(),
+    //   newebpay_aes_encrypt: orderData.aesEncrypt,
+    //   newebpay_sha_encrypt: orderData.shaEncrypt
+    // };
+  
+    // console.log('Order Data Item:', orderDataItem);
+
+    // 傳送資料至藍新金流
+    // sendOrderDataToNewebpay(orderDataItem)
+  } catch (error) {
+    console.error(error)
+    // throw createError(400, "找不到訂單資料");
+  }
 }
 
 // 將 orderDataItem 傳送至藍新金流
-async function sendOrderDataToNewebpay(orderDataItem: OrderCheckInput) {
-  // const encryptedOrderData = encryptOrderData(orderDataItem)
-  // console.log('sendOrderDataToNewebpay', encryptedOrderData)
+// async function sendOrderDataToNewebpay(orderDataItem: OrderCheckInput) {
+//   // const encryptedOrderData = encryptOrderData(orderDataItem)
+//   // console.log('sendOrderDataToNewebpay', encryptedOrderData)
 
-  // 將 encryptedOrderData 傳送給藍新金流相關處理
-  try {
-    const response = await axios.post(
-      'https://ccore.newebpay.com/MPG/mpg_gateway',
-      orderDataItem,
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    )
+//   // 將 encryptedOrderData 傳送給藍新金流相關處理
+//   try {
+//     const response = await axios.post(
+//       'https://ccore.newebpay.com/MPG/mpg_gateway',
+//       orderDataItem,
+//       {
+//         headers: {
+//           'Content-Type': 'application/json'
+//         }
+//       }
+//     )
 
-    // 處理藍新金流回應的邏輯
-    console.log('sendOrderDataToNewebpay Response:', response.data)
-  } catch (error) {
-    // 處理錯誤情況
-    console.error('sendOrderDataToNewebpay Error:', error)
-  }
-}
+//     // 處理藍新金流回應的邏輯
+//     console.log('sendOrderDataToNewebpay Response:', response.data)
+//   } catch (error) {
+//     // 處理錯誤情況
+//     console.error('sendOrderDataToNewebpay Error:', error)
+//   }
+// }
 
 const isEmpty = (text: string): boolean => {
   return text ? false : true;
