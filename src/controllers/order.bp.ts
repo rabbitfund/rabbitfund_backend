@@ -298,6 +298,7 @@ async function doOrderCheck(orderId: string) {
 // }
 
 async function doOrderReturn(orderReturn: any) {
+  console.count('/return');
   console.log('doOrderReturn', orderReturn);
 
   try {
@@ -329,6 +330,7 @@ async function doOrderReturn(orderReturn: any) {
   }
 }
 async function doOrderNotify(orderNotify: any) {
+  console.count('/notify');
   console.log('doOrderNotify', orderNotify);
 
   try {
@@ -341,7 +343,6 @@ async function doOrderNotify(orderNotify: any) {
     // 檢查該筆訂單存不存在
     // console.log(info, info.Result.MerchantOrderNo);
     const order = await Order.findById(orderId)
-    .populate<{ order_info: IOrderInfo }>('order_info')
     if (!order) {
       throw createError(400, '找不到訂單')
     }
