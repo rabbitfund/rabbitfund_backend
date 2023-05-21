@@ -318,6 +318,8 @@ async function doOrderReturn(orderReturn: any) {
     
     const redirectUrl = 'http://192.168.0.74:8085/transaction-result/order-123/?' + queryString
     
+    console.log('doOrderReturn', redirectUrl);
+    
     return redirectUrl
 
     // 將請求傳給前台
@@ -409,7 +411,7 @@ function create_mpg_sha_encrypt(aesEncrypt: any): string {
 }
 
 // 將 aes 解密
-function create_mpg_aes_decrypt(TradeInfo: string): any {
+function create_mpg_aes_decrypt(TradeInfo: any): any {
   const decrypt = crypto.createDecipheriv('aes256', process.env.Newebpay_HashKey!, process.env.Newebpay_HashIV!);
   decrypt.setAutoPadding(false);
   const text = decrypt.update(TradeInfo, 'hex', 'utf8');
