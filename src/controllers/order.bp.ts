@@ -348,10 +348,11 @@ async function doOrderNotify(orderNotify: any) {
     }
 
     console.log('doOrderNotify order', order);
+    console.log('doOrderNotify order.order_info', order.order_info);
 
     // 取出訂單資料並將藍新金流回傳的交易結果更新
     // console.log(orders[info.Result.MerchantOrderNo]);
-    const updateOrder = await OrderInfo.findById(
+    const updateOrder = await OrderInfo.findByIdAndUpdate(
       order.order_info,
       {
         $set: {
@@ -415,7 +416,6 @@ function create_mpg_sha_encrypt(aesEncrypt: any): string {
 
 // 將 aes 解密
 function create_mpg_aes_decrypt(TradeInfo: any): any {
-  console.dir(TradeInfo)
   const decrypt = crypto.createDecipheriv('aes256', process.env.Newebpay_HashKey!, process.env.Newebpay_HashIV!);
   decrypt.setAutoPadding(false);
   const text = decrypt.update(TradeInfo, 'hex', 'utf8');
