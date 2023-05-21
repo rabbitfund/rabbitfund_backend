@@ -8,6 +8,7 @@ import {
   OrderCheckInput,
   verifyOrderCreateData,
   doOrderCreate,
+  getOrderData,
   doOrderCheck,
   doGetMeOrders
 } from "./order.bp";
@@ -55,7 +56,7 @@ export const checkOrder: RequestHandler = async (
   }
 
   
-  const order : OrderCheckInput = await doOrderCheck(orderId);
+  const order = await getOrderData(orderId);
 
   handleSuccess(res, order);
 };

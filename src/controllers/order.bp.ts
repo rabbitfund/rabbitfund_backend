@@ -24,6 +24,23 @@ type OrderCreateInput = {
   invoice_carrier: string;
 };
 
+interface IUser {
+  user_name: string;
+  user_email: string;
+}
+
+interface IProject {
+  project_title: string;
+}
+
+interface IOption {
+  option_name: string;
+}
+
+interface IOrderInfo {
+  newebpay_timeStamp: number;
+}
+
 interface OrderDataInput {
   _id: string;
   user: {
@@ -144,153 +161,37 @@ async function doGetMeOrders(userId: string, page: string) {
   return orders
 }
 
+async function getOrderData(orderId: string) {
+  const orderData = await Order.findById(orderId)
+    .populate<{ user: IUser }>('user', { user_name: 1, user_email: 1 })
+    .populate<{ project: IProject }>('project', { project_title: 1 })
+    .populate<{ option: IOption }>('option', { option_name: 1 })
+    .populate<{ order_info: IOrderInfo }>('order_info', { newebpay_timeStamp: 1 })
+    .select('order_total')
+    .lean()
+    .exec();
+
+    console.log('getOrderData', orderId, orderData);
+    
+  if (!orderData) {
+    throw createError(400, "找不到訂單資料");
+  }
+
+  const aesEncrypt = create_mpg_aes_encrypt(orderData) // 交易資料
+    console.log('aesEncrypt：', aesEncrypt);
+    
+  const shaEncrypt = create_mpg_sha_encrypt(aesEncrypt) // 交易驗證用
+    console.log('shaEncrypt：', shaEncrypt);
+
+  return orderData;
+}
+
 async function doOrderCheck(orderId: string) {
-  // console.log('doOrderCheck', orderId);
-  // THINK: 待思考還需要檢查什麼資料？還是前一步驟已經檢查就不要再多檢查了？
   const order = await Order.findById(orderId).exec();
   // console.log('doOrderCheck order:', order);
   if (!order) {
     throw createError(400, "找不到訂單");
   }
-  
-  try {
-    // async function getOrderData(orderId: string) {
-    //   const orderData : OrderDataInput = await Order.findById(orderId)
-    //     .populate('user', { user_name: 1, user_email: 1 })
-    //     .populate('project', { project_title: 1 })
-    //     .populate('option', { option_name: 1 })
-    //     .populate('order_info', { newebpay_timeStamp: 1 })
-    //     .select('order_total')
-    //     .lean()
-    //     .exec();
-    
-    //   return orderData || null;
-    // }
-    
-    async function getOrderData(orderId: string) {
-      const orderData: OrderDataInput = await Order.findById(orderId)
-        .populate('user', { user_name: 1, user_email: 1 })
-        .populate('project', { project_title: 1 })
-        .populate('option', { option_name: 1 })
-        .populate('order_info', { newebpay_timeStamp: 1 })
-        .select('order_total')
-        .lean()
-        .exec();
-    
-      if (!orderData) {
-        throw createError(400, "找不到訂單資料");
-      }
-    
-      return orderData;
-    }
-    
-    // async function processOrderData(orderId: string) {
-      const orderData = await getOrderData(orderId);
-    
-      console.log(orderData);
-      
-      if (!orderData) {
-        console.log('Order not found');
-        return;
-      }
-    
-    //   console.log('Order Data:', orderData);
-    
-    //   // const orderDataItem: OrderCheckInput = {
-    //   //   order_id: orderData._id.toString(),
-    //   //   user_name: orderData.user?.user_name || '',
-    //   //   user_email: orderData.user?.user_email || '',
-    //   //   amt: orderData.order_total,
-    //   //   itemDesc: orderData.project?.project_title || '',
-    //   //   timeStamp: orderData.order_info?.newebpay_timeStamp || 0,
-    //   // };
-    
-    //   // console.log('Order Data Item:', orderDataItem);
-    
-    //   // Call your further processing functions here with orderDataItem
-    // }
-    
-    // processOrderData(orderId);
-    
-
-    // Call your further processing functions here with orderDataItem
-    const orderDataItem: OrderCheckInput = {
-      order_id: orderData._id.toString(),
-      user_name: orderData.user?.user_name || '',
-      user_email: orderData.user?.user_email || '',
-      amt: orderData.order_total,
-      itemDesc: orderData.project?.project_title || '',
-      timeStamp: orderData.order_info?.newebpay_timeStamp || '',
-    };
-
-    // const aesEncrypt = create_mpg_aes_encrypt(orderDataItem); // 交易資料
-    // const shaEncrypt = create_mpg_sha_encrypt(aesEncrypt); // 交易驗證用
-
-    // 傳送資料至藍新金流
-    // sendOrderDataToNewebpay(orderDataItem);
-
-
-    const aesEncrypt = create_mpg_aes_encrypt(orderDataItem) // 交易資料
-    console.log('aesEncrypt：', aesEncrypt);
-    
-    const shaEncrypt = create_mpg_sha_encrypt(aesEncrypt) // 交易驗證用
-    console.log('shaEncrypt：', shaEncrypt);
-  
-    // 2. 取得 orderInfoId
-    // const orderInfoId = order.order_info;
-
-    // 3. 使用 orderInfoId 更新 OrderInfo 資料
-    const checkOrder = await OrderInfo.findOneAndUpdate(
-      { _id: orderData.order_info._id },
-      { $set: {
-        newebpay_aes_encrypt: aesEncrypt,
-        newebpay_sha_encrypt: shaEncrypt,
-      } },
-      { new: true }
-    );
-
-    console.log('checkOrder: ', checkOrder);
-
-    // 建立加密函式
-    function encryptOrderData(orderDataItem: OrderCheckInput): OrderCheckInput {
-      // const aesEncrypt = create_mpg_aes_encrypt(orderDataItem);
-      // const shaEncrypt = create_mpg_sha_encrypt(orderDataItem);
-      return {
-        ...orderDataItem,
-        newebpay_aes_encrypt: aesEncrypt,
-        newebpay_sha_encrypt: shaEncrypt,
-      };
-    }
-
-    // 將 orderDataItem 加密後整合並傳送至藍新金流
-    async function sendOrderDataToNewebpay(orderDataItem: OrderCheckInput) {
-      const encryptedOrderData = encryptOrderData(orderDataItem);
-      console.log('sendOrderDataToNewebpay', encryptedOrderData);
-          
-      // 將 encryptedOrderData 傳送給藍新金流相關處理
-      try {
-        const response = await axios.post('https://ccore.newebpay.com/MPG/mpg_gateway', encryptedOrderData, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        // 處理藍新金流回應的邏輯
-        console.log('sendOrderDataToNewebpay Response:', response.data);
-      } catch (error) {
-        // 處理錯誤情況
-        console.error('sendOrderDataToNewebpay Error:', error);
-      }
-    }
-
-    // 傳送資料至藍新金流
-    sendOrderDataToNewebpay(orderDataItem);
-
-  } catch (error) {
-    console.error(error);
-    // throw createError(400, "找不到訂單資料");
-  }
-
 }
 
 const isEmpty = (text: string): boolean => {
@@ -299,14 +200,14 @@ const isEmpty = (text: string): boolean => {
 
 
 // 組成藍新金流所需字串 - 特別注意轉換字串時，ItemDesc、Email 會出現問題，要使用 encode 來轉換成藍新金流要的格式
-function genDataChain(order: OrderCheckInput | null): string {
+function genDataChain(order: any): string {
   if (order === null) {
     // 處理 null 的情況
     return '';
   }
   console.log('genDataChain(order):', order);
  
-  const orderData: string = `MerchantID=${process.env.Newebpay_MerchantID}&RespondType=JSON&TimeStamp=${order.timeStamp}&Version=${process.env.Newebpay_Version}&MerchantOrderNo=${order.order_id}&Amt=${order.amt}&ItemDesc=${encodeURIComponent(order.itemDesc)}&Email=${encodeURIComponent(order.user_email)}`
+  const orderData: string = `MerchantID=${process.env.Newebpay_MerchantID}&RespondType=JSON&TimeStamp=${order.order_info.newebpay_timeStamp}&Version=${process.env.Newebpay_Version}&MerchantOrderNo=${order._id}&Amt=${order.order_total}&ItemDesc=${encodeURIComponent(order.option.option_name)}&Email=${encodeURIComponent(order.user.user_email)}`
   
   console.log('genDataChain:', orderData);
 
@@ -316,7 +217,7 @@ function genDataChain(order: OrderCheckInput | null): string {
 
 // 使用 aes 加密
 // $edata1=bin2hex(openssl_encrypt($data1, "AES-256-CBC", $key, OPENSSL_RAW_DATA, $iv));
-function create_mpg_aes_encrypt(TradeInfo: OrderCheckInput): string {
+function create_mpg_aes_encrypt(TradeInfo: any): string {
   const encrypt = crypto.createCipheriv('aes256', process.env.Newebpay_HashKey!, process.env.Newebpay_HashIV!); // 製作加密資料
   const enc = encrypt.update(genDataChain(TradeInfo), 'utf8', 'hex'); // 將訂單內容加密
   return enc + encrypt.final('hex');
@@ -324,7 +225,7 @@ function create_mpg_aes_encrypt(TradeInfo: OrderCheckInput): string {
 
 // sha256 加密
 // $hashs="HashKey=".$key."&".$edata1."&HashIV=".$iv;
-function create_mpg_sha_encrypt(aesEncrypt: string): string {
+function create_mpg_sha_encrypt(aesEncrypt: any): string {
   const sha = crypto.createHash('sha256');
   const plainText: string = `HashKey=${process.env.Newebpay_HashKey}&${aesEncrypt}&HashIV=${process.env.Newebpay_HashIV}`;
 
@@ -341,4 +242,4 @@ function create_mpg_aes_decrypt(TradeInfo: string): any {
   return JSON.parse(result);
 }
 
-export { OrderCreateInput, OrderDataInput, OrderCheckInput, verifyOrderCreateData, doOrderCreate, doGetMeOrders, doOrderCheck };
+export { OrderCreateInput, OrderDataInput, OrderCheckInput, verifyOrderCreateData, doOrderCreate, doGetMeOrders, getOrderData, doOrderCheck };
