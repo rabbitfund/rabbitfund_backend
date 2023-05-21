@@ -297,6 +297,79 @@ async function doOrderCheck(orderId: string) {
 //   }
 // }
 
+async function doOrderReturn(orderReturn: any) {
+  console.log('doOrderReturn', orderReturn);
+
+  try {
+    // 將回傳的資料解密
+    const info = create_mpg_aes_decrypt(orderReturn)
+    // console.log('/mpg_gateway_return_url', info.Result);
+  
+    // 將解密後的資料轉換為字串形式
+    const queryString = new URLSearchParams(info.Result).toString();
+  
+    const orderId = info.Result.MerchantOrderNo
+    const order = await Order.findOne({ order_id: orderId })
+  
+    // 檢查該筆訂單存不存在
+    if (!order) {
+      throw createError(400, '找不到訂單')
+    }
+    
+    const redirectUrl = 'http://192.168.0.74:8085/transaction-result/order-123/?' + queryString
+    
+    return redirectUrl
+
+    // 將請求傳給前台
+    // res.redirect(redirectUrl)
+  } catch (error) {
+    console.error(error)
+  }
+}
+async function doOrderNotify(orderNotify: any) {
+  console.log('doOrderNotify', orderNotify);
+
+  try {
+    // 將回傳的資料解密
+    const info = create_mpg_aes_decrypt(orderNotify)
+    console.log('/mpg_gateway_notify_url', info.Result);
+
+    const order_id = info.Result.MerchantOrderNo
+
+    // 檢查該筆訂單存不存在
+    // console.log(info, info.Result.MerchantOrderNo);
+    const order = await Order.findOne({ order_id: order_id })
+    .populate<{ order_info: IOrderInfo }>('order_info')
+    if (!order) {
+      throw createError(400, '找不到訂單')
+    }
+
+    // 取出訂單資料並將藍新金流回傳的交易結果更新
+    // console.log(orders[info.Result.MerchantOrderNo]);
+    const updateOrder = await OrderInfo.findOneAndUpdate(
+      { order_id: order.order_info },
+      {
+        $set: {
+          order_status: 2, // 更新訂單狀態為 2-已完成
+          order_final_date: new Date(),
+          payment_method: info.Result.PaymentType,
+          payment_status: 2, // 更新付款狀態為 2-付款完成 / THINK: 貌似有收到 notify 就一定算成功交易？
+          newebpay_tradeNo: info.Result.TradeNo,
+          newebpay_escrowBank: info.Result.PayBankCode,
+          newebpay_payBankCode: info.Result.PayBankCode,
+          newebpay_payerAccount5Code: info.Result.PayerAccount5Code,
+          newebpay_payTime: info.Result.PayTime // 詭異的日期格式 "2023-05-1402:20:43"
+        },
+      },
+      { new: true }
+    );
+  
+    console.log('Order Notify', updateOrder);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 const isEmpty = (text: string): boolean => {
   return text ? false : true;
 };
@@ -345,4 +418,4 @@ function create_mpg_aes_decrypt(TradeInfo: string): any {
   return JSON.parse(result);
 }
 
-export { OrderCreateInput, OrderDataInput, OrderCheckInput, verifyOrderCreateData, doOrderCreate, doGetMeOrders, getOrderData, doOrderCheck };
+export { OrderCreateInput, OrderDataInput, OrderCheckInput, verifyOrderCreateData, doOrderCreate, doGetMeOrders, getOrderData, doOrderCheck, doOrderReturn, doOrderNotify };

@@ -10,7 +10,9 @@ import {
   doOrderCreate,
   getOrderData,
   doOrderCheck,
-  doGetMeOrders
+  doGetMeOrders,
+  doOrderReturn,
+  doOrderNotify
 } from "./order.bp";
 
 export const createOrder: RequestHandler = async (
@@ -67,17 +69,11 @@ export const orderReturn: RequestHandler = async (
 ) => {
   console.log('orderReturn:',req.body);
   
-  // const orderId = req.params.orderid;
-  // console.log(req.params, orderId);
-
-  // if (!isValidObjectId(orderId)) {
-  //   return next(createError(400, "找不到訂單"));
-  // }
-
+  const orderReturn = req.body;
   
-  // const order = await getOrderData(orderId);
+  const order : any = await doOrderNotify(orderReturn);
 
-  // handleSuccess(res, order);
+  handleSuccess(res, order);
 };
 
 export const orderNotify: RequestHandler = async (
@@ -87,15 +83,10 @@ export const orderNotify: RequestHandler = async (
 ) => {
   console.log('orderNotify:', req.body);
   
-  // const orderId = req.params.orderid;
-  // console.log(req.params, orderId);
-
-  // if (!isValidObjectId(orderId)) {
-  //   return next(createError(400, "找不到訂單"));
-  // }
-
+  const orderNotify = req.body;
   
-  // const order = await getOrderData(orderId);
+  const order : any = await doOrderNotify(orderNotify);
 
   // handleSuccess(res, order);
+  res.redirect(order)
 };
