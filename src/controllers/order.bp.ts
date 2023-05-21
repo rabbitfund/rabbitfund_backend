@@ -302,7 +302,7 @@ async function doOrderReturn(orderReturn: any) {
 
   try {
     // 將回傳的資料解密
-    const info = create_mpg_aes_decrypt(orderReturn)
+    const info = create_mpg_aes_decrypt(orderReturn.TradeInfo)
     // console.log('/mpg_gateway_return_url', info.Result);
   
     // 將解密後的資料轉換為字串形式
@@ -333,7 +333,7 @@ async function doOrderNotify(orderNotify: any) {
 
   try {
     // 將回傳的資料解密
-    const info = create_mpg_aes_decrypt(orderNotify)
+    const info = create_mpg_aes_decrypt(orderNotify.TradeInfo)
     console.log('/mpg_gateway_notify_url', info.Result);
 
     const order_id = info.Result.MerchantOrderNo
@@ -412,6 +412,7 @@ function create_mpg_sha_encrypt(aesEncrypt: any): string {
 
 // 將 aes 解密
 function create_mpg_aes_decrypt(TradeInfo: any): any {
+  console.dir(TradeInfo)
   const decrypt = crypto.createDecipheriv('aes256', process.env.Newebpay_HashKey!, process.env.Newebpay_HashIV!);
   decrypt.setAutoPadding(false);
   const text = decrypt.update(TradeInfo, 'hex', 'utf8');
