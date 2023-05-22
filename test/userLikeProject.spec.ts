@@ -46,7 +46,7 @@ const projectOwnerInfo = {
   proposer_name: "提案方 proposer - like",
   // proposer_create: "", // --> user
   proposer_email: "proposer_like@test.com",
-  proposer_tax_id: "123456789",
+  proposer_tax_id: "87654321",
 };
 const projectOption1 = {
   // option_parent: "", // --> project
