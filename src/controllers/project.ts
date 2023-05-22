@@ -145,7 +145,7 @@ export const getProjects: RequestHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userId = res.locals.user.id;
+  // const userId = res.locals.user.id;
   const type = req.query.type;
   const keyword = req.query.k;
   const page = req.query.page as string;
