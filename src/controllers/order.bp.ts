@@ -99,10 +99,11 @@ async function doGetMeOrders(userId: string, page: string) {
   const orders = await Order.find({ user: userId })
     .limit(perPage)
     .skip(perPage*(pageNum-1));
+  
 
-  if (!orders || orders.length === 0) {
-    throw createError(400, "找不到贊助紀錄");
-  }
+  // if (!orders || orders.length === 0) {
+  //   throw createError(400, "找不到贊助紀錄");
+  // }
 
   return orders
 }
