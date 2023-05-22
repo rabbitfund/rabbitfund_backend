@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import validator from "validator";
+
 const userProposerSchema = new mongoose.Schema(
   {
     proposer_name: {
@@ -39,13 +41,12 @@ const userProposerSchema = new mongoose.Schema(
       type: String,
       required: [true, "電子郵件未填寫"],
       unique: true,
-      // 自訂驗證，安裝套件 npm i validator
-      // validate: {
-      //   validator (value) {
-      //     return validator.isEmail(value)
-      //   },
-      //   message: '信箱格式不正確'
-      // }
+      validate: {
+        validator(value: string) {
+          return validator.isEmail(value);
+        },
+        message: "信箱格式不正確",
+      },
     },
     proposer_phone: {
       // 行動電話
@@ -53,7 +54,7 @@ const userProposerSchema = new mongoose.Schema(
     },
     proposer_tax_id: {
       // 統一編號
-      type: Number,
+      type: String,
       minlength: [8, "請確認統一編號格式"],
       maxlength: [8, "請確認統一編號格式"],
       required: true,

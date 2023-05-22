@@ -9,6 +9,7 @@ import meRouter from "./routes/me";
 import ownerProjectRouter from "./routes/ownerProject";
 import projectRouter from "./routes/project";
 import uploadRouter from "./routes/upload";
+import userproposerRouter from "./routes/userProposer";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from '../doc/swagger.json';
@@ -29,6 +30,7 @@ app.use("/me", meRouter);
 app.use("/owner/projects", ownerProjectRouter);
 app.use("/projects", projectRouter);
 app.use("/upload", uploadRouter);
+app.use("/userProposer", userproposerRouter);
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.use("/docs/postman", swaggerUi.serve, swaggerUi.setup(postmanSpec))
