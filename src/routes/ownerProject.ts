@@ -15,7 +15,7 @@ import { handleErrorAsync } from "../service/handleErrorAsync";
 
 const router = Router();
 
-router.get("", needAuth, handleErrorAsync(getOwnerProjects)); // TODO
+router.get("", needAuth, handleErrorAsync(getOwnerProjects));
 router.post("", needAuth, handleErrorAsync(postOwnerProjects));
 router.get("/:pid", needAuth, handleErrorAsync(getOwnerProject));
 router.put("/:pid", needAuth, handleErrorAsync(putOwnerProject));

@@ -16,7 +16,7 @@ const projectSchema = new mongoose.Schema(
     },
     project_category: {
       // 專案類別
-      type: [String],
+      type: String,
       enum: ["校園", "公益", "市集"],
       required: true,
     },

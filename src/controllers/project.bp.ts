@@ -172,12 +172,25 @@ async function doGetProjects(parameters: any, page: string) {
   const pageNum = parseInt(page);
   const perPage = 10;
   const projects = await Project.find(parameters)
+    .populate("ownerInfo", {
+      _id: 1,
+      proposer_name: 1,
+      proposer_cover: 1,
+      proposer_tax_id: 1
+    })
+    .populate("option", {
+      _id: 1,
+      option_name: 1,
+      option_price: 1,
+      option_content: 1,
+      option_cover: 1
+    })
     .limit(perPage)
     .skip(perPage * (pageNum - 1));
 
-  if (!projects || projects.length === 0) {
-    throw createError(400, "找不到專案");
-  }
+  // if (!projects || projects.length === 0) {
+  //   throw createError(400, "找不到專案");
+  // }
 
   // filtered out specific info
   const filteredProjects = projects.map((project) => {
@@ -195,7 +208,20 @@ async function doGetProjects(parameters: any, page: string) {
 }
 
 async function doGetProject(projectId: string) {
-  const project = await Project.findById(projectId);
+  const project = await Project.findById(projectId)
+    .populate("ownerInfo", {
+      _id: 1, //?
+      proposer_name: 1,
+      proposer_cover: 1,
+      proposer_tax_id: 1
+    })
+    .populate("option", {
+      _id: 1,
+      option_name: 1,
+      option_price: 1,
+      option_content: 1,
+      option_cover: 1
+    })
   if (!!project) {
     if (!project.delete) {
       // filtered out specific info
