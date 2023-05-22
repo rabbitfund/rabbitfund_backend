@@ -317,14 +317,15 @@ async function doOrderReturn(orderReturn: any) {
       throw createError(400, '找不到訂單')
     }
     
-    const redirectUrl = 'http://192.168.0.74:8085/transaction-result/order-123/?' + queryString
+    // const redirectUrl = 'http://192.168.0.74:8085/transaction-result/?' + queryString
     
-    console.log('doOrderReturn', redirectUrl);
-    
-    return redirectUrl
+    // console.log('doOrderReturn', redirectUrl);
 
     // 將請求傳給前台
     // res.redirect(redirectUrl)
+    
+    return order
+
   } catch (error) {
     console.error(error)
   }
