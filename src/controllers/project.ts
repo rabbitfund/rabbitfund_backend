@@ -11,6 +11,7 @@ import {
   doPostOwnerProject,
   doGetOwnerProject,
   doPutOwnerProject,
+  doUpdateOwnerProjectOption,
   doDeleteOwnerProject,
   doGetProjects,
   doGetProject,
@@ -137,6 +138,8 @@ export const postOwnerProjectOptions: RequestHandler = async (
   // TODO: verify data
 
   const option = await doPostOwnerProjectOptions(prjectId, data);
+  const project = await doUpdateOwnerProjectOption(prjectId, option._id.toString());
+
   return handleSuccess(res, option);
 };
 
