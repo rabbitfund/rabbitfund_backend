@@ -21,6 +21,7 @@ import {
   doGetOwnerProjectOptions,
   doPostOwnerProjectOptions,
   doGetProjectOptions,
+  doGetProjectOption,
   doPatchProjectOptions,
 } from "./option.bp";
 
@@ -58,13 +59,13 @@ export const getOwnerProject: RequestHandler = async (
   next: NextFunction
 ) => {
   const userId = res.locals.user.id;
-  const prjectId = req.params.pid;
+  const projectId = req.params.pid;
 
-  if (!isValidObjectId(prjectId)) {
+  if (!isValidObjectId(projectId)) {
     return next(createError(400, "找不到專案"));
   }
 
-  const project = await doGetOwnerProject(prjectId);
+  const project = await doGetOwnerProject(projectId);
   return handleSuccess(res, project);
 };
 
@@ -74,18 +75,18 @@ export const putOwnerProject: RequestHandler = async (
   next: NextFunction
 ) => {
   const userId = res.locals.user.id;
-  const prjectId = req.params.pid;
+  const projectId = req.params.pid;
   const data = req.body;
 
-  console.log("putOwnerProject=", prjectId);
+  console.log("putOwnerProject=", projectId);
 
-  if (!isValidObjectId(prjectId)) {
+  if (!isValidObjectId(projectId)) {
     return next(createError(400, "找不到專案"));
   }
 
   // TODO: verify data
 
-  const project = await doPutOwnerProject(userId, prjectId, data);
+  const project = await doPutOwnerProject(userId, projectId, data);
   return handleSuccess(res, project);
 };
 
@@ -95,13 +96,13 @@ export const deleteOwnerProject: RequestHandler = async (
   next: NextFunction
 ) => {
   const userId = res.locals.user.id;
-  const prjectId = req.params.pid;
+  const projectId = req.params.pid;
 
-  if (!isValidObjectId(prjectId)) {
+  if (!isValidObjectId(projectId)) {
     return next(createError(400, "找不到專案"));
   }
 
-  const result = await doDeleteOwnerProject(userId, prjectId);
+  const result = await doDeleteOwnerProject(userId, projectId);
   return handleSuccess(res, result);
 };
 
@@ -111,13 +112,13 @@ export const getOwnerProjectOptions: RequestHandler = async (
   next: NextFunction
 ) => {
   const userId = res.locals.user.id;
-  const prjectId = req.params.pid;
+  const projectId = req.params.pid;
 
-  if (!isValidObjectId(prjectId)) {
+  if (!isValidObjectId(projectId)) {
     return next(createError(400, "找不到專案"));
   }
 
-  const project = await doGetOwnerProjectOptions(prjectId);
+  const project = await doGetOwnerProjectOptions(projectId);
   return handleSuccess(res, project);
 };
 
@@ -127,16 +128,16 @@ export const postOwnerProjectOptions: RequestHandler = async (
   next: NextFunction
 ) => {
   const userId = res.locals.user.id;
-  const prjectId = req.params.pid;
+  const projectId = req.params.pid;
   const data = req.body;
 
-  if (!isValidObjectId(prjectId)) {
+  if (!isValidObjectId(projectId)) {
     return next(createError(400, "找不到專案"));
   }
 
   // TODO: verify data
 
-  const option = await doPostOwnerProjectOptions(prjectId, data);
+  const option = await doPostOwnerProjectOptions(projectId, data);
   return handleSuccess(res, option);
 };
 
@@ -174,11 +175,11 @@ export const patchProjectOptions: RequestHandler = async (
   next: NextFunction
 ) => {
   const userId = res.locals.user.id;
-  const prjectId = req.params.pid;
+  const projectId = req.params.pid;
   const optionId = req.params.optid;
   const data = req.body;
 
-  if (!isValidObjectId(prjectId)) {
+  if (!isValidObjectId(projectId)) {
     return next(createError(400, "找不到專案"));
   }
 
@@ -186,7 +187,7 @@ export const patchProjectOptions: RequestHandler = async (
     return next(createError(400, "找不到方案"));
   }
 
-  const option = await doPatchProjectOptions(prjectId, optionId, data);
+  const option = await doPatchProjectOptions(projectId, optionId, data);
   return handleSuccess(res, option);
 };
 
@@ -196,13 +197,13 @@ export const getProject: RequestHandler = async (
   next: NextFunction
 ) => {
   // const userId = res.locals.user.id;
-  const prjectId = req.params.pid;
+  const projectId = req.params.pid;
 
-  if (!isValidObjectId(prjectId)) {
+  if (!isValidObjectId(projectId)) {
     return next(createError(400, "找不到專案"));
   }
 
-  const project = await doGetProject(prjectId);
+  const project = await doGetProject(projectId);
   return handleSuccess(res, project);
 };
 
@@ -212,14 +213,33 @@ export const getProjectOptions: RequestHandler = async (
   next: NextFunction
 ) => {
   // const userId = res.locals.user.id;
-  const prjectId = req.params.pid;
+  const projectId = req.params.pid;
 
-  if (!isValidObjectId(prjectId)) {
+  if (!isValidObjectId(projectId)) {
     return next(createError(400, "找不到專案"));
   }
 
-  const project = await doGetProjectOptions(prjectId);
+  const project = await doGetProjectOptions(projectId);
   return handleSuccess(res, project);
+};
+
+export const getProjectOption: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const projectId = req.params.pid;
+  const optionId = req.params.optid;
+
+  if (!isValidObjectId(projectId)) {
+    return next(createError(400, "找不到專案"));
+  }
+  if (!isValidObjectId(optionId)) {
+    return next(createError(400, "找不到方案"));
+  }
+
+  const option = await doGetProjectOption(optionId);
+  return handleSuccess(res, option);
 };
 
 // B10: 取得專案贊助人列表
