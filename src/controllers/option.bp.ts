@@ -107,6 +107,31 @@ async function doGetProjectOptions(projectId: string) {
   return filteredOptions
 }
 
+async function doGetProjectOption(optionId: string) {
+  const option = await Option.findById(optionId)
+    .populate("option_parent", {
+      _id: 1,
+      project_title: 1,
+      project_end_date: 1,
+    })
+  if (!option || option.delete) {
+    throw createError(400, "找不到方案");
+  }
+
+  // filtered out specific info
+  const {
+    option_create_date: _,
+    option_update_date: __,
+    delete: ___,
+    delete_member: ____,
+    ...filteredOption
+  } = option.toObject();
+
+  // TODO: add project title
+
+  return filteredOption;
+}
+
 async function doPatchProjectOptions(projectId: string, optionId: string, data: OptionUpdateInput) {
   const project = await Project.findById(projectId)
   if (!project || project.delete) {
@@ -168,5 +193,6 @@ export {
   doGetOwnerProjectOptions,
   doPostOwnerProjectOptions,
   doGetProjectOptions,
+  doGetProjectOption,
   doPatchProjectOptions
 }

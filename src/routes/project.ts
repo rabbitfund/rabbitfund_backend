@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getProject, getProjects, getProjectOptions } from "../controllers/project";
+import { getProject, getProjects, getProjectOptions, getProjectOption } from "../controllers/project";
 import { needAuth } from "../middleware/needAuth";
 import { handleErrorAsync } from "../service/handleErrorAsync";
 
@@ -8,6 +8,7 @@ const router = Router();
 router.get("", handleErrorAsync(getProjects));
 router.get("/:pid", handleErrorAsync(getProject));
 router.get("/:pid/options", handleErrorAsync(getProjectOptions));
+router.get("/:pid/options/:optid", handleErrorAsync(getProjectOption));
 
 
 // S5, GET, /projects/{pid}

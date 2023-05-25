@@ -21,6 +21,7 @@ import {
   doGetOwnerProjectOptions,
   doPostOwnerProjectOptions,
   doGetProjectOptions,
+  doGetProjectOption,
   doPatchProjectOptions,
 } from "./option.bp";
 
@@ -220,6 +221,25 @@ export const getProjectOptions: RequestHandler = async (
 
   const project = await doGetProjectOptions(prjectId);
   return handleSuccess(res, project);
+};
+
+export const getProjectOption: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const prjectId = req.params.pid;
+  const optionId = req.params.optid;
+
+  if (!isValidObjectId(prjectId)) {
+    return next(createError(400, "找不到專案"));
+  }
+  if (!isValidObjectId(optionId)) {
+    return next(createError(400, "找不到方案"));
+  }
+
+  const option = await doGetProjectOption(optionId);
+  return handleSuccess(res, option);
 };
 
 // B10: 取得專案贊助人列表
