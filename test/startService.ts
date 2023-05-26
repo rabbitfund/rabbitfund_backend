@@ -6,6 +6,7 @@ import indexRouter from "../src/routes/index";
 import meRouter from "../src/routes/me";
 import ownerProjectRouter from "../src/routes/ownerProject";
 import projectRouter from "../src/routes/project";
+import userproposerRouter from "../src/routes/userProposer";
 
 // ### setup express app
 export function startServer() {
@@ -16,6 +17,7 @@ export function startServer() {
   app.use("/me", meRouter);
   app.use("/owner/projects", ownerProjectRouter);
   app.use("/projects", projectRouter);
+  app.use("/userProposer", userproposerRouter);
   // catch 404 (NOT FOUND) and forward to error handler
   app.use((req: Request, res: Response, next: NextFunction) => {
     next(createError(404));

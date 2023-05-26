@@ -21,7 +21,7 @@ export const getProposer: RequestHandler = async (
   ) => {
     const userId = res.locals.user.id;
     const proposer = await doGetProposer(userId);
-    console.log(proposer);
+    // console.log(proposer);
   
     return handleSuccess(res, proposer || {});
   };

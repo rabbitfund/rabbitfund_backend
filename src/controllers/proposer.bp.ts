@@ -4,7 +4,7 @@ import createError from "http-errors";
 //欄位
 type ProposerCreateInput = {
   proposer_name: string;
-  proposer_update_date: Date;
+  // proposer_update_date: Date;
   proposer_cover: string;
   proposer_email: string;
   proposer_phone: string;
@@ -15,7 +15,7 @@ type ProposerCreateInput = {
 
 type ProposerUpdateInput = {
   proposer_name: string;
-  proposer_update_date: Date;
+  // proposer_update_date: Date;
   proposer_cover: string;
   proposer_email: string;
   proposer_phone: string;
@@ -42,6 +42,12 @@ async function doGetProposer(userId: string) {
 
 //新增提案人
 async function doPostProposer(userId: string, data: ProposerCreateInput) {
+  const result = await UserProposer.find(
+    { proposer_tax_id: data.proposer_tax_id }).exec();
+  if (result.length !== 0) {
+    throw createError(400, "已註冊過此統一編號")
+  }
+  
   const proposer = await UserProposer.create({
     proposer_create: userId,
     proposer_name: data.proposer_name,
