@@ -87,6 +87,8 @@ export const orderNotify: RequestHandler = async (
   
   const order : any = await doOrderNotify(orderNotify);
 
+  console.log('orderNotify redirect', order);
+  
   // handleSuccess(res, order);
   res.redirect(order)
 };
