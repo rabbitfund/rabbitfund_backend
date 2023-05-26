@@ -104,7 +104,7 @@ describe("projects", () => {
   });
 
   afterAll(async () => {
-    // await Project.deleteOne({ _id: projectId });a
+    // await Project.deleteOne({ _id: projectId });
   });
 
   test("create project", async () => {
