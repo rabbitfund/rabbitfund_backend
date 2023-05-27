@@ -1,7 +1,7 @@
 import validator from "validator";
 import createError from "http-errors";
 import * as crypto from 'crypto';
-import axios from 'axios';
+// import axios from 'axios';
 // import https from 'https';
 import { isValidObjectId } from "../utils/objectIdValidator";
 import { User } from "../model/userModels";
@@ -388,7 +388,7 @@ function genDataChain(order: any): string {
     // 處理 null 的情況
     return '';
   }
-  console.log('genDataChain(order):', order);
+  // console.log('genDataChain(order):', order);
  
   const orderData: string = `MerchantID=${process.env.Newebpay_MerchantID}&RespondType=JSON&TimeStamp=${order.order_info.newebpay_timeStamp}&Version=${process.env.Newebpay_Version}&MerchantOrderNo=${order._id}&Amt=${order.order_total}&ItemDesc=${encodeURIComponent(order.option.option_name)}&Email=${encodeURIComponent(order.user.user_email)}`
   

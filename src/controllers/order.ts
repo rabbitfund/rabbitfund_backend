@@ -73,7 +73,9 @@ export const orderReturn: RequestHandler = async (
   
   const order : any = await doOrderNotify(orderReturn);
 
-  handleSuccess(res, order);
+  // handleSuccess(res, order);
+  res.redirect(order)
+
 };
 
 export const orderNotify: RequestHandler = async (
@@ -89,6 +91,6 @@ export const orderNotify: RequestHandler = async (
 
   console.log('orderNotify redirect', order);
   
-  // handleSuccess(res, order);
-  res.redirect(order)
+  handleSuccess(res, order);
+  // res.redirect(order)
 };
