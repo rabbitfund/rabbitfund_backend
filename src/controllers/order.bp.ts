@@ -317,7 +317,7 @@ async function doOrderReturn(orderReturn: any) {
     //   throw createError(400, '找不到訂單')
     // }
     
-    const redirectUrl = process.env.Newebpay_redirect + orderId + '?' + queryString
+    const redirectUrl = process.env.Newebpay_redirect + orderId + '/transaction-result/?' + queryString
     
     // console.log('doOrderReturn', redirectUrl);
 
