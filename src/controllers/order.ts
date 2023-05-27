@@ -75,6 +75,7 @@ export const orderReturn: RequestHandler = async (
   console.log('orderReturn redirect', order);
 
   // handleSuccess(res, order);
+  // 將請求傳給前台
   res.redirect(order)
 
 };

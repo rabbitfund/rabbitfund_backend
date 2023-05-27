@@ -3,6 +3,7 @@ import createError from "http-errors";
 import * as crypto from 'crypto';
 // import axios from 'axios';
 // import https from 'https';
+import dotenv from "dotenv";
 import { isValidObjectId } from "../utils/objectIdValidator";
 import { User } from "../model/userModels";
 import Project from "../model/projectModels";
@@ -304,26 +305,22 @@ async function doOrderReturn(orderReturn: any) {
   try {
     // 將回傳的資料解密
     const info = create_mpg_aes_decrypt(orderReturn.TradeInfo)
-    // console.log('/mpg_gateway_return_url', info.Result);
   
     // 將解密後的資料轉換為字串形式
     const queryString = new URLSearchParams(info.Result).toString();
     console.log('doOrderReturn', queryString);
     
-    // const orderId = info.Result.MerchantOrderNo
+    const orderId = info.Result.MerchantOrderNo
     // const order = await Order.findById(orderId)
     // // 檢查該筆訂單存不存在
     // if (!order) {
     //   throw createError(400, '找不到訂單')
     // }
     
-    const redirectUrl = 'http://192.168.0.74:8085/transaction-result/?' + queryString
+    const redirectUrl = process.env.Newebpay_redirect + orderId + '?' + queryString
     
-    console.log('doOrderReturn', redirectUrl);
+    // console.log('doOrderReturn', redirectUrl);
 
-    // 將請求傳給前台
-    // res.redirect(redirectUrl)
-    
     return redirectUrl
 
   } catch (error) {
