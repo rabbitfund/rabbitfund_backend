@@ -31,4 +31,9 @@ jobs:
           MONGODB_DATABASE: ${{ secrets.MONGODB_DATABASE }}
           MONGODB_CONNECT_STRING: ${{ secrets.MONGODB_CONNECT_STRING }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NEWEBPAY_HASHKEY: ${{ secrets.NEWEBPAY_HASHKEY }}
+          NEWEBPAY_HASHIV: ${{ secrets.NEWEBPAY_HASHIV }}
+          NEWEBPAY_MERCHANTID: ${{ secrets.NEWEBPAY_MERCHANTID }}
+          NEWEBPAY_VERSION: ${{ secrets.NEWEBPAY_VERSION }}
+          NEWEBPAY_REDIRECT: ${{ secrets.NEWEBPAY_REDIRECT }}
         run: npm run test

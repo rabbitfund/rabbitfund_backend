@@ -140,7 +140,7 @@ describe("orders", () => {
       order_extra: 0,
       order_total: 1000,
       order_note: "testing orders",
-      payment_method: "信用卡",
+      payment_method: "CREDIT",
       invoice_type: "紙本發票",
       invoice_carrier: "",
     };
@@ -197,7 +197,7 @@ describe("orders", () => {
       order_extra: 0,
       order_total: 1000,
       order_note: "testing orders",
-      payment_method: "信用卡",
+      payment_method: "CREDIT",
       invoice_type: "紙本發票",
       invoice_carrier: "",
     };
