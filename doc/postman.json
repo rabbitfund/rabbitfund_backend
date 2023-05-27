@@ -14,6 +14,10 @@
             "bearerAuth": {
                 "type": "http",
                 "scheme": "bearer"
+            },
+            "noauthAuth": {
+                "type": "http",
+                "scheme": "noauth"
             }
         }
     },
@@ -40,6 +44,38 @@
                                     "name": "a2",
                                     "method": 0,
                                     "oauth_google_id": "123"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "S2-登入-no",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "anne@test.com",
+                                    "pass": "12345678",
+                                    "method": 0,
+                                    "oauth_google_id": "123",
+                                    "forget": false
                                 }
                             }
                         }
@@ -99,10 +135,10 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "name": "AAnne",
+                                    "name": "AAnnAAAe",
                                     "cover": "https://showanne.github.io/src/img/avatar_Anne.jpg",
                                     "phone": "988123123",
-                                    "intro": "hello Anne",
+                                    "intro": "hello Anne -----",
                                     "website": "https://showanne.github.io/",
                                     "interests": [
                                         "read"
@@ -158,10 +194,12 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "title": "標題",
+                                    "title": "標題0516DEMO",
                                     "summary": "project summary",
                                     "content": "project content",
-                                    "category": "校園",
+                                    "category": [
+                                        "校園"
+                                    ],
                                     "target": 12000,
                                     "progress": 0,
                                     "status": 0,
@@ -170,10 +208,8 @@
                                     "cover": "cover URL",
                                     "video": "project video URL",
                                     "risks": "the risks",
-                                    "owner": "6453d211c6ab8c4bfc26717d",
-                                    "option": [
-                                        "6453d211c6ab8c4bfc26717d"
-                                    ]
+                                    "owner": "645f2f381357264aa70629b3",
+                                    "option": ""
                                 }
                             }
                         }
@@ -214,35 +250,6 @@
             }
         },
         "/owner/projects/{projectId}": {
-            "get": {
-                "tags": [
-                    "default"
-                ],
-                "summary": "B3-取得專案詳細內容",
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "name": "projectId",
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {}
-                        }
-                    }
-                }
-            },
             "put": {
                 "tags": [
                     "default"
@@ -254,8 +261,11 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "title": "修改標題",
-                                    "status": 2
+                                    "title": "標題被修改",
+                                    "status": 2,
+                                    "start_date": "2023-05-03",
+                                    "end_date": "2023-06-23",
+                                    "tag": "long"
                                 }
                             }
                         }
@@ -285,11 +295,16 @@
                     }
                 }
             },
-            "delete": {
+            "get": {
                 "tags": [
                     "default"
                 ],
-                "summary": "B5-刪除專案",
+                "summary": "B3-取得專案詳細內容",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "projectId",
@@ -298,6 +313,27 @@
                             "type": "string"
                         },
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/owner/projects/645f32491357264aa70629c1": {
+            "delete": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "B5-刪除專案",
+                "security": [
+                    {
+                        "bearerAuth": []
                     }
                 ],
                 "responses": {
@@ -322,13 +358,13 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "name": "方案名稱2",
-                                    "price": 1000,
-                                    "total": 50,
-                                    "content": "說明",
-                                    "cover": "cover URL",
-                                    "start_date": "2023-01-23",
-                                    "end_date": "2023-04-23"
+                                    "name": "< 貼心相伴套組 >",
+                                    "price": 2290,
+                                    "total": 200,
+                                    "content": "<p>您將會收到：<br>☀ 電子感謝卡 x 1份<br>&lt; 美好曙光文具禮盒 &gt; X1組<br>☀ 米色筆記本(小)&nbsp;<br>☀ 白色筆記本(中)<br>☀ 8款微笑詩篇紙膠帶<br>☀ 6色莫蘭迪色系平頭彩筆<br>&lt; 一秒放晴愛心傘 &gt; X1支</p>",
+                                    "cover": "/img/option.img",
+                                    "start_date": "2023-05-31",
+                                    "end_date": "2023-07-02"
                                 }
                             }
                         }
@@ -363,6 +399,11 @@
                     "default"
                 ],
                 "summary": "B7-列出專案之方案內容",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "projectId",
@@ -383,7 +424,7 @@
                 }
             }
         },
-        "/owner/projects/{projectId}/options/6460c4fe5c37bd19a64b9955": {
+        "/owner/projects/{projectId}/options/{optionId}": {
             "patch": {
                 "tags": [
                     "default"
@@ -395,7 +436,7 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "name": "方案名稱2-2",
+                                    "name": "方案名稱0516",
                                     "status": 2
                                 }
                             }
@@ -410,6 +451,14 @@
                 "parameters": [
                     {
                         "name": "projectId",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "optionId",
                         "in": "path",
                         "schema": {
                             "type": "string"
@@ -453,7 +502,7 @@
                         "schema": {
                             "type": "string"
                         },
-                        "example": "標題"
+                        "example": "修改標題"
                     }
                 ],
                 "responses": {
@@ -472,6 +521,11 @@
                     "default"
                 ],
                 "summary": "S5-取得專案內容",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "projectId",
@@ -498,6 +552,11 @@
                     "default"
                 ],
                 "summary": "S6-列出專案之方案內容",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "projectId",
@@ -506,6 +565,37 @@
                             "type": "string"
                         },
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/me/orders": {
+            "get": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "C2-分頁列出會員的贊助專案",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": "1"
                     }
                 ],
                 "responses": {
@@ -530,12 +620,17 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "pid": "6459fab141b8f20460c5856d"
+                                    "pid": "6460c369e87dc6bfa5544e2c"
                                 }
                             }
                         }
                     }
                 },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -550,6 +645,11 @@
                     "default"
                 ],
                 "summary": "C12-取得我的收藏專案",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -566,6 +666,11 @@
                     "default"
                 ],
                 "summary": "C11-刪除收藏專案",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "pid",
@@ -573,7 +678,8 @@
                         "schema": {
                             "type": "string"
                         },
-                        "required": true
+                        "required": true,
+                        "example": "645f32631357264aa70629c5"
                     }
                 ],
                 "responses": {
@@ -628,12 +734,12 @@
                 }
             }
         },
-        "/me/orders": {
+        "/order/{id}": {
             "get": {
                 "tags": [
                     "default"
                 ],
-                "summary": "C2-分頁列出會員的贊助專案",
+                "summary": "C14-確認訂單資料",
                 "security": [
                     {
                         "bearerAuth": []
@@ -641,12 +747,257 @@
                 ],
                 "parameters": [
                     {
-                        "name": "page",
-                        "in": "query",
+                        "name": "id",
+                        "in": "path",
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
-                        "example": "1"
+                        "required": true,
+                        "example": "6471da904fe1111a089b5333"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/userProposer": {
+            "post": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "B12-新增提案方",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "proposer_name": "測試公司",
+                                    "proposer_email": "TEST@test.com",
+                                    "proposer_tax_id": "12345678"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "B13-取得提案方",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/userProposer/{proposer_id}": {
+            "put": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "B14-修改提案方",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "proposer_intro": "介紹測試文字",
+                                    "proposer_website": "google"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "proposer_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/userProposer/{projectId}": {
+            "delete": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "B15-刪除提案方",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "projectId",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/upload/Image": {
+            "post": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "上傳圖片",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "取得所有圖片",
+                "security": [
+                    {
+                        "noauthAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/upload/Image/{img_id}": {
+            "get": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "取得特定圖片",
+                "security": [
+                    {
+                        "noauthAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "img_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "刪除特定圖片",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "img_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
                     }
                 ],
                 "responses": {

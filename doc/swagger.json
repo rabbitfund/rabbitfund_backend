@@ -13,9 +13,6 @@
   "paths": {
     "/": {
       "get": {
-        "tags": [
-          "Index"
-        ],
         "description": "",
         "parameters": [],
         "responses": {
@@ -27,9 +24,6 @@
     },
     "/signup": {
       "post": {
-        "tags": [
-          "Index"
-        ],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -50,6 +44,34 @@
       }
     },
     "/orders": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/order/{orderid}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "orderid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/orders/return": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/orders/notify": {
       "post": {
         "description": "",
         "parameters": [],
@@ -239,6 +261,26 @@
         "responses": {}
       }
     },
+    "/projects/{pid}/options/{optid}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "pid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "optid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
     "/upload/Image": {
       "get": {
         "description": "",
@@ -269,6 +311,32 @@
         "parameters": [
           {
             "name": "pid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/userProposer/{id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
