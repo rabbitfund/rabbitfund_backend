@@ -1,9 +1,6 @@
 import validator from "validator";
 import createError from "http-errors";
 import * as crypto from 'crypto';
-// import axios from 'axios';
-// import https from 'https';
-import dotenv from "dotenv";
 import { isValidObjectId } from "../utils/objectIdValidator";
 import { User } from "../model/userModels";
 import Project from "../model/projectModels";
