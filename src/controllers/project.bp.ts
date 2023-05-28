@@ -264,6 +264,55 @@ async function doGetProjectSupporters(userId: string, projectId: string) {
   return orders || [];
 }
 
+async function doUpdateTotalFundingAmount(projectId: string) {
+  try {
+    const project = await Project.findById(projectId);
+    if (project) {
+      const orders = await Order.find({ project: projectId });
+
+      const totalFundingAmount = orders.reduce((total, order) => {
+        if (order.order_total) {
+          return total + order.order_total;
+        }
+        return total;
+      }, 0);
+      project.project_progress = totalFundingAmount;
+      await project.save();
+    }
+  } catch (error) {
+    console.log("更新募資總金額失敗", error);
+  }
+}
+
+async function doGetTotalFundingAmount(projectId: string) {
+  try {
+    const project = await Project.findById(projectId, 'project_title project_progress project_target');
+    if (project) {
+      const project_id = project._id || '';
+      const project_title = project.project_title || '';
+      const project_progress = project.project_progress || 0;
+      const project_target = project.project_target || 0; 
+      const progressPercentage = Math.round((project_progress / project_target) * 100);
+      return {
+        project_id,
+        project_title,
+        project_progress,
+        project_target,
+        progress_percentage: progressPercentage,
+      };
+    }
+    console.error("找不到專案");
+  } catch (error) {
+    console.error("取得募資總金額失敗", error);
+  }
+  return {
+    project_id: '',
+    project_progress: 0,
+    project_title: '',
+    progress_percentage: 0,
+  };
+}
+
 export {
   ProjectCreateInput,
   ProjectUpdateInput,
@@ -275,4 +324,6 @@ export {
   doGetProjects,
   doGetProject,
   doGetProjectSupporters,
+  doUpdateTotalFundingAmount,
+  doGetTotalFundingAmount
 };
