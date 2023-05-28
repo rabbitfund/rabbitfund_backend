@@ -199,14 +199,6 @@ async function getOrderData(orderId: string) {
 
     console.log('UpdateOrderInfo: ', UpdateOrderInfo)
 
-  // return orderData
-  // let order = {}
-  // return order = {
-  //   ...orderData,
-  //   aesEncrypt,
-  //   shaEncrypt
-  // };
-
     const orderDataItem: OrderCheckInput = {
       order_id: orderData._id.toString(),
       user_name: orderData.user?.user_name || '',
@@ -221,83 +213,12 @@ async function getOrderData(orderId: string) {
     console.log('Order Data Item:', orderDataItem);
 
     return orderDataItem
-    // 傳送資料至藍新金流
-    // sendOrderDataToNewebpay(orderDataItem)
+
   } catch (error) {
     console.error(error)
     // throw createError(400, "找不到訂單資料");
   }
 }
-
-async function doOrderCheck(orderId: string) {
-  // const orderData = await getOrderData(orderId)
-  // console.log("doOrderCheck orderData", orderData);
-  
-  const order = await Order.findById(orderId).exec()
-  console.log('doOrderCheck order:', order);
-
-  if (!order) {
-    throw createError(400, '找不到訂單')
-  }
-  try {
-    // const checkOrder = await OrderInfo.findOneAndUpdate(
-    //   { _id: orderData.order_info },
-    //   {
-    //     $set: {
-    //       newebpay_aes_encrypt: orderData.aesEncrypt,
-    //       newebpay_sha_encrypt: orderData.shaEncrypt
-    //     }
-    //   },
-    //   { new: true }
-    // )
-
-    // console.log('checkOrder: ', checkOrder)
-
-    // const orderDataItem: OrderCheckInput = {
-    //   order_id: orderData._id.toString(),
-    //   user_name: orderData.user?.user_name || '',
-    //   user_email: orderData.user?.user_email || '',
-    //   amt: orderData.order_total || 0,
-    //   itemDesc: orderData.project?.project_title || '',
-    //   timeStamp: orderData.order_info.newebpay_timeStamp.toString(),
-    //   newebpay_aes_encrypt: orderData.aesEncrypt,
-    //   newebpay_sha_encrypt: orderData.shaEncrypt
-    // };
-  
-    // console.log('Order Data Item:', orderDataItem);
-
-    // 傳送資料至藍新金流
-    // sendOrderDataToNewebpay(orderDataItem)
-  } catch (error) {
-    console.error(error)
-    // throw createError(400, "找不到訂單資料");
-  }
-}
-
-// 將 orderDataItem 傳送至藍新金流
-// async function sendOrderDataToNewebpay(orderDataItem: OrderCheckInput) {
-//   // const encryptedOrderData = encryptOrderData(orderDataItem)
-//   // console.log('sendOrderDataToNewebpay', encryptedOrderData)
-
-//   // 將 encryptedOrderData 傳送給藍新金流相關處理
-//   try {
-//     const response = await axios.post(
-//       'https://ccore.newebpay.com/MPG/mpg_gateway',
-//       orderDataItem,
-//       {
-//         headers: {
-//           'Content-Type': 'application/json'
-//         }
-//       }
-//     )
-
-//     // 處理藍新金流回應的邏輯
-//     console.log('sendOrderDataToNewebpay Response:', response.data)
-//   } catch (error) {
-//     // 處理錯誤情況
-//     console.error('sendOrderDataToNewebpay Error:', error)
-//   }
-// }
 
 async function doOrderReturn(orderReturn: any) {
   console.count('/return');
@@ -312,12 +233,7 @@ async function doOrderReturn(orderReturn: any) {
     console.log('doOrderReturn', queryString);
     
     const orderId = info.Result.MerchantOrderNo
-    // const order = await Order.findById(orderId)
-    // // 檢查該筆訂單存不存在
-    // if (!order) {
-    //   throw createError(400, '找不到訂單')
-    // }
-    
+    // NOTE: 此處不檢查訂單的存在與否，僅將金流的資料傳給前端頁面
     const redirectUrl = process.env.Newebpay_redirect + orderId + '/transaction-result/?' + queryString
     
     // console.log('doOrderReturn', redirectUrl);
@@ -339,15 +255,24 @@ async function doOrderNotify(orderNotify: any) {
 
     const orderId = info.Result.MerchantOrderNo
 
-    // 檢查該筆訂單存不存在
+    // 檢查該筆訂單存不存在，並更新訂單狀態
     // console.log(info, info.Result.MerchantOrderNo);
-    const order = await Order.findById(orderId)
+    const order = await Order.findOneAndUpdate(
+      { _id: orderId },
+      {
+        $set: {
+          order_status: 2, // 更新訂單狀態為 2-已完成
+          order_final_date: new Date(),
+          order_shipping_status: 3 // 3-已完成
+        }
+      }
+    )
     if (!order) {
       throw createError(400, '找不到訂單')
     }
 
     console.log('doOrderNotify order', order);
-    console.log('doOrderNotify order.order_info', order.order_info);
+    // console.log('doOrderNotify order.order_info', order.order_info);
 
     // 取出訂單資料並將藍新金流回傳的交易結果更新
     // console.log(orders[info.Result.MerchantOrderNo]);
@@ -357,8 +282,8 @@ async function doOrderNotify(orderNotify: any) {
         $set: {
           order_status: 2, // 更新訂單狀態為 2-已完成
           order_final_date: new Date(),
-          payment_method: info.Result.PaymentType,
           payment_status: 2, // 更新付款狀態為 2-付款完成 / THINK: 貌似有收到 notify 就一定算成功交易？
+          payment_method: info.Result.PaymentType,
           newebpay_tradeNo: info.Result.TradeNo,
           newebpay_escrowBank: info.Result.PayBankCode,
           newebpay_payBankCode: info.Result.PayBankCode,

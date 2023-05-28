@@ -9,7 +9,6 @@ import {
   verifyOrderCreateData,
   doOrderCreate,
   getOrderData,
-  doOrderCheck,
   doGetMeOrders,
   doOrderReturn,
   doOrderNotify
@@ -55,7 +54,6 @@ export const checkOrder: RequestHandler = async (
   if (!isValidObjectId(orderId)) {
     return next(createError(400, "找不到訂單"));
   }
-
   
   const order : any = await getOrderData(orderId);
 
