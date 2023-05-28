@@ -116,7 +116,6 @@ async function doPutOwnerProject(
   projectId: string,
   data: ProjectUpdateInput
 ) {
-  // will return previous version
   const project = await Project.findByIdAndUpdate(
     projectId,
     {
@@ -143,6 +142,21 @@ async function doPutOwnerProject(
       order: data.order,
     },
     { new: true }
+  );
+
+  if (!!project) {
+    return project;
+  }
+  throw createError(400, "找不到專案");
+}
+
+async function doUpdateOwnerProjectOption(
+  projectId: string,
+  optionId: string
+) {
+  const project = await Project.updateOne(
+    { _id: projectId },
+    { $push: { option: optionId }}
   );
 
   if (!!project) {
@@ -320,6 +334,7 @@ export {
   doPostOwnerProject,
   doGetOwnerProject,
   doPutOwnerProject,
+  doUpdateOwnerProjectOption,
   doDeleteOwnerProject,
   doGetProjects,
   doGetProject,
