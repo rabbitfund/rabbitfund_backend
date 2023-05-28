@@ -11,6 +11,7 @@
     "postman": "npx p2o ./doc/倍而兔募資平台.postman_collection.json -f ./doc/postman.json -o ./doc/options.json"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
