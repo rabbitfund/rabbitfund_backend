@@ -10,7 +10,6 @@ import { handleErrorAsync } from "../service/handleErrorAsync";
 
 const router = Router();
 
-//不用登入取得提案人資料？
 router.get("", needAuth, handleErrorAsync(getProposer));
 router.post("", needAuth, handleErrorAsync(postProposer));
 router.put("/:id", needAuth, handleErrorAsync(putUserProposer));

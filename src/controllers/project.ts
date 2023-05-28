@@ -15,6 +15,8 @@ import {
   doGetProjects,
   doGetProject,
   doGetProjectSupporters,
+  doUpdateTotalFundingAmount,
+  doGetTotalFundingAmount
 } from "./project.bp";
 
 import {
@@ -263,4 +265,40 @@ export const getProjectSupporters: RequestHandler = async (
   const supporters = await doGetProjectSupporters(userId, projectId);
 
   handleSuccess(res, supporters);
+};
+
+export const updateTotalFundingAmount: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const projectId = req.params.pid;
+
+  if (!isValidObjectId(projectId)) {
+    return next(createError(400, "找不到專案"));
+  }
+  try {
+    await doUpdateTotalFundingAmount(projectId);
+    return handleSuccess(res, { message: "更新募資總金額成功" });
+  } catch (error) {
+    return next(createError(400, "更新募資總金額失敗"));
+  }
+};
+
+export const getTotalFundingAmount: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const projectId = req.params.pid;
+
+  if (!isValidObjectId(projectId)) {
+    return next(createError(400, "找不到專案"));
+  }
+  try {
+    const totalFundingAmount = await doGetTotalFundingAmount(projectId);
+    return handleSuccess(res, { totalFundingAmount });
+  } catch (error) {
+    return next(createError(400, "取得募資總金額失敗"));
+  }
 };
