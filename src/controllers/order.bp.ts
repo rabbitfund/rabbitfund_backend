@@ -280,8 +280,8 @@ async function doOrderNotify(orderNotify: any) {
       order.order_info,
       {
         $set: {
-          order_status: 2, // 更新訂單狀態為 2-已完成
-          order_final_date: new Date(),
+          invoice_number: generateInvoiceNumber(), // 隨機產生發票號碼
+          invoice_date: new Date(),
           payment_status: 2, // 更新付款狀態為 2-付款完成 / THINK: 貌似有收到 notify 就一定算成功交易？
           payment_method: info.Result.PaymentType,
           newebpay_tradeNo: info.Result.TradeNo,
@@ -348,4 +348,32 @@ function create_mpg_aes_decrypt(TradeInfo: any): any {
   return JSON.parse(result);
 }
 
-export { OrderCreateInput, OrderDataInput, OrderCheckInput, verifyOrderCreateData, doOrderCreate, doGetMeOrders, getOrderData, doOrderCheck, doOrderReturn, doOrderNotify };
+// 隨機產生發票號碼
+function generateInvoiceNumber(): string {
+
+  // 產生隨機的大寫字母
+  function generateRandomLetters(length: number): string {
+    let randomLetters: string = "";
+    const possibleLetters: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    
+    for (let i = 0; i < length; i++) {
+      const randomIndex: number = Math.floor(Math.random() * possibleLetters.length);
+      randomLetters += possibleLetters.charAt(randomIndex);
+    }
+    
+    return randomLetters;
+  }
+
+  // 產生隨機的2個大寫字母作為前綴部分
+  const prefix: string = generateRandomLetters(3);
+
+  // 產生隨機的8位數字
+  const digits: number = Math.floor(Math.random() * (99999999 - 10000000 + 1)) + 10000000;
+
+  // 組合發票號碼
+  const invoiceNumber: string = `${prefix}-${digits}`;
+
+  return invoiceNumber;
+}
+
+export { OrderCreateInput, OrderDataInput, OrderCheckInput, verifyOrderCreateData, doOrderCreate, doGetMeOrders, getOrderData, doOrderReturn, doOrderNotify };
