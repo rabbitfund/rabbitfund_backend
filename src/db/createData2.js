@@ -230,7 +230,7 @@ class DataGenerator {
         qas_q: "question",
         qas_a: "answer",
         qas_create_date: faker.date.between({ from: '2023-01-02T00:00:00.000Z', to: '2023-03-31T00:00:00.000Z' }).toJSON(),
-        qas_update_date:faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' }).toJSON(),
+        qas_update_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' }).toJSON(),
         check: true,
         enables: true
       }
@@ -240,12 +240,42 @@ class DataGenerator {
     console.log(`${this.nQas} random QAs are created`);
   }
 
+  createRandomNews() {
+    const news = [];
+
+    for (let i = 0; i < this.nNews; i++) {
+      const r = i % this.nNewsPerProject;
+      const q = (i - r) / this.nNewsPerProject;
+      const projectId = this.projectIds[Math.round(q)];
+      const newsId = this.newsIds[i];
+
+      const item = {
+        _id: newsId,
+        news_parent: projectId,
+        news_title: "question",
+        news_content: "answer",
+        news_cover: "news cover URL",
+        news_status: 2,
+        news_start_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-04-30T00:00:00.000Z' }).toJSON(),
+        news_end_date: faker.date.between({ from: '2023-08-15T00:00:00.000Z', to: '2023-09-30T00:00:00.000Z' }).toJSON(),
+        news_create_date: faker.date.between({ from: '2023-01-02T00:00:00.000Z', to: '2023-03-31T00:00:00.000Z' }).toJSON(),
+        news_update_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' }).toJSON(),
+        check: true,
+        enables: true
+      }
+      news.push(item);
+    };
+    this.news = news;
+    console.log(`${this.nNews} random news are created`);
+  }
+
   writeFiles() {
     fs.writeFileSync('src/db/data/user.json', JSON.stringify(this.users, null, 4));
     fs.writeFileSync('src/db/data/proposer.json', JSON.stringify(this.proposers, null, 4));
     fs.writeFileSync('src/db/data/project.json', JSON.stringify(this.projects, null, 4));
     fs.writeFileSync('src/db/data/option.json', JSON.stringify(this.options, null, 4));
     fs.writeFileSync('src/db/data/qas.json', JSON.stringify(this.qas, null, 4));
+    fs.writeFileSync('src/db/data/news.json', JSON.stringify(this.news, null, 4));
 
     console.log("All json files are created")
   }
