@@ -1,7 +1,10 @@
 import { User } from "../model/userModels";
-import { users } from "./data/user"
+// import { users } from "./data/user"
+import * as fs from 'fs';
 
 const initUsers = async () => {
+  const data = fs.readFileSync("./src/db/data/user.json", "utf-8");
+  const users = JSON.parse(data);
   try {
     await User.deleteMany();
     await User.insertMany(users);
