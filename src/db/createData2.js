@@ -184,6 +184,29 @@ class DataGenerator {
     console.log(`${this.nProject} random projects are created`)
   }
 
+  createRandomQas() {
+    const qas = [];
+
+    for (let i = 0; i < this.nQas; i++) {
+      const projectId = i % this.nQasPerProject === 0 ? this.projectIds[Math.round(i/2)] : this.projectIds[Math.round((i-1)/2)];
+      const qaId = this.qasIds[i];
+
+      const qa = {
+        _id: qaId,
+        qas_parent: projectId,
+        qas_q: "question",
+        qas_a: "answer",
+        qas_create_date: faker.date.between({ from: '2023-01-02T00:00:00.000Z', to: '2023-03-31T00:00:00.000Z' }).toJSON(),
+        qas_update_date:faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' }).toJSON(),
+        check: true,
+        enables: true
+      }
+      qas.push(qa);
+    };
+    this.qas = qas;
+    console.log(`${this.nQas} random QAs are created`)
+  }
+
   writeFiles() {
     fs.writeFileSync('src/db/data/user.json', JSON.stringify(this.users, null, 4));
     fs.writeFileSync('src/db/data/proposer.json', JSON.stringify(this.proposers, null, 4));
@@ -231,8 +254,9 @@ data.generateAllObjectIds()
 data.createRandomUsers()
 data.createRandomProposers()
 data.createRandomProjects()
-console.log(data.projects.length)
-// console.log(data.projects[0])
-// console.log(data.projects[1])
+data.createRandomQas()
+// console.log(data.qas.length)
+// console.log(data.qas[0])
+// console.log(data.qas[1])
 
 data.writeFiles()
