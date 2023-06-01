@@ -69,7 +69,7 @@ class DataGenerator {
     this.orderIds = this.generateObjectIds(this.orderIds, this.nOrder);
     this.orderInfoIds = this.generateObjectIds(this.orderInfoIds, this.nOrder);
     this.likeIds = this.generateObjectIds(this.likeIds, this.nLike);
-    console.log("All object IDs are created")
+    console.log("All object IDs are created");
   }
 
   createRandomUsers() {
@@ -102,7 +102,7 @@ class DataGenerator {
       users.push(user);
     };
     this.users = users;
-    console.log(`${this.nUser} random users are created`)
+    console.log(`${this.nUser} random users are created`);
   }
 
   createRandomProposers() {
@@ -133,7 +133,7 @@ class DataGenerator {
       proposers.push(proposer);
     };
     this.proposers = proposers;
-    console.log(`${this.nProposer} random proposers are created`)
+    console.log(`${this.nProposer} random proposers are created`);
   }
 
   createRandomProjects() {
@@ -181,14 +181,47 @@ class DataGenerator {
       projects.push(project);
     };
     this.projects = projects;
-    console.log(`${this.nProject} random projects are created`)
+    console.log(`${this.nProject} random projects are created`);
+  }
+
+  createRandomOptions() {
+    const options = [];
+
+    for (let i = 0; i < this.nOption; i++) {
+      const r = i % this.nOptionPerProject;
+      const q = (i - r) / this.nOptionPerProject;
+      const projectId = this.projectIds[Math.round(q)];
+      const optionId = this.optionIds[i];
+
+      const option = {
+        _id: optionId,
+        option_parent: projectId,
+        option_name: "option name",
+        option_price: faker.number.int({ min: 1, max: 500 }) * 100,
+        option_total: faker.number.int({ min: 50, max: 500 }),
+        option_content: "option content",
+        option_cover: "cover URL",
+        option_status: 2,
+        option_start_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-05-31T00:00:00.000Z' }).toJSON(),
+        option_end_date: faker.date.between({ from: '2023-06-01T00:00:00.000Z', to: '2023-08-31T00:00:00.000Z' }).toJSON(),
+        option_create_date: faker.date.between({ from: '2023-01-02T00:00:00.000Z', to: '2023-03-31T00:00:00.000Z' }).toJSON(),
+        option_update_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' }).toJSON(),
+        delete: false,
+        delete_member: null,
+      }
+      options.push(option);
+    };
+    this.options = options;
+    console.log(`${this.nOption} random options are created`);
   }
 
   createRandomQas() {
     const qas = [];
 
     for (let i = 0; i < this.nQas; i++) {
-      const projectId = i % this.nQasPerProject === 0 ? this.projectIds[Math.round(i/2)] : this.projectIds[Math.round((i-1)/2)];
+      const r = i % this.nQasPerProject;
+      const q = (i - r) / this.nQasPerProject;
+      const projectId = this.projectIds[Math.round(q)];
       const qaId = this.qasIds[i];
 
       const qa = {
@@ -204,13 +237,15 @@ class DataGenerator {
       qas.push(qa);
     };
     this.qas = qas;
-    console.log(`${this.nQas} random QAs are created`)
+    console.log(`${this.nQas} random QAs are created`);
   }
 
   writeFiles() {
     fs.writeFileSync('src/db/data/user.json', JSON.stringify(this.users, null, 4));
     fs.writeFileSync('src/db/data/proposer.json', JSON.stringify(this.proposers, null, 4));
     fs.writeFileSync('src/db/data/project.json', JSON.stringify(this.projects, null, 4));
+    fs.writeFileSync('src/db/data/option.json', JSON.stringify(this.options, null, 4));
+    fs.writeFileSync('src/db/data/qas.json', JSON.stringify(this.qas, null, 4));
 
     console.log("All json files are created")
   }
@@ -254,8 +289,8 @@ data.generateAllObjectIds()
 data.createRandomUsers()
 data.createRandomProposers()
 data.createRandomProjects()
+data.createRandomOptions()
 data.createRandomQas()
-// console.log(data.qas.length)
 // console.log(data.qas[0])
 // console.log(data.qas[1])
 
