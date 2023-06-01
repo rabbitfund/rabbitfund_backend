@@ -42,6 +42,7 @@
     "debug": "~2.6.9",
     "dotenv": "^16.0.3",
     "express": "~4.16.1",
+    "fake-data-generator-taiwan": "^1.0.4",
     "firebase-admin": "^11.8.0",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
