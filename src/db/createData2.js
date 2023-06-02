@@ -269,6 +269,58 @@ class DataGenerator {
     console.log(`${this.nNews} random news are created`);
   }
 
+  createRandomOrders() {
+    const orders = [];
+    // 0, 10, 20, .., 90 號訂單都是 0 號使用者
+    // 1, 11, 21, .., 91 號訂單都是 1 號使用者
+    // 100, 110, 120, ..., 190 則是 10 號
+    // 200, 210 則是 20 號
+    // % 10 的餘數決定幾號，百位數字決定要加幾個 10
+
+    for (let i = 0; i < this.nOrder; i++) {
+      const r1 = i % (this.nOrderPerUser ** 2);
+      const q1 = (i - r1) / (this.nOrderPerUser ** 2);
+      const group = Math.round(q1);
+      const userNum = i % this.nOrderPerUser + group * this.nOrderPerUser
+      const userId = this.userIds[userNum];
+
+      const r2 = i % this.nProposer;
+      const q2 = (i - r2) / this.nProposer;
+      const proposerId = this.proposerIds[Math.round(q2)];
+
+      const r3 = i % this.nOrderPerUser;
+      const q3 = (i - r3) / this.nOrderPerUser;
+      const projectId = this.projectIds[Math.round(q3)];
+
+      const selectOption = faker.number.int({ min: 0, max: 2 });
+      const optionId = this.optionIds[Math.round(q3) + selectOption];
+
+      const orderId = this.orderIds[i];
+      const orderInfoId = this.orderInfoIds[i];
+
+      const quantity = faker.number.int({ min: 1, max: 5 });
+      const extra = faker.number.int({ min: 1, max: 50 }) * 100;
+      const optionPrice = this.options[Math.round(q3) + selectOption].option_price;
+      const totalPrice = optionPrice * quantity + extra;
+
+      const order = {
+        _id: orderId,
+        user: userId,
+        ownerInfo: proposerId,
+        project: projectId,
+        option: optionId,
+        order_option_quantity: quantity,
+        order_extra: extra,
+        order_total: totalPrice,
+        order_note: "order note",
+        order_info: orderInfoId,
+      }
+      orders.push(order);
+    };
+    this.orders = orders;
+    console.log(`${this.nOrder} random orders are created`);
+  }
+
   writeFiles() {
     fs.writeFileSync('src/db/data/user.json', JSON.stringify(this.users, null, 4));
     fs.writeFileSync('src/db/data/proposer.json', JSON.stringify(this.proposers, null, 4));
@@ -276,6 +328,7 @@ class DataGenerator {
     fs.writeFileSync('src/db/data/option.json', JSON.stringify(this.options, null, 4));
     fs.writeFileSync('src/db/data/qas.json', JSON.stringify(this.qas, null, 4));
     fs.writeFileSync('src/db/data/news.json', JSON.stringify(this.news, null, 4));
+    fs.writeFileSync('src/db/data/orders.json', JSON.stringify(this.news, null, 4));
 
     console.log("All json files are created")
   }
@@ -321,7 +374,8 @@ data.createRandomProposers()
 data.createRandomProjects()
 data.createRandomOptions()
 data.createRandomQas()
-// console.log(data.qas[0])
-// console.log(data.qas[1])
+data.createRandomOrders()
+// console.log(data.orders[0])
+// console.log(data.orders[1])
 
 data.writeFiles()
