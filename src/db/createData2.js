@@ -23,6 +23,7 @@ class DataGenerator {
     this.nQasPerProject = nQasPerProject,
     this.nNewsPerProject = nNewsPerProject,
     this.nOrderPerUser = nOrderPerUser,
+    this.nLikePerUser = nLikePerUser,
     this.nProject = nProposer * nProjectPerProposer,
     this.nOption = this.nProject * nOptionPerProject,
     this.nQas = this.nProject * nQasPerProject,
@@ -48,7 +49,9 @@ class DataGenerator {
     this.orderInfos = [],
     this.likes = [],
     this.categories = ["校園", "公益", "市集"], 
-    this.tags = ["hot", "recent", "long"]
+    this.tags = ["hot", "recent", "long"],
+    this.paymentMethod = ["WEBATM", "CREDIT"],
+    this.invoiceType = ["紙本發票", "電子載具", "三聯式發票"]
   }
 
   generateObjectIds(array, n) {
@@ -281,8 +284,8 @@ class DataGenerator {
       const r1 = i % (this.nOrderPerUser ** 2);
       const q1 = (i - r1) / (this.nOrderPerUser ** 2);
       const group = Math.round(q1);
-      const userNum = i % this.nOrderPerUser + group * this.nOrderPerUser
-      const userId = this.userIds[userNum];
+      const userIdx = i % this.nOrderPerUser + group * this.nOrderPerUser
+      const userId = this.userIds[userIdx];
 
       const r2 = i % this.nProposer;
       const q2 = (i - r2) / this.nProposer;
@@ -321,14 +324,92 @@ class DataGenerator {
     console.log(`${this.nOrder} random orders are created`);
   }
 
+  createRandomOrderInfos() {
+    const orderInfos = [];
+
+    for (let i = 0; i < this.nOrder; i++) {
+      const orderInfoId = this.orderInfoIds[i];
+      const userId = this.orders[i].user;
+      const price = this.orders[i].order_total
+      const paymentMethod = this.paymentMethod[i % 2];
+      const paymentDate = faker.date.between({ from: '2023-06-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' });
+      const invoiceNumber_1 = faker.string.alpha({length: 3, casing: "upper"});
+      const invoiceNumber_2 = faker.string.numeric(8)
+      const invoiceType = this.invoiceType[i % 3];
+      const invoiceCarrier = i % 3 === 1 ? `/${faker.string.alphanumeric({length: 7, casing: "upper"})}` : ""
+      const newebpayPayTime = paymentDate.toJSON().substring(0, 19).replace("T", "")
+
+      const orderInfo = {
+        _id: orderInfoId,
+        user: userId,
+        payment_price: price,
+        payment_method: paymentMethod,
+        payment_status: 2,
+        invoice_number: `${invoiceNumber_1}-${invoiceNumber_2}`,
+        invoice_date: paymentDate.toJSON(),
+        invoice_type: invoiceType,
+        invoice_carrier: invoiceCarrier,
+        newebpay_timeStamp: Math.round(paymentDate.getTime() / 1000), // NOTE: 藍新金流有限制時間戳長度 10 位數
+        newebpay_aes_encrypt: "13b7fa9fd92305551393f96554ad5e0e9f16d80baf2b83d045d93ce6e738619b2a90457e105fc8ea8116effe6b4152214f89f046a2bb46346f6d33d7bc5fee9898041527c39c42f7eeee325ffe72e243d93043dd26ff102881266769ae6f32a3d0c90cd79d09407faf418098b44675a263740b2dd6bb83a4211633df03099629a5fd05c9467936326047ab87c885e23d919528c323642cb27903b7b664d4f07b595b8046f4547452da468b6ee900d18038e04d4c205b1dee0f78a63ed96ee389a59a496c172ef10de96f2f90526b88e1a06c1a1170e5931e8d46276a711825fd52f8eb16216cbd48e3a4851330a9c821",
+        newebpay_sha_encrypt: "630B88DFFB5C34239AF78463AF108F34AF78243D8C98A08758C2C45815501C5A",
+        newebpay_tradeNo: "23060200514650996",
+        newebpay_IP: faker.internet.ipv4(),
+        newebpay_escrowBank: "809",
+        newebpay_payBankCode: "809",
+        newebpay_payerAccount5Code: faker.string.numeric(5),
+        newebpay_payTime: newebpayPayTime
+      }
+      orderInfos.push(orderInfo);
+    };
+    this.orderInfos = orderInfos;
+    console.log(`${this.nOrder} random orderInfos are created`);
+  }
+
+  createRandomLikes() {
+    const likes = [];
+
+    for (let i = 0; i < this.nLike; i++) {
+      const likeId = this.likeIds[i];
+      const r = i % this.nLikePerUser;
+      const q = (i - r) / this.nLikePerUser;
+      const userId = this.userIds[Math.round(q)];
+      const projectIdx = faker.number.int({ min: 0, max: this.nProject - 1 })
+      const projectId = this.projectIds[projectIdx]
+
+      const like = {
+        _id: likeId,
+        user: userId,
+        project: projectId,
+        created: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' }).toJSON(),
+      }
+      likes.push(like);
+    };
+    this.likes = likes;
+    console.log(`${this.nLike} random likes are created`);
+  }
+
+  createAllRandomData() {
+    this.createRandomUsers()
+    this.createRandomProposers()
+    this.createRandomProjects()
+    this.createRandomOptions()
+    this.createRandomQas()
+    this.createRandomNews()
+    this.createRandomOrders()
+    this.createRandomOrderInfos()
+    this.createRandomLikes()
+  }
+
   writeFiles() {
-    fs.writeFileSync('src/db/data/user.json', JSON.stringify(this.users, null, 4));
-    fs.writeFileSync('src/db/data/proposer.json', JSON.stringify(this.proposers, null, 4));
-    fs.writeFileSync('src/db/data/project.json', JSON.stringify(this.projects, null, 4));
-    fs.writeFileSync('src/db/data/option.json', JSON.stringify(this.options, null, 4));
+    fs.writeFileSync('src/db/data/users.json', JSON.stringify(this.users, null, 4));
+    fs.writeFileSync('src/db/data/proposers.json', JSON.stringify(this.proposers, null, 4));
+    fs.writeFileSync('src/db/data/projects.json', JSON.stringify(this.projects, null, 4));
+    fs.writeFileSync('src/db/data/options.json', JSON.stringify(this.options, null, 4));
     fs.writeFileSync('src/db/data/qas.json', JSON.stringify(this.qas, null, 4));
     fs.writeFileSync('src/db/data/news.json', JSON.stringify(this.news, null, 4));
-    fs.writeFileSync('src/db/data/orders.json', JSON.stringify(this.news, null, 4));
+    fs.writeFileSync('src/db/data/orders.json', JSON.stringify(this.orders, null, 4));
+    fs.writeFileSync('src/db/data/orderInfos.json', JSON.stringify(this.orderInfos, null, 4));
+    fs.writeFileSync('src/db/data/likes.json', JSON.stringify(this.likes, null, 4));
 
     console.log("All json files are created")
   }
@@ -369,13 +450,6 @@ const data = new DataGenerator(
 
 data.generateAllObjectIds()
 
-data.createRandomUsers()
-data.createRandomProposers()
-data.createRandomProjects()
-data.createRandomOptions()
-data.createRandomQas()
-data.createRandomOrders()
-// console.log(data.orders[0])
-// console.log(data.orders[1])
+data.createAllRandomData()
 
 data.writeFiles()
