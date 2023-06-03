@@ -3,7 +3,7 @@ import { User } from "../model/userModels";
 import * as fs from 'fs';
 
 const initUsers = async () => {
-  const data = fs.readFileSync("./src/db/data/user.json", "utf-8");
+  const data = fs.readFileSync("./src/db/data/users.json", "utf-8");
   const users = JSON.parse(data);
   try {
     await User.deleteMany();

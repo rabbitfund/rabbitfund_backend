@@ -2,7 +2,7 @@ import Project from "../model/projectModels";
 import * as fs from 'fs';
 
 const initProjects = async () => {
-  const data = fs.readFileSync("./src/db/data/project.json", "utf-8");
+  const data = fs.readFileSync("./src/db/data/projects.json", "utf-8");
   const projects = JSON.parse(data);
   try {
     await Project.deleteMany();
