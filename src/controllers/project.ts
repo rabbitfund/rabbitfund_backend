@@ -173,9 +173,14 @@ export const getProjects: RequestHandler = async (
     parameters.project_category = type
   };
 
-  const projects = await doGetProjects(parameters, page);
+  const [projects, totalPages, currentPage] = await doGetProjects(parameters, page);
+  const result = {
+    totalPages: totalPages,
+    currentPage: currentPage,
+    projects: projects
+  }
 
-  return handleSuccess(res, projects || {});
+  return handleSuccess(res, result || {});
 };
 
 export const patchProjectOptions: RequestHandler = async (
