@@ -207,17 +207,6 @@ async function doGetProjects(parameters: any, page: string) {
       option_content: 1,
       option_cover: 1
     })
-    .populate("qas", {
-      _id: 1,
-      qas_q: 1,
-      qas_a: 1,
-    })
-    .populate("news", {
-      _id: 1,
-      news_title: 1,
-      news_content: 1,
-      news_cover: 1
-    })
     .limit(perPage)
     .skip(perPage * (pageNum - 1));
 
@@ -254,6 +243,17 @@ async function doGetProject(projectId: string) {
       option_price: 1,
       option_content: 1,
       option_cover: 1
+    })
+    .populate("qas", {
+      _id: 1,
+      qas_q: 1,
+      qas_a: 1,
+    })
+    .populate("news", {
+      _id: 1,
+      news_title: 1,
+      news_content: 1,
+      news_cover: 1
     })
   if (!!project) {
     if (!project.delete) {
