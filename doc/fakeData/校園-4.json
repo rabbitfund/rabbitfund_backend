@@ -1,40 +1,40 @@
 {
   "title": "校園音樂祭：奏響校園音樂的節奏",
   "summary": "《校園音樂祭》是一個由學生發起的計畫，旨在舉辦一場規模大、品質高、氣氛佳的校園音樂祭，讓更多學生能夠欣賞和體驗音樂的魅力，也讓音樂人能夠與聽眾直接交流和互動，建立良好的關係。我們預計在2023年6月在台北市某所大學校園舉辦這場音樂祭，邀請20組以上不同風格和風格的音樂人參演，包括知名的樂團、歌手、DJ等。此外，我們還將安排各種精彩的活動，如音樂工作坊、音樂市集、音樂遊戲等，讓參與者能夠在輕鬆愉快的氛圍中學習和實踐音樂。",
-  "content": "你是否喜歡音樂？你是否想要聽到不同風格和風格的音樂？你是否想要參與一場充滿音樂和歡樂的校園音樂祭？<br>如果你有以上的想法，那麼我們誠摯地邀請你支持我們的募資專案：《校園音樂祭》。<br>《校園音樂祭》是一個由學生發起的計畫，旨在舉辦一場規模大、品質高、氣氛佳的校園音樂祭，讓更多學生能夠欣賞和體驗音樂的魅力，也讓音樂人能夠與聽眾直接交流和互動，建立良好的關係。<br>我們希望透過募資，籌備一場在 2023 年 6 月舉辦的《校園音樂祭》，地點在台北市某所大學校園。我們預計邀請 20 組以上不同風格和風格的音樂人參演，包括有知名的樂團、歌手、DJ等等。我們也會安排各種精彩的活動，如音樂工作坊、音樂市集、音樂遊戲等等，讓參與者能夠在輕鬆愉快的氛圍中，學習和實踐音樂。<br>我們希望透過這場音樂祭，能夠提升大學生對於音樂的興趣和熱情，也能夠幫助音樂人拓展市場和影響力，並促進校園文化的多元與活絡。<br>我們目前已經完成了部分籌備工作，如場地租用、音樂人徵選、活動規劃等等。但是我們還需要更多的資金來支付其他費用，如音響設備、宣傳推廣、活動製作等等。因此，我們希望能夠透過群眾募資的方式，籌集 300 萬元的資金目標。",
+  "content": "你喜愛音樂嗎？想聆聽多樣風格的音樂嗎？渴望參與充滿歡樂的校園音樂盛事嗎？<br>現誠摯邀請您支持我們的募資專案：《校園音樂祭》。<br>《校園音樂祭》是由學生發起的計畫，旨在舉辦一場規模大、品質高、氛圍佳的校園音樂盛事，讓更多學生欣賞和體驗音樂的魅力，促進音樂人與聽眾之間的直接交流，建立緊密的連結。<br>我們計畫在 2023 年 6 月於台北市某大學校園舉辦《校園音樂祭》，邀請 20 組以上風格迥異的音樂人參與，包括知名樂團、歌手和DJ等。同時，我們還將舉辦各類精彩活動，如音樂工作坊、音樂市集和音樂遊戲，讓參與者在輕鬆快樂的氛圍中學習和實踐音樂。<br>透過這場音樂祭，我們希望激發大學生對音樂的興趣和熱情，同時幫助音樂人擴展市場和影響力，促進校園文化的多元活躍。<br>我們已完成一部分籌備工作，如場地租用、音樂人徵選和活動規劃，但仍需籌集額外資金支付其他費用，如音響設備、宣傳推廣和活動製作。因此，我們希望透過群眾募資方式，達成 300 萬元的籌款目標。",
   "target": 3000000,
   "risks": "<ol><li>募資專案風險1</li><li>募資專案風險2</li><li>募資專案風險3</li></ol>",
   "option": [
     {
-      "name": "小額支持",
+      "name": "音樂之聲",
       "content": "捐款100元以上的支持者將收到一張《校園音樂祭》感謝明信片。",
       "target": 50000,
       "total": 500
     },
     {
-      "name": "綠色小禮物",
-      "content": "捐款500元以上的支持者將收到一張《校園音樂祭》感謝卡片，內容將由參演音樂人隨機致贈祝福的話。",
-      "target": 250000,
-      "total": 500
+      "name": "音樂摯友",
+      "content": "捐款500元以上的支持者將收到一張《校園音樂祭》感謝明信片，內容將由參演音樂人隨機致贈祝福的話。",
+      "target": 20000,
+      "total": 150
     },
     {
-      "name": "VIP體驗",
-      "content": "捐款1000元以上的支持者，您將收到一張《校園音樂祭》感謝卡片，以及一份由參演音樂人提供的精美小禮物。此外，您還可以在音樂祭期間享有免費入場券一張。",
-      "target": 300000,
-      "total": 300
+      "name": "熱情奏鳴",
+      "content": "捐款1000元以上的支持者將收到一張《校園音樂祭》感謝明信片，一份由參演音樂人提供的精美小禮物，以及音樂祭期間的免費入場券一張。",
+      "target": 10000,
+      "total": 50
     },
     {
-      "name": "超級支持者",
-      "content": "捐款5000元以上的支持者，您將收到一張《校園音樂祭》感謝卡片，以及一份由參演音樂人提供的精美小禮物。此外，您還可以在音樂祭期間享有免費入場券兩張。最重要的是，您還可以在音樂祭期間參加任何一場由我們安排的精彩活動（如音樂工作坊、音樂市集等），並享有優先報名權。",
-      "target": 500000,
-      "total": 100
+      "name": "狂熱音浪",
+      "content": "捐款5000元以上的支持者將收到一張《校園音樂祭》感謝明信片，內容將由參演音樂人隨機致贈祝福的話，並親自書寫卡片內容；一份由參演音樂人提供的精美小禮物，音樂祭期間的免費入場券兩張，並可參加一場由我們安排的精彩活動。",
+      "target": 5000,
+      "total": 20
     },
     {
-      "name": "超級支持者+紀念品組合",
-      "content": "捐款10000元以上的支持者，感謝您的支持！您將收到一張《校園音樂祭》感謝卡片，以及一份由參演音樂人提供的精美小禮物。此外，您還可以在音樂祭期間享有免費入場券四張。最重要的是，您還可以在音樂祭期間參加任何兩場由我們安排的精彩活動（如音樂工作坊、音樂市集等），並享有優先報名權。更棒的是，您還可以在音樂祭結束後收到一份由我們精心挑選的《校園音樂祭》紀念品組合（包含各種不同風格和價值的CD、海報、T恤等）。",
-      "target": 2000000,
-      "total": 200
-    }
+      "name": "璀璨星光",
+      "content": "捐款10000元以上的支持者將收到一張由參演音樂人親筆寫的《校園音樂祭》感謝明信片，音樂祭期間的免費入場券四張，並可於一年內參加由我們安排的精彩活動。此外，音樂祭結束後，將獲得一份精心挑選的《校園音樂祭》紀念品組合。",
+      "target": 2000,
+      "total": 20
+    }    
   ],
   "qas": [
     {
@@ -88,4 +88,28 @@
   捐款 1000 元：感謝您的支持！您將收到一張《校園音樂祭》感謝卡片，以及一份由參演音樂人提供的精美小禮物。此外，您還可以在音樂祭期間享有免費入場券一張。
   捐款 5000 元：感謝您的支持！您將收到一張《校園音樂祭》感謝卡片，以及一份由參演音樂人提供的精美小禮物。此外，您還可以在音樂祭期間享有免費入場券兩張。最重要的是，您還可以在音樂祭期間參加任何一場由我們安排的精彩活動（如音樂工作坊、音樂市集等），並享有優先報名權。
   捐款 10000 元：感謝您的支持！您將收到一張《校園音樂祭》感謝卡片，以及一份由參演音樂人提供的精美小禮物。此外，您還可以在音樂祭期間享有免費入場券四張。最重要的是，您還可以在音樂祭期間參加任何兩場由我們安排的精彩活動（如音樂工作坊、音樂市集等），並享有優先報名權。更棒的是，您還可以在音樂祭結束後收到一份由我們精心挑選的《校園音樂祭》紀念品組合（包含各種不同風格和價值的CD、海報、T恤等）。"
+},
+{
+  "chatGPT generate prompt": "當然！以下是根據您的要求進行修改後的10組英文描述句子，用於產生現代化的募資專案封面視覺及活動文宣品設計的創意：
+
+  1. Immerse yourself in a world of musical enchantment with a charismatic bard of extraordinary talent. Visualize a captivating performer with a mix of human and drow heritage, exuding charm and elegance. Dressed in a stylish, tailored coat and a trendy shirt, their bright smile lights up the stage as they captivate the audience with their mesmerizing melodies.
+  
+  2. Embark on a musical journey led by a captivating bard with a touch of allure. Picture an alluring individual with a captivating blend of human and drow features, donning fashionable attire that reflects their unique style. Their magnetic presence, paired with their exceptional musical skills, creates an atmosphere of excitement and joy.
+  
+  3. Prepare to be swept away by the magical tunes of a talented bard who embodies modern elegance. Imagine an enchanting figure with a mix of human and drow ancestry, dressed in sophisticated and fashionable clothing. Their radiant smile and captivating stage presence leave a lasting impression as they deliver their spellbinding performances.
+  
+  4. Discover the extraordinary world of music through the eyes of a charismatic bard. Envision a captivating performer with a hint of drow heritage, exuding confidence and style. Dressed in contemporary and fashionable attire, their magnetic personality and musical prowess create an unforgettable experience for the audience.
+  
+  5. Experience the captivating melodies of a modern bard who redefines musical charm. Picture a charismatic individual with a captivating blend of human and drow ancestry, dressed in trendy and stylish clothing. Their infectious smile and magnetic stage presence leave the audience in awe as they deliver their soulful and enchanting performances.
+  
+  6. Step into a realm of musical enchantment with a talented bard who embodies contemporary elegance. Visualize an alluring performer with a mix of human and drow features, exuding charisma and style. Dressed in fashionable and sleek attire, their passion for music shines through as they create a vibrant and captivating atmosphere.
+  
+  7. Immerse yourself in the captivating world of music with a modern bard of unparalleled charm. Imagine a captivating figure with a captivating blend of human and drow features, exuding confidence and sophistication. Dressed in stylish and trendy clothing, their magnetic stage presence and musical talent create an immersive and unforgettable experience.
+  
+  8. Let the enchanting melodies of a modern bard transport you to a world of musical bliss. Visualize a charismatic individual with a mix of human and drow ancestry, radiating contemporary charm and style. Dressed in fashionable and elegant attire, their infectious energy and soulful performances captivate the audience, leaving them craving for more.
+  
+  9. Prepare for a captivating musical experience with a charismatic bard who embraces the modern era. Picture an alluring performer with a hint of drow heritage, dressed in contemporary and stylish clothing. Their radiant smile and magnetic stage presence create an atmosphere of excitement and joy as they share their musical talent with the world.
+  
+  10. Enter the world of modern music with a talented bard who embodies elegance and sophistication. Imagine a captivating individual with a captivating blend of human and drow ancestry, dressed in fashionable and refined attire. Their magnetic stage presence, coupled with their exceptional musical abilities, creates an unforgettable experience for the audience.
+  "
 }
