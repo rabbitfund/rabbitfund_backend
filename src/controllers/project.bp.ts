@@ -192,7 +192,7 @@ async function doDeleteOwnerProject(userId: string, projectId: string) {
 
 async function doGetProjects(parameters: any, page: string) {
   const pageNum = parseInt(page);
-  const perPage = 10;
+  const perPage = 9;
   const projects = await Project.find(parameters)
     .populate("ownerInfo", {
       _id: 1,
