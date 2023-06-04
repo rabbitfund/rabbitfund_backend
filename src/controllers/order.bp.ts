@@ -145,18 +145,43 @@ async function doOrderCreate(data: OrderCreateInput) {
 }
 
 async function doGetMeOrders(userId: string, page: string) {
+  console.log(page);
+  
   const pageNum = parseInt(page);
-  const perPage = 10;
+  const perPage = 6;
+
+  const order = await Order.find({ user: userId })
+  if (!order || order.length === 0) {
+    throw createError(400, "找不到贊助紀錄");
+  }
 
   const orders = await Order.find({ user: userId })
+    .populate("project", {
+      _id: 1,
+      project_title: 1,
+      project_cover: 1,
+    })
+    .populate("option", {
+      _id: 1,
+      option_name: 1,
+      option_cover: 1,
+    })
+    .populate("order_info", {
+      _id: 1,
+      payment_price: 1,
+      payment_status: 1,
+      invoice_type: 1,
+      invoice_carrier: 1,
+      newebpay_timeStamp: 1,
+      newebpay_escrowBank: 1,
+      newebpay_payBankCode: 1,
+      // newebpay_payTime: 1,
+      newebpay_payerAccount5Code: 1,
+      payment_method: 1
+    })
     .limit(perPage)
     .skip(perPage*(pageNum-1));
   
-
-  // if (!orders || orders.length === 0) {
-  //   throw createError(400, "找不到贊助紀錄");
-  // }
-
   return orders
 }
 
