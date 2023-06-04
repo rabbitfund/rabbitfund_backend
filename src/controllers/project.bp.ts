@@ -2,6 +2,8 @@ import Order from "../model/orderModels";
 import Project from "../model/projectModels";
 import UserProposer from "../model/userProposerModels";
 import createError from "http-errors";
+import "../model/newsModels";   // 不加這個沒辦法用 populate
+import "../model/qasModels";
 
 type ProjectCreateInput = {
   title: String; // must
@@ -104,7 +106,13 @@ async function doPostOwnerProject(userId: string, data: ProjectCreateInput) {
 }
 
 async function doGetOwnerProject(projectId: string) {
-  const project = await Project.findById(projectId);
+  const project = await Project.findById(projectId)
+    .populate("ownerInfo")
+    .populate("option")
+    .populate("qas")
+    .populate("news")
+    .populate("order")
+  
   if (!!project) {
     if (!project.delete) return project;
   }
@@ -184,7 +192,7 @@ async function doDeleteOwnerProject(userId: string, projectId: string) {
 
 async function doGetProjects(parameters: any, page: string) {
   const pageNum = parseInt(page);
-  const perPage = 10;
+  const perPage = 9;
   const projects = await Project.find(parameters)
     .populate("ownerInfo", {
       _id: 1,
@@ -213,6 +221,9 @@ async function doGetProjects(parameters: any, page: string) {
       project_update_final_member: __,
       delete: ___,
       delete_member: ____,
+      news: _____,
+      qas: ______,
+      order: _______, // 應該要改成數字就好，但前端會做另外處理(for Demo)，因此這邊直接移除
       ...filteredProject
     } = project.toObject();
     return filteredProject;
@@ -236,6 +247,17 @@ async function doGetProject(projectId: string) {
       option_content: 1,
       option_cover: 1
     })
+    .populate("qas", {
+      _id: 1,
+      qas_q: 1,
+      qas_a: 1,
+    })
+    .populate("news", {
+      _id: 1,
+      news_title: 1,
+      news_content: 1,
+      news_cover: 1
+    })
   if (!!project) {
     if (!project.delete) {
       // filtered out specific info
@@ -244,6 +266,7 @@ async function doGetProject(projectId: string) {
         project_update_final_member: __,
         delete: ___,
         delete_member: ____,
+        order: _______, // 應該要改成數字就好，但前端會做另外處理(for Demo)，因此這邊直接移除
         ...filteredProject
       } = project.toObject();
 

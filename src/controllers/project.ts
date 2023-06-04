@@ -152,22 +152,26 @@ export const getProjects: RequestHandler = async (
   next: NextFunction
 ) => {
   // const userId = res.locals.user.id;
-  const type = req.query.type;
-  const keyword = req.query.k;
+  const type = req.query.type as string;
+  const keyword = req.query.k as string;
   const page = req.query.page as string;
-  const tag = req.query.tag;
+  const tag = req.query.tag as string;
 
-  let parameters;
-  if (!!tag) {
-    parameters = {
-      project_tag: tag,
-    };
-  } else if (!!type && !!keyword) {
-    parameters = {
-      project_category: type,
-      project_title: { $regex: keyword},
-    };
+  interface Parameters {
+    project_title?: Object,
+    project_tag?: string,
+    project_category?: string
   }
+  let parameters: Parameters = {};
+  if (!!keyword) {
+    parameters.project_title = { $regex: keyword}
+  };
+  if (!!tag) {
+    parameters.project_tag = tag 
+  };
+  if (!!type) {
+    parameters.project_category = type
+  };
 
   const projects = await doGetProjects(parameters, page);
 
