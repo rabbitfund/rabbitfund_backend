@@ -237,8 +237,8 @@ class DataGenerator {
       const qa = {
         _id: qaId,
         qas_parent: projectId,
-        qas_q: this.data[projectId] ? this.data[projectId].qas[i % 2].qas_q : "question",
-        qas_a: this.data[projectId] ? this.data[projectId].qas[i % 2].qas_a : "answer",
+        qas_q: this.data[projectIdx] ? this.data[projectIdx].qas[i % 2].qas_q : "question",
+        qas_a: this.data[projectIdx] ? this.data[projectIdx].qas[i % 2].qas_a : "answer",
         qas_create_date: faker.date.between({ from: '2023-01-02T00:00:00.000Z', to: '2023-03-31T00:00:00.000Z' }).toJSON(),
         qas_update_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' }).toJSON(),
         check: true,
