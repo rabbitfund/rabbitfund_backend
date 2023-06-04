@@ -73,10 +73,10 @@ const userProposerSchema = new mongoose.Schema(
       // 提案方擁有的專案
       type: [
         {
-          projects: {
+          // projects: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Project",
-          },
+          // },
         },
       ],
     },
@@ -84,10 +84,10 @@ const userProposerSchema = new mongoose.Schema(
       // 追蹤專案
       type: [
         {
-          likeProjects: {
+          // likeProjects: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Project",
-          },
+          // },
         },
       ],
     },
