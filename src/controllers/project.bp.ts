@@ -221,6 +221,9 @@ async function doGetProjects(parameters: any, page: string) {
       project_update_final_member: __,
       delete: ___,
       delete_member: ____,
+      news: _____,
+      qas: ______,
+      order: _______, // 應該要改成數字就好，但前端會做另外處理(for Demo)，因此這邊直接移除
       ...filteredProject
     } = project.toObject();
     return filteredProject;
@@ -263,6 +266,7 @@ async function doGetProject(projectId: string) {
         project_update_final_member: __,
         delete: ___,
         delete_member: ____,
+        order: _______, // 應該要改成數字就好，但前端會做另外處理(for Demo)，因此這邊直接移除
         ...filteredProject
       } = project.toObject();
 
