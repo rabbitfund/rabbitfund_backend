@@ -198,16 +198,17 @@ class DataGenerator {
     for (let i = 0; i < this.nOption; i++) {
       const r = i % this.nOptionPerProject;
       const q = (i - r) / this.nOptionPerProject;
-      const projectId = this.projectIds[Math.round(q)];
+      const projectIdx = Math.round(q);
+      const projectId = this.projectIds[projectIdx];
       const optionId = this.optionIds[i];
 
       const option = {
         _id: optionId,
         option_parent: projectId,
-        option_name: this.data[i] ? this.data[i].option[i % 3].name : "option name",
-        option_price: this.data[i] ? this.data[i].option[i % 3].price : faker.number.int({ min: 1, max: 500 }) * 100,
-        option_total: this.data[i] ? this.data[i].option[i % 3].total : faker.number.int({ min: 50, max: 500 }),
-        option_content: this.data[i] ? this.data[i].option[i % 3].content : "option content",
+        option_name: this.data[projectIdx] ? this.data[projectIdx].option[i % 3].name : "option name",
+        option_price: this.data[projectIdx] ? this.data[projectIdx].option[i % 3].price : faker.number.int({ min: 1, max: 500 }) * 100,
+        option_total: this.data[projectIdx] ? this.data[projectIdx].option[i % 3].total : faker.number.int({ min: 50, max: 500 }),
+        option_content: this.data[projectIdx] ? this.data[projectIdx].option[i % 3].content : "option content",
         option_cover: "cover URL",
         option_status: 2,
         option_start_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-05-31T00:00:00.000Z' }).toJSON(),
@@ -229,14 +230,15 @@ class DataGenerator {
     for (let i = 0; i < this.nQas; i++) {
       const r = i % this.nQasPerProject;
       const q = (i - r) / this.nQasPerProject;
-      const projectId = this.projectIds[Math.round(q)];
+      const projectIdx = Math.round(q);
+      const projectId = this.projectIds[projectIdx];
       const qaId = this.qasIds[i];
 
       const qa = {
         _id: qaId,
         qas_parent: projectId,
-        qas_q: this.data[i] ? this.data[i].qas[i % 2].qas_q : "question",
-        qas_a: this.data[i] ? this.data[i].qas[i % 2].qas_a : "answer",
+        qas_q: this.data[projectId] ? this.data[projectId].qas[i % 2].qas_q : "question",
+        qas_a: this.data[projectId] ? this.data[projectId].qas[i % 2].qas_a : "answer",
         qas_create_date: faker.date.between({ from: '2023-01-02T00:00:00.000Z', to: '2023-03-31T00:00:00.000Z' }).toJSON(),
         qas_update_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' }).toJSON(),
         check: true,
@@ -254,14 +256,15 @@ class DataGenerator {
     for (let i = 0; i < this.nNews; i++) {
       const r = i % this.nNewsPerProject;
       const q = (i - r) / this.nNewsPerProject;
-      const projectId = this.projectIds[Math.round(q)];
+      const projectIdx = Math.round(q);
+      const projectId = this.projectIds[projectIdx];
       const newsId = this.newsIds[i];
 
       const item = {
         _id: newsId,
         news_parent: projectId,
-        news_title: this.data[i] ? this.data[i].news[i % 2].news_title : "news title",
-        news_content: this.data[i] ? this.data[i].news[i % 2].news_content : "news content",
+        news_title: this.data[projectIdx] ? this.data[projectIdx].news[i % 2].news_title : "news title",
+        news_content: this.data[projectIdx] ? this.data[projectIdx].news[i % 2].news_content : "news content",
         news_cover: "news cover URL",
         news_status: 2,
         news_start_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-04-30T00:00:00.000Z' }).toJSON(),
