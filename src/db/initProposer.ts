@@ -5,6 +5,7 @@ import * as fs from 'fs';
 const initProposers = async () => {
   const data = fs.readFileSync("./src/db/data/proposers.json", "utf-8");
   const proposers = JSON.parse(data);
+  console.log(`取得${proposers.length}筆proposer`)
   try {
     await UserProposer.deleteMany();
     await UserProposer.insertMany(proposers);

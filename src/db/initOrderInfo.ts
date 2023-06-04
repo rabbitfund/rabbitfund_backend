@@ -4,6 +4,7 @@ import * as fs from 'fs';
 const initOrderInfos = async () => {
   const data = fs.readFileSync("./src/db/data/orderInfos.json", "utf-8");
   const orderInfos = JSON.parse(data);
+  console.log(`取得${orderInfos.length}筆orderInfo`)
   try {
     await OrderInfo.deleteMany();
     await OrderInfo.insertMany(orderInfos);

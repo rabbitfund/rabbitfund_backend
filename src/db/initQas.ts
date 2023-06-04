@@ -4,6 +4,7 @@ import * as fs from 'fs';
 const initQas = async () => {
   const data = fs.readFileSync("./src/db/data/qas.json", "utf-8");
   const qas = JSON.parse(data);
+  console.log(`取得${qas.length}筆qas`)
   try {
     await Qas.deleteMany();
     await Qas.insertMany(qas);
