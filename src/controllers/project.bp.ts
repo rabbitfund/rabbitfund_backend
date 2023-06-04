@@ -2,6 +2,8 @@ import Order from "../model/orderModels";
 import Project from "../model/projectModels";
 import UserProposer from "../model/userProposerModels";
 import createError from "http-errors";
+import "../model/newsModels";   // 不加這個沒辦法用 populate
+import "../model/qasModels";
 
 type ProjectCreateInput = {
   title: String; // must
@@ -104,7 +106,13 @@ async function doPostOwnerProject(userId: string, data: ProjectCreateInput) {
 }
 
 async function doGetOwnerProject(projectId: string) {
-  const project = await Project.findById(projectId);
+  const project = await Project.findById(projectId)
+    .populate("ownerInfo")
+    .populate("option")
+    .populate("qas")
+    .populate("news")
+    .populate("order")
+  
   if (!!project) {
     if (!project.delete) return project;
   }
@@ -198,6 +206,17 @@ async function doGetProjects(parameters: any, page: string) {
       option_price: 1,
       option_content: 1,
       option_cover: 1
+    })
+    .populate("qas", {
+      _id: 1,
+      qas_q: 1,
+      qas_a: 1,
+    })
+    .populate("news", {
+      _id: 1,
+      news_title: 1,
+      news_content: 1,
+      news_cover: 1
     })
     .limit(perPage)
     .skip(perPage * (pageNum - 1));
