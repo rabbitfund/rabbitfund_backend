@@ -14,7 +14,9 @@ class DataGenerator {
     nQasPerProject,
     nNewsPerProject,
     nOrderPerUser,
-    nLikePerUser
+    nLikePerUser,
+    proposerNames,
+    data
   ) {
     this.nUser = nUser,
     this.nProposer = nProposer,
@@ -51,7 +53,9 @@ class DataGenerator {
     this.categories = ["校園", "公益", "市集"], 
     this.tags = ["hot", "recent", "long"],
     this.paymentMethod = ["WEBATM", "CREDIT"],
-    this.invoiceType = ["紙本發票", "電子載具", "三聯式發票"]
+    this.invoiceType = ["紙本發票", "電子載具", "三聯式發票"],
+    this.proposerNames = proposerNames,
+    this.data = data
   }
 
   generateObjectIds(array, n) {
@@ -113,7 +117,8 @@ class DataGenerator {
     const proposers = [];
     const step = this.nProjectPerProposer;
     for (let i = 0; i < this.nProposer; i++) {
-      const companyName = faker.company.name();
+      // const companyName = faker.company.name();
+      const companyName = this.proposerNames[i];
       
       const userId = this.userIds[i];
       const proposerId = this.proposerIds[i];
@@ -157,11 +162,11 @@ class DataGenerator {
 
       const project = {
         _id: projectId,
-        project_title: `標題 ${i} ${projectId}`,
-        project_summary: "summary",
-        project_content: "project content",
+        project_title: this.data[i] ? this.data[i].title : `標題 ${i} ${projectId}`,
+        project_summary: this.data[i] ? this.data[i].summary : "summary",
+        project_content: this.data[i] ? this.data[i].content : "project content",
         project_category: category,
-        project_target: faker.number.int({ min: 1, max: 300 }) * 10000,
+        project_target: this.data[i] ? this.data[i].target : faker.number.int({ min: 1, max: 300 }) * 10000,
         project_progress: faker.number.int({ min: 1, max: 500 }) * 10000,
         project_status: 2,
         project_start_date: startDate.toJSON(),
@@ -169,9 +174,9 @@ class DataGenerator {
         project_create_date: faker.date.between({ from: '2023-01-02T00:00:00.000Z', to: '2023-03-31T00:00:00.000Z' }).toJSON(),
         project_update_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' }).toJSON(),
         project_update_final_member: userId,
-        project_cover: "project cover",
+        project_cover: "https://storage.googleapis.com/rabbitfund01.appspot.com/images/ff11bb06-dc05-4c78-9434-999ec4b5934f.png?GoogleAccessId=firebase-adminsdk-1xnh8%40rabbitfund01.iam.gserviceaccount.com&Expires=16756646400&Signature=Qtzv3muBlIjuBx0yGdnU6JnVePxD8OR3fYa9NAaZog5GQ3k7BksO%2FTKZXe3l5YB3UCNkR4mg7PDB5D%2FsyB428Wwc%2BnmJudpvxiNVrYv8ZPDGSKGAS876Di5eFy3i0fmIgaD%2BPSOl%2FPfkaOhyPUdjCMHfW0fKNntP%2Ft9eTx23SMue%2BbP2RWMAVoXzYOFllBJPqWHX%2BCCG4ctF0ZFKTEVT4h625VapPUtofQI4imkrQA6c4r4w8%2BclWczK%2FakWmTdr%2BRiLEonD0Kx3oHMXy0X4UlQJnIYr5IIpTwFWJwZCmBlEzI0jX2tfk3r6Y4S9ivW9dEt0h6lTM8SEexjNshoD8A%3D%3D",
         project_video: "project video",
-        project_risks: "project risks",
+        project_risks: this.data[i] ? this.data[i].risks : "project risks",
         project_tag: tag,
         ownerInfo: proposerId,
         option: this.optionIds.slice(i * optionStep, (i + 1) * optionStep),
@@ -199,10 +204,10 @@ class DataGenerator {
       const option = {
         _id: optionId,
         option_parent: projectId,
-        option_name: "option name",
-        option_price: faker.number.int({ min: 1, max: 500 }) * 100,
-        option_total: faker.number.int({ min: 50, max: 500 }),
-        option_content: "option content",
+        option_name: this.data[i] ? this.data[i].option[i % 3].name : "option name",
+        option_price: this.data[i] ? this.data[i].option[i % 3].price : faker.number.int({ min: 1, max: 500 }) * 100,
+        option_total: this.data[i] ? this.data[i].option[i % 3].total : faker.number.int({ min: 50, max: 500 }),
+        option_content: this.data[i] ? this.data[i].option[i % 3].content : "option content",
         option_cover: "cover URL",
         option_status: 2,
         option_start_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-05-31T00:00:00.000Z' }).toJSON(),
@@ -230,8 +235,8 @@ class DataGenerator {
       const qa = {
         _id: qaId,
         qas_parent: projectId,
-        qas_q: "question",
-        qas_a: "answer",
+        qas_q: this.data[i] ? this.data[i].qas[i % 2].qas_q : "question",
+        qas_a: this.data[i] ? this.data[i].qas[i % 2].qas_a : "answer",
         qas_create_date: faker.date.between({ from: '2023-01-02T00:00:00.000Z', to: '2023-03-31T00:00:00.000Z' }).toJSON(),
         qas_update_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' }).toJSON(),
         check: true,
@@ -255,8 +260,8 @@ class DataGenerator {
       const item = {
         _id: newsId,
         news_parent: projectId,
-        news_title: "question",
-        news_content: "answer",
+        news_title: this.data[i] ? this.data[i].news[i % 2].news_title : "news title",
+        news_content: this.data[i] ? this.data[i].news[i % 2].news_content : "news content",
         news_cover: "news cover URL",
         news_status: 2,
         news_start_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-04-30T00:00:00.000Z' }).toJSON(),
@@ -415,7 +420,8 @@ class DataGenerator {
   }
 }
 
-
+const proposerNames = JSON.parse(fs.readFileSync("./src/db/data/proposer_name.json", "utf-8"));
+const data = JSON.parse(fs.readFileSync("./src/db/data/data.json", "utf-8"));
 
 const nUser = 40;
 const nProposer = 20;
@@ -437,7 +443,7 @@ const nLikePerUser = 3;
 // ...
 // 前 10 號使用者只贊助前 10 號專案
 
-const data = new DataGenerator(
+const dataGen = new DataGenerator(
   nUser,
   nProposer,
   nProjectPerProposer,
@@ -446,10 +452,12 @@ const data = new DataGenerator(
   nNewsPerProject,
   nOrderPerUser,   // (10個不同專案)
   nLikePerUser,
+  proposerNames,
+  data
 )
 
-data.generateAllObjectIds()
+dataGen.generateAllObjectIds()
 
-data.createAllRandomData()
+dataGen.createAllRandomData()
 
-data.writeFiles()
+dataGen.writeFiles()
