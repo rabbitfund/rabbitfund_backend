@@ -253,12 +253,14 @@ async function doGetProject(projectId: string) {
       _id: 1,
       qas_q: 1,
       qas_a: 1,
+      qas_update_date: 1
     })
     .populate("news", {
       _id: 1,
       news_title: 1,
       news_content: 1,
-      news_cover: 1
+      news_cover: 1,
+      news_update_date: 1
     })
   if (!!project) {
     if (!project.delete) {
