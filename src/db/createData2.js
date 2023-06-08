@@ -118,7 +118,7 @@ class DataGenerator {
         user_name: generator.Name.generate(),
         user_email: faker.internet.email({ firstName: firstname, lastName: lastname }),
         user_hash_pwd: bcrypt.hashSync("password", 12),
-        user_roles: [0],
+        user_roles: i < this.nProposer ? [0, 2] : [0],
         login_method: [0],
         oauth_google_id: "",
         user_create_date: faker.date.between({ from: '2020-01-01T00:00:00.000Z', to: '2023-01-01T00:00:00.000Z' }).toJSON(),
@@ -128,7 +128,8 @@ class DataGenerator {
         user_phone: generator.Mobile.generate(0, 10),
         user_intro: "user intro",
         user_website: "website",
-        user_interests: []
+        user_interests: [],
+        user_like: []  // TODO
       }
       users.push(user);
     };
