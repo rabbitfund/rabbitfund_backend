@@ -180,9 +180,12 @@ class DataGenerator {
       const category = this.categories[i % 3];
       const tag = this.tags[faker.number.int({ min: 0, max: 2 })];
 
-      const userId = this.userIds[i];
-      const proposerId = this.proposerIds[i];
       const projectId = this.projectIds[i];
+      const userId = this.userIds[i];
+
+      const r = i % this.nProjectPerProposer;
+      const q = (i - r) / this.nProjectPerProposer;
+      const proposerId = this.proposerIds[Math.round(q)];
 
       const project = {
         _id: projectId,
