@@ -348,6 +348,12 @@ class DataGenerator {
         order_extra: extra,
         order_total: totalPrice,
         order_note: "order note",
+        order_create_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' }).toJSON(),
+        order_status: 2,
+        order_shipping_status: 0,
+        order_shipping_date: faker.date.between({ from: '2023-08-01T00:00:00.000Z', to: '2023-12-31T00:00:00.000Z' }).toJSON(),
+        order_final_date: faker.date.between({ from: '2023-07-01T00:00:00.000Z', to: '2023-07-31T00:00:00.000Z' }).toJSON(),
+        order_feedback: "order feedback",
         order_info: orderInfoId,
       }
       orders.push(order);
