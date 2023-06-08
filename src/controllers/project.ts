@@ -262,7 +262,7 @@ export const getProjectSupporters: RequestHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userId = res.locals.user.id;
+  // const userId = res.locals.user.id;
 
   // check user's role
   if (!res.locals.user.roles.includes(UserRole.PROVIDER)) {
@@ -274,7 +274,7 @@ export const getProjectSupporters: RequestHandler = async (
     return next(createError(400, "欄位填寫不完整或格式錯誤"));
   }
 
-  const supporters = await doGetProjectSupporters(userId, projectId);
+  const supporters = await doGetProjectSupporters(projectId);
 
   handleSuccess(res, supporters);
 };

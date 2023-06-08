@@ -282,9 +282,8 @@ async function doGetProject(projectId: string) {
 }
 
 //
-async function doGetProjectSupporters(userId: string, projectId: string) {
+async function doGetProjectSupporters(projectId: string) {
   const orders = await Order.find({
-    user: userId,
     project: projectId,
     order_status: 2,
   })
