@@ -77,6 +77,30 @@ class DataGenerator {
     this.orderInfoIds = this.generateObjectIds(this.orderInfoIds, this.nOrder);
     this.likeIds = this.generateObjectIds(this.likeIds, this.nLike);
     console.log("All object IDs are created");
+
+    fs.writeFileSync('src/db/data/objectId/userIds.json', JSON.stringify(this.userIds, null, 4));
+    fs.writeFileSync('src/db/data/objectId/proposerIds.json', JSON.stringify(this.proposerIds, null, 4));
+    fs.writeFileSync('src/db/data/objectId/projectIds.json', JSON.stringify(this.projectIds, null, 4));
+    fs.writeFileSync('src/db/data/objectId/optionIds.json', JSON.stringify(this.optionIds, null, 4));
+    fs.writeFileSync('src/db/data/objectId/qasIds.json', JSON.stringify(this.qasIds, null, 4));
+    fs.writeFileSync('src/db/data/objectId/newsIds.json', JSON.stringify(this.newsIds, null, 4));
+    fs.writeFileSync('src/db/data/objectId/orderIds.json', JSON.stringify(this.orderIds, null, 4));
+    fs.writeFileSync('src/db/data/objectId/orderInfoIds.json', JSON.stringify(this.orderInfoIds, null, 4));
+    fs.writeFileSync('src/db/data/objectId/likeIds.json', JSON.stringify(this.likeIds, null, 4));
+    console.log("All object IDs are saved");
+  }
+
+  readAllObjectIds() {
+    this.userIds = JSON.parse(fs.readFileSync("./src/db/data/objectId/userIds.json", "utf-8"));
+    this.proposerIds = JSON.parse(fs.readFileSync("./src/db/data/objectId/proposerIds.json", "utf-8"));
+    this.projectIds = JSON.parse(fs.readFileSync("./src/db/data/objectId/projectIds.json", "utf-8"));
+    this.optionIds = JSON.parse(fs.readFileSync("./src/db/data/objectId/optionIds.json", "utf-8"));
+    this.qasIds = JSON.parse(fs.readFileSync("./src/db/data/objectId/qasIds.json", "utf-8"));
+    this.newsIds = JSON.parse(fs.readFileSync("./src/db/data/objectId/newsIds.json", "utf-8"));
+    this.orderIds = JSON.parse(fs.readFileSync("./src/db/data/objectId/orderIds.json", "utf-8"));
+    this.orderInfoIds = JSON.parse(fs.readFileSync("./src/db/data/objectId/orderInfoIds.json", "utf-8"));
+    this.likeIds = JSON.parse(fs.readFileSync("./src/db/data/objectId/likeIds.json", "utf-8"));
+    console.log("All object IDs are imported");
   }
 
   createRandomUsers() {
@@ -459,7 +483,8 @@ const dataGen = new DataGenerator(
   data
 )
 
-dataGen.generateAllObjectIds()
+// dataGen.generateAllObjectIds()
+dataGen.readAllObjectIds()
 
 dataGen.createAllRandomData()
 
