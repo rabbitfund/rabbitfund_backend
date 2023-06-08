@@ -173,6 +173,21 @@ async function doUpdateOwnerProjectOption(
   throw createError(400, "找不到專案");
 }
 
+async function doUpdateOwnerProjectOrder(
+  projectId: string,
+  orderId: string
+) {
+  const project = await Project.updateOne(
+    { _id: projectId },
+    { $push: { order: orderId }}
+  );
+
+  if (!!project) {
+    return project;
+  }
+  throw createError(400, "找不到專案");
+}
+
 async function doDeleteOwnerProject(userId: string, projectId: string) {
   const project = await Project.findByIdAndUpdate(
     projectId,
@@ -361,6 +376,7 @@ export {
   doGetOwnerProject,
   doPutOwnerProject,
   doUpdateOwnerProjectOption,
+  doUpdateOwnerProjectOrder,
   doDeleteOwnerProject,
   doGetProjects,
   doGetProject,
