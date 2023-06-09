@@ -24,6 +24,18 @@ npm run coverage
 ```
 > 詳細測試報告在 `/coverage/index.html`
 
+### 透過 postman 產生 openAPI 文件
+```
+npm run postman
+```
+> postman collection 檔案在[這裡](doc/倍而兔募資平台.postman_collection.json)
+
+### 初始化資料庫的資料
+```
+npm run init
+```
+> 資料檔案在[這裡](src/db/data)
+
 ## 建置流程
 [參考此文件](doc/build.md)
 
