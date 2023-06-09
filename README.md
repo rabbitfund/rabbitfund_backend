@@ -5,7 +5,7 @@
 - ```
   npm install
   ```
-- 建立 `.env` (格式請參考 `example.env`)
+- 建立 `.env` (格式請參考 [`example.env`](example.env))
 
 ## How to use
 ### 開發
@@ -39,6 +39,8 @@ npm run init
 ## 建置流程
 [參考此文件](doc/build.md)
 
+---
+
 # 技術
 ## 後端框架
 ### [Express](https://expressjs.com/)
@@ -71,8 +73,14 @@ npm run init
 
 ## 串接服務
 ### [藍新金流](https://www.newebpay.com/)
+- 整合藍新金流供贊助募資專案時使用
+
 ### [Firebase](https://firebase.google.com/)
+- 負責儲存圖片
+
 ### [Uptimerobot](https://uptimerobot.com/)
+- 定時確認後端狀態，並確保後端隨時都可以迅速回應
+
 ### Discord Webhook
 - Github
 - Uptimerobot
