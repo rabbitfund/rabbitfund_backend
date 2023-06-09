@@ -7,8 +7,7 @@
   ```
 - 建立 `.env` (格式請參考 `example.env`)
 
-## 使用方法
-
+## How to use
 ### 開發
 ```
 npm run start
@@ -18,6 +17,7 @@ npm run start
 ```
 npm run test
 ```
+
 ### 計算測試覆蓋率
 ```
 npm run coverage
