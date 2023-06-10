@@ -445,18 +445,27 @@ class DataGenerator {
     this.createRandomLikes()
   }
 
-  writeFiles() {
-    fs.writeFileSync('src/db/data/users.json', JSON.stringify(this.users, null, 4));
-    fs.writeFileSync('src/db/data/proposers.json', JSON.stringify(this.proposers, null, 4));
-    fs.writeFileSync('src/db/data/projects.json', JSON.stringify(this.projects, null, 4));
-    fs.writeFileSync('src/db/data/options.json', JSON.stringify(this.options, null, 4));
-    fs.writeFileSync('src/db/data/qas.json', JSON.stringify(this.qas, null, 4));
-    fs.writeFileSync('src/db/data/news.json', JSON.stringify(this.news, null, 4));
-    fs.writeFileSync('src/db/data/orders.json', JSON.stringify(this.orders, null, 4));
-    fs.writeFileSync('src/db/data/orderInfos.json', JSON.stringify(this.orderInfos, null, 4));
-    fs.writeFileSync('src/db/data/likes.json', JSON.stringify(this.likes, null, 4));
+  writeFiles(files) {
+    const defaultFilenames = ["users", "proposers", "projects", "options", "qas", "news", "orders", "orderInfos", "likes"];
+    let filenames;
+    if (files.length === 0) {
+      filenames = defaultFilenames;
+    } else {
+      for (let filename of files) {
+        if (!defaultFilenames.includes(filename)) {
+          console.log("Incorrect arguments");
+          console.log(`Arguments can only be ${defaultFilenames}`);
+          return
+        } else {
+          filenames = files;
+        }
+      }
+    }
+    for (let filename of filenames) {
+      fs.writeFileSync(`src/db/data/${filename}.json`, JSON.stringify(this[filename], null, 4));
+    };
 
-    console.log("All json files are created")
+    console.log("All json files are created");
   }
 }
 
@@ -501,4 +510,4 @@ dataGen.readAllObjectIds()
 
 dataGen.createAllRandomData()
 
-dataGen.writeFiles()
+dataGen.writeFiles(process.argv.slice(2))
