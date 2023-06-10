@@ -14,6 +14,10 @@
             "bearerAuth": {
                 "type": "http",
                 "scheme": "bearer"
+            },
+            "noauthAuth": {
+                "type": "http",
+                "scheme": "noauth"
             }
         }
     },
@@ -68,9 +72,8 @@
                                 "type": "object",
                                 "example": {
                                     "method": 0,
-                                    "email": "c1_12345678@test.com",
-                                    "pass": "12345678",
-                                    "oauth_google_id": "123",
+                                    "email": "Mikayla_Witting91@yahoo.com",
+                                    "pass": "password",
                                     "forget": false
                                 }
                             }
@@ -87,34 +90,33 @@
                 }
             }
         },
-        "/me/user": {
-            "put": {
+        "/projects": {
+            "get": {
                 "tags": [
                     "default"
                 ],
-                "summary": "C3-更新我的會員資料",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "example": {
-                                    "name": "AAnne",
-                                    "cover": "https://showanne.github.io/src/img/avatar_Anne.jpg",
-                                    "phone": "988123123",
-                                    "intro": "hello Anne",
-                                    "website": "https://showanne.github.io/",
-                                    "interests": [
-                                        "read"
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                },
+                "summary": "S7-搜尋專案",
                 "security": [
                     {
                         "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "校園"
+                    },
+                    {
+                        "name": "k",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "標題"
                     }
                 ],
                 "responses": {
@@ -125,15 +127,48 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/projects/{projectId}": {
             "get": {
                 "tags": [
                     "default"
                 ],
-                "summary": "C4-取得我的會員資料",
-                "security": [
+                "summary": "S5-取得專案內容",
+                "parameters": [
                     {
-                        "bearerAuth": []
+                        "name": "projectId",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/projects/{projectId}/options": {
+            "get": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "S6-列出專案之方案內容",
+                "parameters": [
+                    {
+                        "name": "projectId",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -427,12 +462,12 @@
                 }
             }
         },
-        "/projects": {
-            "get": {
+        "/upload/Image/{img_id}": {
+            "delete": {
                 "tags": [
                     "default"
                 ],
-                "summary": "S7-搜尋專案",
+                "summary": "health",
                 "security": [
                     {
                         "bearerAuth": []
@@ -440,20 +475,41 @@
                 ],
                 "parameters": [
                     {
-                        "name": "type",
-                        "in": "query",
+                        "name": "img_id",
+                        "in": "path",
                         "schema": {
                             "type": "string"
                         },
-                        "example": "校園"
-                    },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "取得特定圖片",
+                "security": [
                     {
-                        "name": "k",
-                        "in": "query",
+                        "noauthAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "img_id",
+                        "in": "path",
                         "schema": {
                             "type": "string"
                         },
-                        "example": "標題"
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -466,12 +522,115 @@
                 }
             }
         },
-        "/projects/{projectId}": {
+        "/userProposer": {
+            "post": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "B12-新增提案方",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "proposer_name": "測試公司",
+                                    "proposer_email": "TEST@test.com",
+                                    "proposer_tax_id": "12345678"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
             "get": {
                 "tags": [
                     "default"
                 ],
-                "summary": "S5-取得專案內容",
+                "summary": "B13-取得提案方",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/userProposer/{proposer_id}": {
+            "put": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "B14-修改提案方",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "proposer_intro": "介紹測試文字",
+                                    "proposer_website": "google"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "proposer_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/userProposer/{projectId}": {
+            "delete": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "B15-刪除提案方",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
                         "name": "projectId",
@@ -492,20 +651,126 @@
                 }
             }
         },
-        "/projects/{projectId}/options": {
+        "/orders": {
+            "post": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "C1-贊助專案",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "user_id": "6460c3a55c37bd19a64b993d",
+                                    "project_id": "6460c4185c37bd19a64b9943",
+                                    "option_id": "6460c4fe5c37bd19a64b9955",
+                                    "order_option_quantity": 1,
+                                    "order_extra": 0,
+                                    "order_total": 1000,
+                                    "order_note": "testing orders",
+                                    "payment_method": "信用卡",
+                                    "invoice_type": "紙本發票",
+                                    "invoice_carrier": ""
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/me/orders": {
             "get": {
                 "tags": [
                     "default"
                 ],
-                "summary": "S6-列出專案之方案內容",
+                "summary": "C2-分頁列出會員的贊助專案",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "parameters": [
                     {
-                        "name": "projectId",
-                        "in": "path",
+                        "name": "page",
+                        "in": "query",
                         "schema": {
-                            "type": "string"
+                            "type": "integer"
                         },
-                        "required": true
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/me/user": {
+            "put": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "C3-更新我的會員資料",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "name": "AAnne",
+                                    "cover": "https://showanne.github.io/src/img/avatar_Anne.jpg",
+                                    "phone": "988123123",
+                                    "intro": "hello Anne",
+                                    "website": "https://showanne.github.io/",
+                                    "interests": [
+                                        "read"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "default"
+                ],
+                "summary": "C4-取得我的會員資料",
+                "security": [
+                    {
+                        "bearerAuth": []
                     }
                 ],
                 "responses": {
@@ -586,28 +851,22 @@
                 }
             }
         },
-        "/orders": {
+        "/upload/Image": {
             "post": {
                 "tags": [
                     "default"
                 ],
-                "summary": "C1-贊助專案",
+                "summary": "上傳圖片",
                 "requestBody": {
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "type": "object",
-                                "example": {
-                                    "user_id": "6460c3a55c37bd19a64b993d",
-                                    "project_id": "6460c4185c37bd19a64b9943",
-                                    "option_id": "6460c4fe5c37bd19a64b9955",
-                                    "order_option_quantity": 1,
-                                    "order_extra": 0,
-                                    "order_total": 1000,
-                                    "order_note": "testing orders",
-                                    "payment_method": "信用卡",
-                                    "invoice_type": "紙本發票",
-                                    "invoice_carrier": ""
+                                "properties": {
+                                    "": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
                                 }
                             }
                         }
@@ -626,27 +885,15 @@
                         }
                     }
                 }
-            }
-        },
-        "/me/orders": {
+            },
             "get": {
                 "tags": [
                     "default"
                 ],
-                "summary": "C2-分頁列出會員的贊助專案",
+                "summary": "取得所有圖片",
                 "security": [
                     {
-                        "bearerAuth": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "example": "1"
+                        "noauthAuth": []
                     }
                 ],
                 "responses": {

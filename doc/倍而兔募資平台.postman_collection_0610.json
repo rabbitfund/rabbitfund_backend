@@ -1,0 +1,1067 @@
+{
+	"info": {
+		"_postman_id": "8778d0f2-1612-465b-b8e4-6504e32fe922",
+		"name": "倍而兔募資平台",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22739180"
+	},
+	"item": [
+		{
+			"name": "S1-註冊",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"c1_12345678@test.com\",\n    \"pass\" : \"12345678\",\n    \"name\": \"a2\",\n    \"method\": 0,\n    \"oauth_google_id\":\"123\"\n    // \"cover\": \"\",\n    // \"phone\":\"988123123\",\n    // \"intro\":\"hello user introduction\",\n    // \"website\":\"\",\n    // \"interests\":[\"dance\",\"sing\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/signup",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "S2-登入",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response and set global variable\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"user_token\", jsonData.data.token);  // 更新變數，jsonData.key 是回應中你要更新的內容",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"method\": 0,\n    \"email\": \"Mikayla_Witting91@yahoo.com\",\n    \"pass\": \"password\",\n    // \"oauth_google_id\": \"123\",\n    \"forget\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/signin",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "S4-列出專案(列表)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/projects?page=1&tag=long",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"projects"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "tag",
+							"value": "long"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "S5-取得專案內容",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/projects/{{projectId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"projects",
+						"{{projectId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "S6-列出專案之方案內容",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/projects/{{projectId}}/options",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"projects",
+						"{{projectId}}",
+						"options"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "S7-搜尋專案",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/projects?type=校園&k=標題",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"projects"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "校園"
+						},
+						{
+							"key": "k",
+							"value": "標題"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B1-新增專案內容",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"標題\",\r\n  \"summary\": \"project summary\",\r\n  \"content\": \"project content\",\r\n  \"category\": \"校園\", // must\r\n  \"target\": 12000,   // must\r\n  \"progress\": 0,   // must\r\n  \"status\": 0,\r\n//   \"start_date\": \"2023-01-23\",\r\n//   \"end_date\": \"2023-04-23\",\r\n//   \"create_date\": Date;\r\n  \"update_date\": \"2023-01-23\",\r\n  \"update_final_member\": \"member\",\r\n  \"cover\": \"cover URL\",   // must\r\n  \"video\": \"project video URL\",\r\n  \"risks\": \"the risks\",\r\n  \"owner\": \"6453d211c6ab8c4bfc26717d\", // fake,\r\n  \"option\": [\"6453d211c6ab8c4bfc26717d\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/owner/projects",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"owner",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B2-列出專案",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/owner/projects",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"owner",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B3-取得專案詳細內容",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/owner/projects/{{projectId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"owner",
+						"projects",
+						"{{projectId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B4-修改專案內容",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"修改標題\",\r\n//   \"summary\": \"project summary\",\r\n//   \"content\": \"project content\",\r\n//   \"category\": \"校園\", // must\r\n//   \"target\": 12000,   // must\r\n//   \"progress\": 0,   // must\r\n  \"status\": 2\r\n//   \"start_date\": \"2023-01-23\",\r\n//   \"end_date\": \"2023-04-23\",\r\n//   \"create_date\": Date;\r\n//   \"update_date\": \"2023-01-23\",\r\n//   \"update_final_member\": \"member\",\r\n//   \"cover\": \"cover URL\",   // must\r\n//   \"video\": \"project video URL\",\r\n//   \"risks\": \"the risks\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/owner/projects/{{projectId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"owner",
+						"projects",
+						"{{projectId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B5-刪除專案",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/owner/projects/{{projectId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"owner",
+						"projects",
+						"{{projectId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B6-新增方案內容",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"方案名稱2\",   // must\r\n  \"price\": 1000,   // must\r\n  \"total\": 50,   // must\r\n  \"content\": \"說明\",\r\n  \"cover\": \"cover URL\",\r\n  \"start_date\": \"2023-01-23\",\r\n  \"end_date\": \"2023-04-23\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/owner/projects/{{projectId}}/options",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"owner",
+						"projects",
+						"{{projectId}}",
+						"options"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B7-列出專案之方案內容",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/owner/projects/{{projectId}}/options",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"owner",
+						"projects",
+						"{{projectId}}",
+						"options"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B9-修改某方案內容",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"方案名稱2-2\",   // must\r\n//   \"price\": 1000,   // must\r\n//   \"total\": 50,   // must\r\n//   \"content\": \"說明\",\r\n//   \"cover\": \"cover URL\",\r\n//   \"start_date\": \"2023-01-23\",\r\n//   \"end_date\": \"2023-04-23\",\r\n\"status\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/owner/projects/{{projectId}}/options/6460c4fe5c37bd19a64b9955",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"owner",
+						"projects",
+						"{{projectId}}",
+						"options",
+						"6460c4fe5c37bd19a64b9955"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B10 取得專案贊助人列表",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/upload/Image/{{img_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"upload",
+						"Image",
+						"{{img_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B12-新增提案方",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response and set global variable\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"proposer_id\", jsonData.data._id);  // 更新變數，jsonData.key 是回應中你要更新的內容",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"proposer_name\": \"測試公司\", //must\n    \"proposer_email\": \"TEST@test.com\", //must, unique\n    \"proposer_tax_id\": \"12345678\" //must, unique\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/userProposer",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"userProposer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B13-取得提案方",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/userProposer",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"userProposer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B14-修改提案方",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"proposer_intro\": \"介紹測試文字\",\n\"proposer_website\": \"google\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/userProposer/{{proposer_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"userProposer",
+						"{{proposer_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "B15-刪除提案方",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/userProposer/{{projectId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"userProposer",
+						"{{projectId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C1-贊助專案",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"user_id\": \"6460c3a55c37bd19a64b993d\",\n  \"project_id\": \"6460c4185c37bd19a64b9943\",\n  \"option_id\": \"6460c4fe5c37bd19a64b9955\",\n  \"order_option_quantity\": 1,\n  \"order_extra\": 0,\n  \"order_total\": 1000,\n  \"order_note\": \"testing orders\",\n  \"payment_method\": \"信用卡\",\n  \"invoice_type\": \"紙本發票\",\n  \"invoice_carrier\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/orders",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C2-分頁列出會員的贊助專案",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"user_id\": \"6459f9ce41b8f20460c58565\",\n  \"project_id\": \"6459fa5341b8f20460c58569\",\n  \"option_id\": \"645a123041b8f20460c5858f\",\n  \"order_option_quantity\": 1,\n  \"order_extra\": 0,\n  \"order_total\": 1000,\n  \"order_note\": \"testing orders\",\n  \"payment_method\": \"信用卡\",\n  \"invoice_type\": \"紙本發票\",\n  \"invoice_carrier\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/me/orders?page=1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"me",
+						"orders"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C3-更新我的會員資料",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"AAnne\",    \n    \"cover\": \"https://showanne.github.io/src/img/avatar_Anne.jpg\",\n    \"phone\":\"988123123\",\n    \"intro\":\"hello Anne\",\n    \"website\":\"https://showanne.github.io/\",\n    \"interests\":[\"read\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/me/user",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"me",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C4-取得我的會員資料",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/me/user",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"me",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C7-收藏專案",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pid\": \"6459fab141b8f20460c5856d\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/me/likes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"me",
+						"likes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C11-刪除收藏專案",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/me/likes/{{pid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"me",
+						"likes",
+						"{{pid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C12-取得我的收藏專案",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/me/likes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"me",
+						"likes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "上傳圖片",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check response and set global variable\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"img_id\", jsonData.data._id);  // 更新變數，jsonData.key 是回應中你要更新的內容",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "",
+							"type": "file",
+							"src": "/Users/yc/Desktop/1.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/upload/Image",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"upload",
+						"Image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "取得所有圖片",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/upload/Image",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"upload",
+						"Image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "取得特定圖片",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/upload/Image/{{img_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"upload",
+						"Image",
+						"{{img_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刪除特定圖片",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/upload/Image/{{img_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"upload",
+						"Image",
+						"{{img_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "health",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/upload/Image/{{img_id}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"upload",
+						"Image",
+						"{{img_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWZiNjA2YWNjYWZmOWZlNTFlZjQ5MCIsImVtYWlsIjoiYzFfMTIzNDU2NzhAdGVzdC5jb20iLCJyb2xlcyI6WzBdLCJpYXQiOjE2ODM5OTQxMjEsImV4cCI6MTY4Mzk5NzcyMX0.0oVAOGh5oPJ8MVSc69tngNluAUtuv43myhwjLpo56R0",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "user_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "projectId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "optionId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "proposer_id",
+			"value": "proposer_id"
+		},
+		{
+			"key": "img_id",
+			"value": "img_id"
+		}
+	]
+}
