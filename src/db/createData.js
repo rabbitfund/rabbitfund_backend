@@ -208,7 +208,7 @@ class DataGenerator {
         project_cover: (!this.data[i]) ? defaultCoverUrl : (!this.data[i].cover) ? defaultCoverUrl : this.data[i].cover,
         project_video: (!this.data[i]) ? defaultVideoUrl : (!this.data[i].video) ? defaultVideoUrl : this.data[i].video,
         project_risks: this.data[i] ? this.data[i].risks : "project risks",
-        project_tag: this.data[i] ? this.data[i].tag : tag,
+        project_tag: (!this.data[i]) ? tag : (!this.data[i].tag) ? tag : this.data[i].tag,
         ownerInfo: proposerId,
         option: this.optionIds.slice(i * optionStep, (i + 1) * optionStep),
         news: this.newsIds.slice(i * newsStep, (i + 1) * newsStep),
