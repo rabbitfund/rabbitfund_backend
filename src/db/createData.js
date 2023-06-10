@@ -188,12 +188,15 @@ class DataGenerator {
       const q = (i - r) / this.nProjectPerProposer;
       const proposerId = this.proposerIds[Math.round(q)];
 
+      const defaultCoverUrl = "https://storage.googleapis.com/rabbitfund01.appspot.com/images/ff11bb06-dc05-4c78-9434-999ec4b5934f.png?GoogleAccessId=firebase-adminsdk-1xnh8%40rabbitfund01.iam.gserviceaccount.com&Expires=16756646400&Signature=Qtzv3muBlIjuBx0yGdnU6JnVePxD8OR3fYa9NAaZog5GQ3k7BksO%2FTKZXe3l5YB3UCNkR4mg7PDB5D%2FsyB428Wwc%2BnmJudpvxiNVrYv8ZPDGSKGAS876Di5eFy3i0fmIgaD%2BPSOl%2FPfkaOhyPUdjCMHfW0fKNntP%2Ft9eTx23SMue%2BbP2RWMAVoXzYOFllBJPqWHX%2BCCG4ctF0ZFKTEVT4h625VapPUtofQI4imkrQA6c4r4w8%2BclWczK%2FakWmTdr%2BRiLEonD0Kx3oHMXy0X4UlQJnIYr5IIpTwFWJwZCmBlEzI0jX2tfk3r6Y4S9ivW9dEt0h6lTM8SEexjNshoD8A%3D%3D";
+      const defaultVideoUrl = "https://www.youtube.com/watch?v=uncWs5w6aVg"
+
       const project = {
         _id: projectId,
         project_title: this.data[i] ? this.data[i].title : `標題 ${i} ${projectId}`,
         project_summary: this.data[i] ? this.data[i].summary : "summary",
         project_content: this.data[i] ? this.data[i].content : "project content",
-        project_category: category,
+        project_category: (!this.data[i]) ? category : (!this.data[i].category) ? category : this.data[i].category,
         project_target: this.data[i] ? this.data[i].target : faker.number.int({ min: 1, max: 300 }) * 10000,
         project_progress: faker.number.int({ min: 1, max: 500 }) * 10000,
         project_status: 2,
@@ -202,10 +205,10 @@ class DataGenerator {
         project_create_date: faker.date.between({ from: '2023-01-02T00:00:00.000Z', to: '2023-03-31T00:00:00.000Z' }).toJSON(),
         project_update_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-06-30T00:00:00.000Z' }).toJSON(),
         project_update_final_member: userId,
-        project_cover: "https://storage.googleapis.com/rabbitfund01.appspot.com/images/ff11bb06-dc05-4c78-9434-999ec4b5934f.png?GoogleAccessId=firebase-adminsdk-1xnh8%40rabbitfund01.iam.gserviceaccount.com&Expires=16756646400&Signature=Qtzv3muBlIjuBx0yGdnU6JnVePxD8OR3fYa9NAaZog5GQ3k7BksO%2FTKZXe3l5YB3UCNkR4mg7PDB5D%2FsyB428Wwc%2BnmJudpvxiNVrYv8ZPDGSKGAS876Di5eFy3i0fmIgaD%2BPSOl%2FPfkaOhyPUdjCMHfW0fKNntP%2Ft9eTx23SMue%2BbP2RWMAVoXzYOFllBJPqWHX%2BCCG4ctF0ZFKTEVT4h625VapPUtofQI4imkrQA6c4r4w8%2BclWczK%2FakWmTdr%2BRiLEonD0Kx3oHMXy0X4UlQJnIYr5IIpTwFWJwZCmBlEzI0jX2tfk3r6Y4S9ivW9dEt0h6lTM8SEexjNshoD8A%3D%3D",
-        project_video: "project video",
+        project_cover: (!this.data[i]) ? defaultCoverUrl : (!this.data[i].cover) ? defaultCoverUrl : this.data[i].cover,
+        project_video: (!this.data[i]) ? defaultVideoUrl : (!this.data[i].video) ? defaultVideoUrl : this.data[i].video,
         project_risks: this.data[i] ? this.data[i].risks : "project risks",
-        project_tag: tag,
+        project_tag: this.data[i] ? this.data[i].tag : tag,
         ownerInfo: proposerId,
         option: this.optionIds.slice(i * optionStep, (i + 1) * optionStep),
         news: this.newsIds.slice(i * newsStep, (i + 1) * newsStep),
