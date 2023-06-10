@@ -86,7 +86,10 @@ npm run init
 
 ## API 文件
 ### [Swagger](https://swagger.io/)
-- [文件連結](https://rabbitfund-backend.onrender.com/docs/)
+- [文件連結 (版本一)](https://rabbitfund-backend.onrender.com/docs/)
+  > `swaggerAutogen` 產生
+- [文件連結 (版本二)](https://rabbitfund-backend.onrender.com/docs-postman/)
+  > `postman-to-openapi` 產生
 
 ## 串接服務
 ### [藍新金流](https://www.newebpay.com/)
