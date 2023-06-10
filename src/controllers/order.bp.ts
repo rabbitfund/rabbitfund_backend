@@ -165,6 +165,7 @@ async function doGetMeOrders(userId: string, page: string) {
     .populate("option", {
       _id: 1,
       option_name: 1,
+      option_price: 1,
       option_cover: 1,
     })
     .populate("order_info", {
@@ -173,11 +174,13 @@ async function doGetMeOrders(userId: string, page: string) {
       payment_status: 1,
       invoice_type: 1,
       invoice_carrier: 1,
+      invoice_number: 1,
+      invoice_date: 1,
       newebpay_timeStamp: 1,
-      newebpay_escrowBank: 1,
+      // newebpay_escrowBank: 1,
       newebpay_payBankCode: 1,
       // newebpay_payTime: 1,
-      newebpay_payerAccount5Code: 1,
+      // newebpay_payerAccount5Code: 1,
       payment_method: 1
     })
     .limit(perPage)
