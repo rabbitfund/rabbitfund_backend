@@ -123,7 +123,7 @@ class DataGenerator {
         oauth_google_id: "",
         user_create_date: faker.date.between({ from: '2020-01-01T00:00:00.000Z', to: '2023-01-01T00:00:00.000Z' }).toJSON(),
         user_update_date: faker.date.between({ from: '2023-04-01T00:00:00.000Z', to: '2023-05-28T00:00:00.000Z' }).toJSON(),
-        user_cover: "cover URL",
+        user_cover: "",
         // user_phone: faker.phone.number("09##-###-###"),
         user_phone: generator.Mobile.generate(0, 10),
         user_intro: "user intro",
