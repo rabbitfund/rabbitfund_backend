@@ -32,8 +32,9 @@ app.use("/projects", projectRouter);
 app.use("/upload", uploadRouter);
 app.use("/userProposer", userproposerRouter);
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
-app.use("/docs/postman", swaggerUi.serve, swaggerUi.setup(postmanSpec))
+const options = {};
+app.use("/docs", swaggerUi.serveFiles(swaggerSpec, options), swaggerUi.setup(swaggerSpec));
+app.use("/docs-postman", swaggerUi.serveFiles(postmanSpec, options), swaggerUi.setup(postmanSpec));
 
 // catch 404 (NOT FOUND) and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {
