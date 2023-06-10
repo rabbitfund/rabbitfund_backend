@@ -8,6 +8,7 @@ import Option from "../model/optionModels";
 import Order from "../model/orderModels";
 import OrderInfo from "../model/orderInfoModels";
 import { log } from "console";
+import { doUpdateTotalFundingAmount } from "./project.bp";
 
 type OrderCreateInput = {
   user_id: string;
@@ -316,6 +317,7 @@ async function doOrderNotify(orderNotify: any) {
       { new: true }
     );
   
+    await doUpdateTotalFundingAmount(orderNotify.project_Id) //更新募資的總金額
     console.log('Order Notify', updateOrder);
   } catch (error) {
     console.error(error);
