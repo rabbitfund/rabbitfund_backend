@@ -68,6 +68,16 @@ export const getOwnerProject: RequestHandler = async (
     return next(createError(400, "找不到專案"));
   }
 
+  // TODO: 必須是提案人才可以看
+  // 確認 UserProposer proposer_create = userId, proposer_project 包含 projectId
+
+  // 在 proposer.bp.ts 弄一個 function
+  // const proposers = await UserProposer.find({
+  //   proposer_create: userId,
+  //   proposer_project 包含 projectId
+  // }).exec();
+  // 如果 proposers 不存在，return next(createError(400, "非專案發起人"));
+
   const project = await doGetOwnerProject(projectId);
   return handleSuccess(res, project);
 };
@@ -160,9 +170,12 @@ export const getProjects: RequestHandler = async (
   interface Parameters {
     project_title?: Object,
     project_tag?: string,
-    project_category?: string
+    project_category?: string,
+    project_status: number
   }
-  let parameters: Parameters = {};
+  let parameters: Parameters = {
+    project_status: 2
+  };
   if (!!keyword) {
     parameters.project_title = { $regex: keyword}
   };
