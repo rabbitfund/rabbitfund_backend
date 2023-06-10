@@ -30,6 +30,23 @@ npm run postman
 ```
 > postman collection 檔案在[這裡](doc/倍而兔募資平台.postman_collection.json)
 
+### 隨機生成資料
+```
+node src/db/createData.js <filenames>  
+```
+- `filenames` 為 optional
+- `filenames` 只能是以下這幾種
+  - `users`
+  - `proposers`
+  - `projects`
+  - `options`
+  - `qas`
+  - `news`
+  - `orders`
+  - `orderInfos`
+  - `likes`
+> 例如： `node src/db/createData.js users proposers` 就只會更新 `users.json` 和 `proposers.json` 這兩個檔案
+
 ### 初始化資料庫的資料
 ```
 npm run init
