@@ -127,7 +127,7 @@ class DataGenerator {
         // user_phone: faker.phone.number("09##-###-###"),
         user_phone: generator.Mobile.generate(0, 10),
         user_intro: "user intro",
-        user_website: "website",
+        user_website: "https://github.com/rabbitfund",
         user_interests: [],
         user_like: []  // TODO
       }
@@ -159,7 +159,7 @@ class DataGenerator {
         user_phone: generator.Mobile.generate(0, 10),
         proposer_tax_id: faker.string.numeric(8),
         proposer_intro: "proposer intro",
-        proposer_website: "proposer website",
+        proposer_website: "https://github.com/rabbitfund",
         proposer_project: this.projectIds.slice(i * step, (i + 1) * step),
         proposer_like: [],
       }
