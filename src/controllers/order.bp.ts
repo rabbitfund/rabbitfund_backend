@@ -326,8 +326,9 @@ async function doOrderNotify(orderNotify: any) {
       },
       { new: true }
     );
+    console.log('Order Notify project_id', orderNotify.project);
   
-    await doUpdateTotalFundingAmount(orderNotify.project_Id) //更新募資的總金額
+    await doUpdateTotalFundingAmount(orderNotify.project) //更新募資的總金額
     console.log('Order Notify', updateOrder);
   } catch (error) {
     console.error(error);
