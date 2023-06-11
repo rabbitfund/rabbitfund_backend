@@ -321,7 +321,7 @@ async function doGetProjectSupporters(projectId: string) {
   return orders || [];
 }
 
-async function doUpdateTotalFundingAmount(projectId: string) {
+async function doUpdateTotalFundingAmount(projectId: any) {
   try {
     const project = await Project.findById(projectId);
     if (project) {
