@@ -171,10 +171,10 @@ export const getProjects: RequestHandler = async (
     project_title?: Object,
     project_tag?: string,
     project_category?: string,
-    project_status: number
+    project_status: number | Object
   }
   let parameters: Parameters = {
-    project_status: 2
+    project_status: { $gte: 2 }
   };
   if (!!keyword) {
     parameters.project_title = { $regex: keyword}
