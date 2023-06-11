@@ -333,6 +333,10 @@ async function doUpdateTotalFundingAmount(projectId: string) {
         }
         return total;
       }, 0);
+      console.log('doUpdateTotalFundingAmount totalFundingAmount', totalFundingAmount);
+      console.log('doUpdateTotalFundingAmount project', project._id);
+      console.log('doUpdateTotalFundingAmount project_progress', project.project_progress);
+      
       project.project_progress = totalFundingAmount;
       await project.save();
     }
