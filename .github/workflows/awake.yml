@@ -1,0 +1,17 @@
+name: Render Awake
+
+on:
+  schedule:
+    - cron: "*/15 0-15 * * *"
+  
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: mikeesto/heroku-awake@1.0.0
+        with:
+          URL: "https://rabbitfund-backend.onrender.com"
