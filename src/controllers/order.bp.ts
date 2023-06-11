@@ -151,6 +151,11 @@ async function doGetMeOrders(userId: string, page: string) {
   const pageNum = parseInt(page);
   const perPage = 6;
 
+  const totalOrders = await Order.countDocuments({ user: userId }).exec();
+  const totalPages = Math.ceil(totalOrders / perPage);
+
+  // console.log(perPage, totalOrders, totalPages);
+  
   const order = await Order.find({ user: userId })
   if (!order || order.length === 0) {
     throw createError(400, "找不到贊助紀錄");
@@ -176,17 +181,19 @@ async function doGetMeOrders(userId: string, page: string) {
       invoice_carrier: 1,
       invoice_number: 1,
       invoice_date: 1,
-      newebpay_timeStamp: 1,
+      newebpay_timeStamp: 1, 
       // newebpay_escrowBank: 1,
       newebpay_payBankCode: 1,
-      // newebpay_payTime: 1,
+      newebpay_payTime: 1,
       // newebpay_payerAccount5Code: 1,
       payment_method: 1
     })
+    .sort({order_create_date: -1})
     .limit(perPage)
-    .skip(perPage*(pageNum-1));
+    .skip(perPage * (pageNum - 1));
   
-  return orders
+  // return orders
+  return {data:orders, totalPages, pageNum}
 }
 
 async function getOrderData(orderId: string) {
