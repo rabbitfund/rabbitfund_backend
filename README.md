@@ -32,9 +32,13 @@ npm run postman
 
 ### 隨機生成資料
 ```
-node src/db/createData.js <filenames>  
+npm run create
+
+# or
+
+npm run create -- <filenames>  
 ```
-- `filenames` 為 optional
+
 - `filenames` 只能是以下這幾種
   - `users`
   - `proposers`
