@@ -255,6 +255,8 @@ async function doGetProject(projectId: string) {
       _id: 1, //?
       proposer_name: 1,
       proposer_cover: 1,
+      proposer_email: 1,
+      proposer_project: 1,
       proposer_tax_id: 1
     })
     .populate("option", {
