@@ -1,4 +1,5 @@
-import { NextFunction, Express, Request, RequestHandler, Response } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
+// import tinify from 'tinify'
 // import { multer, MulterRequest } from 'multer'
 import { v4 as uuidv4 } from 'uuid'
 import { handleSuccess, handleError } from '../service/handleReply'
@@ -46,11 +47,12 @@ export const uploadImage: RequestHandler = async (
   res: Response,
   next: NextFunction,
 ) => {
-  if (!req.files) {
+  if (!req.file) {
     throw createError(400, '尚未上傳檔案', next);
   } 
-  const files = req.files as Express.Multer.File[];
-  const file = files[0];
+  const file = req.file;
+
+  // TODO: Tinify
 
   const bucket = firebaseAdmin.storage().bucket()
   const path = `images/${uuidv4()}.${file.originalname.split('.').pop()}`
