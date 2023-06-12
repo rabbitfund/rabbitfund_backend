@@ -53,6 +53,7 @@
     "multer": "^1.4.5-lts.1",
     "swagger-autogen": "^2.23.1",
     "swagger-ui-express": "^4.6.3",
+    "tinify": "^1.7.1",
     "typescript": "^5.0.3",
     "uuid": "^9.0.0",
     "validator": "^13.9.0"
