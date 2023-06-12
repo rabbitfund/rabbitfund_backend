@@ -16,6 +16,6 @@ const imageValidation = multer({
     }
     cb(null, true);
   },
-}).any();
+});
 
 export default imageValidation;

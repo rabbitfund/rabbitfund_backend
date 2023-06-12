@@ -263,6 +263,8 @@ async function doGetProject(projectId: string) {
       _id: 1, //?
       proposer_name: 1,
       proposer_cover: 1,
+      proposer_email: 1,
+      proposer_project: 1,
       proposer_tax_id: 1
     })
     .populate("option", {
@@ -327,7 +329,8 @@ async function doGetProjectSupporters(projectId: string) {
   return orders || [];
 }
 
-async function doUpdateTotalFundingAmount(projectId: string) {
+async function doUpdateTotalFundingAmount(projectId: any) {
+  try {
     const project = await Project.findById(projectId);
     if (project) {
       const orders = await Order.find({ project: projectId });
@@ -337,6 +340,10 @@ async function doUpdateTotalFundingAmount(projectId: string) {
         }
         return total;
       }, 0);
+      console.log('doUpdateTotalFundingAmount totalFundingAmount', totalFundingAmount);
+      console.log('doUpdateTotalFundingAmount project', project._id);
+      console.log('doUpdateTotalFundingAmount project_progress', project.project_progress);
+      
       project.project_progress = totalFundingAmount;
       await project.save();
     }

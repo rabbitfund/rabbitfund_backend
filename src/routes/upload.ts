@@ -16,7 +16,7 @@ router.get('/Image', needAuth, handleErrorAsync(getImages))
 // 取得特定圖片
 router.get('/Image/:pid', handleErrorAsync(getImage))
 // 上傳圖片
-router.post('/Image', needAuth, imageValidation, handleErrorAsync(uploadImage))
+router.post('/Image', needAuth, imageValidation.single("file"), handleErrorAsync(uploadImage))
 // 刪除圖片
 router.delete('/Image/:pid', needAuth, handleErrorAsync(deleteImage))
 
