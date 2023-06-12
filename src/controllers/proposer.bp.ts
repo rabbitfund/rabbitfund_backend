@@ -27,18 +27,25 @@ type ProposerUpdateInput = {
 //取得提案人資訊
 async function doGetProposer(userId: string) {
   const proposers = await UserProposer.find({ proposer_create: userId })
-  .exec();
-
-  const totalProposers = [];
-  for (let proposer of proposers) {
-    const relatedProposers = await UserProposer.find({ ownerInfo: proposer })
     .exec();
-
-    totalProposers.push(proposer, ...relatedProposers);
-  }
-
-  return totalProposers;
+  return proposers;
 }
+
+// 驗證用戶是否是提案人
+async function isUserProposer(userId: string, projectId: string) {
+  
+  const proposer = await UserProposer.find({ proposer_create: userId });
+  console.log("proposer", proposer)
+
+  const isProposer = proposer.some(s=>s.proposer_project.some(so=>so._id.toString()==projectId));
+  console.log("isProposer", isProposer)
+
+  if (!isProposer) {
+    throw createError(400, "非專案發起人");
+  }
+  return true;
+}
+
 
 //新增提案人
 async function doPostProposer(userId: string, data: ProposerCreateInput) {
@@ -47,7 +54,7 @@ async function doPostProposer(userId: string, data: ProposerCreateInput) {
   if (result.length !== 0) {
     throw createError(400, "已註冊過此統一編號")
   }
-  
+
   const proposer = await UserProposer.create({
     proposer_create: userId,
     proposer_name: data.proposer_name,
@@ -69,9 +76,10 @@ async function doPutProposer(
   data: ProposerUpdateInput
 ) {
   const proposer = await UserProposer.findByIdAndUpdate(
-    
-    { _id: proposerId, proposer_create: userId},
-    { proposer_name: data.proposer_name,
+
+    { _id: proposerId, proposer_create: userId },
+    {
+      proposer_name: data.proposer_name,
       proposer_update_date: Date.now(),
       proposer_cover: data.proposer_cover,
       proposer_email: data.proposer_email,
@@ -80,7 +88,7 @@ async function doPutProposer(
       proposer_intro: data.proposer_intro,
       proposer_website: data.proposer_website
     },
-    { new: true, runValidators:true  }
+    { new: true, runValidators: true }
   );
 
   if (!proposer) {
@@ -111,5 +119,6 @@ export {
   doGetProposer,
   doPostProposer,
   doPutProposer,
-  doDeleteProposer
+  doDeleteProposer,
+  isUserProposer
 };

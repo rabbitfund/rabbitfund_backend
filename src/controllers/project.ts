@@ -4,6 +4,7 @@ import createError from "http-errors";
 import { isValidObjectId } from "../utils/objectIdValidator";
 import { isEmptyStr } from "../utils/isEmpty";
 import { UserRole } from "../model/userModels";
+import { isUserProposer } from "./proposer.bp"
 import {
   ProjectCreateInput,
   ProjectUpdateInput,
@@ -16,8 +17,7 @@ import {
   doGetProjects,
   doGetProject,
   doGetProjectSupporters,
-  doUpdateTotalFundingAmount,
-  doGetTotalFundingAmount
+  doUpdateTotalFundingAmount
 } from "./project.bp";
 
 import {
@@ -68,15 +68,7 @@ export const getOwnerProject: RequestHandler = async (
     return next(createError(400, "找不到專案"));
   }
 
-  // TODO: 必須是提案人才可以看
-  // 確認 UserProposer proposer_create = userId, proposer_project 包含 projectId
-
-  // 在 proposer.bp.ts 弄一個 function
-  // const proposers = await UserProposer.find({
-  //   proposer_create: userId,
-  //   proposer_project 包含 projectId
-  // }).exec();
-  // 如果 proposers 不存在，return next(createError(400, "非專案發起人"));
+  await isUserProposer(userId, projectId);
 
   const project = await doGetOwnerProject(projectId);
   return handleSuccess(res, project);
@@ -307,23 +299,5 @@ export const updateTotalFundingAmount: RequestHandler = async (
     return handleSuccess(res, { message: "更新募資總金額成功" });
   } catch (error) {
     return next(createError(400, "更新募資總金額失敗"));
-  }
-};
-
-export const getTotalFundingAmount: RequestHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const projectId = req.params.pid;
-
-  if (!isValidObjectId(projectId)) {
-    return next(createError(400, "找不到專案"));
-  }
-  try {
-    const totalFundingAmount = await doGetTotalFundingAmount(projectId);
-    return handleSuccess(res, { totalFundingAmount });
-  } catch (error) {
-    return next(createError(400, "取得募資總金額失敗"));
   }
 };
