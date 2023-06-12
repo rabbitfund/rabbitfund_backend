@@ -330,7 +330,6 @@ async function doGetProjectSupporters(projectId: string) {
 }
 
 async function doUpdateTotalFundingAmount(projectId: any) {
-  try {
     const project = await Project.findById(projectId);
     if (project) {
       const orders = await Order.find({ project: projectId });
@@ -340,15 +339,15 @@ async function doUpdateTotalFundingAmount(projectId: any) {
         }
         return total;
       }, 0);
-      console.log('doUpdateTotalFundingAmount totalFundingAmount', totalFundingAmount);
-      console.log('doUpdateTotalFundingAmount project', project._id);
-      console.log('doUpdateTotalFundingAmount project_progress', project.project_progress);
+      // console.log('doUpdateTotalFundingAmount totalFundingAmount', totalFundingAmount);
+      // console.log('doUpdateTotalFundingAmount project', project._id);
+      // console.log('doUpdateTotalFundingAmount project_progress', project.project_progress);
       
       project.project_progress = totalFundingAmount;
       await project.save();
     }
     throw createError(400, "更新募資總金額失敗");
-  }
+}
 
 export {
   ProjectCreateInput,
