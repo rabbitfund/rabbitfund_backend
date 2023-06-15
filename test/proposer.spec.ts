@@ -37,7 +37,7 @@ const user_normal = {
 };
 
 const proposer = {
-  proposer_name: "test proposer",
+  proposer_name: "test proposer (proposer.spec.ts)",
   proposer_cover: "cover URL",
   proposer_email: "user_proposer@test.com",
   proposer_phone: "0911222333",
