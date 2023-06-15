@@ -26,6 +26,7 @@ const app = startServer();
 
 // ### setup test data
 let newUser;
+let newProposer;
 
 const user_normal = {
   email: "user_project@test.com",
@@ -36,8 +37,18 @@ const user_normal = {
   user_intro: "intro_" + Date.now(),
 };
 
+const proposer = {
+  proposer_name: "test proposer (project.spec.ts)",
+  proposer_cover: "cover URL",
+  proposer_email: "proposer_project@test.com",
+  proposer_phone: "0912777888",
+  proposer_tax_id: "55556666",
+  proposer_intro: "intro_" + Date.now(),
+  proposer_website: "proposer website"
+};
+
 const project = {
-  project_title: "test project",
+  project_title: "test project (project.spec.ts)",
   project_summary: "test project summary",
   project_content: "test project content",
   project_category: "公益",
@@ -60,6 +71,8 @@ const project = {
 // ### end setup test data ###
 beforeAll(async () => {
   await User.deleteOne({ user_email: user_normal.email });
+  await UserProposer.deleteOne({ proposer_name: proposer.proposer_name });
+  await Project.deleteOne({ project_title: project.project_title });
 
   console.log("######clear up project.spec test data");
   newUser = await User.create({
@@ -70,16 +83,23 @@ beforeAll(async () => {
     login_method: user_normal.login_method,
   });
 
-  // newProject = await Project.create(project);
-
-  // await newProject.save();
+  newProposer = await UserProposer.create({
+    proposer_create: newUser._id.toString(),
+    proposer_name: proposer.proposer_name,
+    proposer_update_date: Date.now(),
+    proposer_cover: proposer.proposer_cover,
+    proposer_email: proposer.proposer_email,
+    proposer_phone: proposer.proposer_phone,
+    proposer_tax_id: proposer.proposer_tax_id,
+    proposer_intro: proposer.proposer_intro,
+    proposer_website: proposer.proposer_website
+  });
 });
 
 afterAll(async () => {
   console.log("######clear up project.spec test data");
-  await User.deleteOne({ _id: newUser._id });
-
-  // await Project.deleteOne({ project_title: project.project_title });
+  await User.deleteOne({ _id: newUser._id.toString() });
+  await UserProposer.deleteOne({ _id: newProposer._id.toString() });
 });
 
 describe("projects", () => {
@@ -119,6 +139,7 @@ describe("projects", () => {
       end_date: project.project_end_date,
       cover: project.project_cover,
       risks: project.project_risks,
+      owner: newProposer._id.toString()
     };
 
     const res = await request(app)
