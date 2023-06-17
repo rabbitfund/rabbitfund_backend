@@ -66,3 +66,20 @@ npx express-generator
 - 新增 badge ([官方文件](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/adding-a-workflow-status-badge))
 
 ## 8. Swagger
+一共有兩個版本，分別是：
+- `swagger-autogen`
+  - 會根據 router 的程式碼，產生對應文件
+  - 優點：
+    - 容易設定 API 分類
+  - 缺點：
+    - 詳細內容要手動新增
+- `postman-to-openapi`
+  - 會根據 postman 輸出的 `.json`，產生對應的文件
+  - 優點：
+    - 詳細內容也會一併產生
+  - 缺點：
+    - postman 內無法設定到的部分就無法處理 (e.g. 分類)
+
+### swagger-autogen
+
+### postman-to-openapi
