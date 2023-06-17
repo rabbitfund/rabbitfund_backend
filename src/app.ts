@@ -3,6 +3,7 @@ import express, { Request, Response, NextFunction } from "express";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path";
 
 import indexRouter from "./routes/index";
 import meRouter from "./routes/me";
@@ -35,6 +36,8 @@ app.use("/userProposer", userproposerRouter);
 const options = {};
 app.use("/docs", swaggerUi.serveFiles(swaggerSpec, options), swaggerUi.setup(swaggerSpec));
 app.use("/docs-postman", swaggerUi.serveFiles(postmanSpec, options), swaggerUi.setup(postmanSpec));
+
+app.use("/coverage", express.static(path.join(__dirname, "/..", "/coverage")));
 
 // catch 404 (NOT FOUND) and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {
