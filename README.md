@@ -79,7 +79,7 @@ npm run init
 ### [Vitest](https://vitest.dev/)
 - [測試檔案位置](/test)
 - 大部分 API 功能都有寫測試，目前先以應當成功執行的測試為主
-- 覆蓋率 (`c8`)
+- 覆蓋率 (`c8`) ([報告連結](https://rabbitfund-backend.onrender.com/coverage/index.html/))
   ![覆蓋率](./coverage.PNG)
 
 ### [Github Actions](https://github.com/features/actions)
