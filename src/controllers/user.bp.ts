@@ -11,11 +11,11 @@ type UserSignUpInput = {
   name: string; //must
   method: number; //must
   oauth_google_id: string;
-  cover: string;
-  phone: string;
-  intro: string;
-  website: string;
-  interests: string[];
+  cover?: string;
+  phone?: string;
+  intro?: string;
+  website?: string;
+  interests?: string[];
 };
 
 const verifyUserSignUpData = (data: UserSignUpInput): boolean => {
@@ -69,6 +69,7 @@ type UserLogInInput = {
   pass: string;
   oauth_google_id: string;
   forget: boolean;
+  name?: string;
 };
 function verifyUserLogInData(data: UserLogInInput): boolean {
   return (
@@ -89,14 +90,19 @@ async function doLogIn(data: UserLogInInput) {
   // validate password
   // generate JWT token
 
-  const user = await User.findOne({ user_email: data.email }).select({
+  let user = await User.findOne({ user_email: data.email }).select({
     _id: 1,
     user_name: 1,
     user_hash_pwd: 1,
     user_roles: 1,
     oauth_google_id: 1,
   });
-  if (!user) {
+  if (!user && data.method === 1) {
+    user = await doSignUp(data as UserSignUpInput) as any
+    if (!user) {
+      throw createError(401, "Google帳號註冊失敗");
+    }
+  } else if (!user) {
     // throw new Error("帳號或密碼錯誤");
     throw createError(401, "帳號或密碼錯誤");
   }
@@ -111,7 +117,7 @@ async function doLogIn(data: UserLogInInput) {
       throw createError(401, "帳號或密碼錯誤");
     }
   }
-
+  
   const jwtToken = jwt.sign(
     {
       id: user._id,
