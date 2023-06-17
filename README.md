@@ -71,6 +71,9 @@ npm run init
 ### [MongoDB (Atlas)](https://www.mongodb.com/cloud/atlas/register)
 
 ### 假資料準備
+- [產生假資料的腳本](./src/db/createData.js)
+- [初始化資料庫腳本](./src/connections/init.ts)
+- [準備假資料的細節](./doc/createData.md)
 1. 使用 chatGPT 產生專案的文案
 2. 撰寫腳本，將文案整理成合適的格式，並加上隨機的數字、日期等
 3. 將建立好的資料上傳到資料庫
@@ -93,7 +96,7 @@ npm run init
 ## API 文件
 ### [Swagger](https://swagger.io/)
 - [文件連結 (版本一)](https://rabbitfund-backend.onrender.com/docs/)
-  > `swaggerAutogen` 產生
+  > `swagger-autogen` 產生
 - [文件連結 (版本二)](https://rabbitfund-backend.onrender.com/docs-postman/)
   > `postman-to-openapi` 產生
 
@@ -106,7 +109,11 @@ npm run init
 
 ### [Uptimerobot](https://uptimerobot.com/)
 - 定時確認後端狀態，並確保後端隨時都可以迅速回應
+  > 為了避免 Uptimerobot 失靈，也有同時使用 Github Actions 定時呼叫後端服務 ([設定檔](/.github/workflows/awake.yml))
 
 ### Discord Webhook
 - Github
+  - 有 push 和 PR 時會收到通知
+  - 方便快速查看 commit
 - Uptimerobot
+  - 可即時收到後端服務處於非活躍狀態的提示
