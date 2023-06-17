@@ -15,3 +15,17 @@ jobs:
       - uses: mikeesto/heroku-awake@1.0.0
         with:
           URL: "https://rabbitfund-backend.onrender.com"
+      - name: Get current time
+        uses: josStorer/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MMDDTHH:MM:SS
+          utcOffset: "+08:00"
+      - name: Use current time
+        env:
+          TIME: "${{ steps.current-time.outputs.time }}"
+          # R_TIME: "${{ steps.current-time.outputs.readableTime }}"
+          F_TIME: "${{ steps.current-time.outputs.formattedTime }}"
+          # YEAR: "${{ steps.current-time.outputs.year }}"
+          # DAY: "${{ steps.current-time.outputs.day }}"
+        run: echo $F_TIME
