@@ -84,7 +84,7 @@ const verifyOrderCreateData = (data: OrderCreateInput): boolean => {
     data.order_total >= 0 &&
     data.order_note.length <= 100 &&
     // !isEmpty(data.payment_method) &&
-    validator.isIn(data.payment_method, ["WEBATM", "CREDIT"]) &&
+    // validator.isIn(data.payment_method, ["WEBATM", "CREDIT"]) &&
     validator.isIn(data.invoice_type, ["紙本發票", "電子載具", "三聯式發票"])
   );
 };
