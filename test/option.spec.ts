@@ -178,6 +178,31 @@ describe("projects", () => {
       .get(`/projects/${projectId}/options`)
       .set("Authorization", `Bearer ${token}`);
     // console.log(res.body);
+    expect(res.status).toEqual(400);  // status = 0
+    expect(res.body.ok).toEqual(false);
+    expect(res.body.msg).toEqual("找不到方案");
+  });
+
+  test("update options (owner)", async () => {
+    const testPayload = {
+      content: option.option_content + " (modified)",
+      status: 2,
+    };
+    const res = await request(app)
+      .patch(`/owner/projects/${projectId}/options/${optionId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send(testPayload);
+    // console.log(res.body);
+    expect(res.status).toEqual(200);  // status = 0
+    expect(res.body.ok).toEqual(true);
+    expect(res.body.msg).toEqual("success");
+  });
+
+  test("get options (normal user)", async () => {
+    const res = await request(app)
+      .get(`/projects/${projectId}/options`)
+      .set("Authorization", `Bearer ${token}`);
+    // console.log(res.body);
     expect(res.status).toEqual(200);
     expect(res.body.ok).toEqual(true);
     expect(res.body.msg).toEqual("success");
