@@ -27,7 +27,7 @@
 這是最容易處理的部分，透過 `faker` 這個套件可以滿足大部分需求，只可惜他對中文的支援度不太夠，因此後續還有搭配其他套件 (e.g. `fake-data-generator-taiwan` 等) 來幫助產生。
 
 ### Object ID
-一開始沒有想要納入這部分，但後面發現資料內容會互相關聯 (也或許有個好的設計)，因此需要再一開始就準備好所有 object ID，並規劃好 object ID 的規律。產生 object ID 只要使用 `mongoose` 本身的函數即可。
+一開始沒有想要納入這部分，但後面發現資料內容會互相關聯 (也或許會有更好的 DB 設計)，因此需要再一開始就準備好所有 object ID，並規劃好 object ID 的規律。產生 object ID 只要使用 `mongoose` 本身的函數即可。
 此外，object ID 也有儲存起來，下次隨機生成也會使用相同 object ID，未來更新資料時，可以只更新部分 collection 就好。
 
 ### 有意義的文本
