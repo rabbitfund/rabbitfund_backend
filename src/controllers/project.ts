@@ -89,6 +89,8 @@ export const putOwnerProject: RequestHandler = async (
     return next(createError(400, "找不到專案"));
   }
 
+  await isUserProposer(userId, projectId);
+
   // TODO: verify data
 
   const project = await doPutOwnerProject(userId, projectId, data);
@@ -106,6 +108,8 @@ export const deleteOwnerProject: RequestHandler = async (
   if (!isValidObjectId(projectId)) {
     return next(createError(400, "找不到專案"));
   }
+
+  await isUserProposer(userId, projectId);
 
   const result = await doDeleteOwnerProject(userId, projectId);
   return handleSuccess(res, result);
