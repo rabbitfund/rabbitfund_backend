@@ -267,12 +267,16 @@ async function doGetProject(projectId: string) {
       proposer_project: 1,
       proposer_tax_id: 1
     })
-    .populate("option", {
-      _id: 1,
-      option_name: 1,
-      option_price: 1,
-      option_content: 1,
-      option_cover: 1
+    .populate({
+      path: "option",
+      match: { option_status: { $gte: 2 } }, // 只關聯 option_status >= 2 的 option
+      select: {
+        _id: 1,
+        option_name: 1,
+        option_price: 1,
+        option_content: 1,
+        option_cover: 1
+      }
     })
     .populate("qas", {
       _id: 1,

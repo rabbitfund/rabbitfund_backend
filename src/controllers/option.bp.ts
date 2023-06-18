@@ -85,7 +85,8 @@ async function doGetProjectOptions(projectId: string) {
 
   const options = await Option.find({
     option_parent: projectId,
-    delete: false
+    delete: false,
+    option_status: { $gte: 2 }
   }).exec();
   
   if (!options || options.length === 0) {
