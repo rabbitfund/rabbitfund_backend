@@ -164,7 +164,7 @@ function verifyUserUpdateData(data: UserUpdateInput): boolean {
     (data.cover ? validator.isURL(data.cover) : true) &&
     (data.phone ? validator.isMobilePhone(data.phone, "zh-TW") : true) &&
     (data.intro
-      ? validator.isLength(data.intro, { min: 10, max: 100 })
+      ? validator.isLength(data.intro, { min: 1, max: 100 })
       : true) &&
     (data.website ? validator.isURL(data.website) : true)
   );
