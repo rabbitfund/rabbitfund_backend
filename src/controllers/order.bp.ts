@@ -2,6 +2,7 @@ import validator from "validator";
 import createError from "http-errors";
 import * as crypto from 'crypto';
 import { isValidObjectId } from "../utils/objectIdValidator";
+import { dateOfUtc8 } from '../utils/timeConvert';
 import { User } from "../model/userModels";
 import Project from "../model/projectModels";
 import Option from "../model/optionModels";
@@ -18,6 +19,7 @@ type OrderCreateInput = {
   order_extra: number;
   order_total: number;
   order_note: string;
+  order_create_date: Date;
   payment_method: string;
   invoice_type: string;
   invoice_carrier: string;
@@ -140,6 +142,7 @@ async function doOrderCreate(data: OrderCreateInput) {
     order_total: data.order_total,
     order_note: data.order_note,
     order_info: orderInfo._id,
+    order_create_date: dateOfUtc8(),
   });
 
   return order;
@@ -295,7 +298,7 @@ async function doOrderNotify(orderNotify: any) {
       {
         $set: {
           order_status: 2, // 更新訂單狀態為 2-已完成
-          order_final_date: new Date(),
+          order_final_date: dateOfUtc8(),
           order_shipping_status: 3 // 3-已完成
         }
       }
@@ -314,7 +317,7 @@ async function doOrderNotify(orderNotify: any) {
       {
         $set: {
           invoice_number: generateInvoiceNumber(), // 隨機產生發票號碼
-          invoice_date: new Date(),
+          invoice_date: dateOfUtc8(),
           payment_status: 2, // 更新付款狀態為 2-付款完成 / THINK: 貌似有收到 notify 就一定算成功交易？
           payment_method: info.Result.PaymentType,
           newebpay_tradeNo: info.Result.TradeNo,
