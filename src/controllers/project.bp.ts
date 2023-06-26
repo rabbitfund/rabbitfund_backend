@@ -1,3 +1,4 @@
+import { dateOfUtc8 } from '../utils/timeConvert';
 import Order from "../model/orderModels";
 import Project from "../model/projectModels";
 import UserProposer from "../model/userProposerModels";
@@ -87,8 +88,8 @@ async function doPostOwnerProject(userId: string, data: ProjectCreateInput) {
     project_status: 0,
     project_start_date: data.start_date || "",
     project_end_date: data.end_date || "",
-    project_create_date: Date.now(),
-    project_update_date: Date.now(),
+    project_create_date: dateOfUtc8(),
+    project_update_date: dateOfUtc8(),
     project_update_final_member: userId,
     project_cover: data.cover,
     project_video: data.video || "",
@@ -144,8 +145,8 @@ async function doPutOwnerProject(
       project_status: data.status,
       project_start_date: data.start_date,
       project_end_date: data.end_date,
-      // project_create_date: Date.now(),
-      project_update_date: Date.now(),
+      // project_create_date: dateOfUtc8(),
+      project_update_date: dateOfUtc8(),
       project_update_final_member: userId,
       project_cover: data.cover,
       project_video: data.video,

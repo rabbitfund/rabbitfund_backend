@@ -1,3 +1,4 @@
+import { dateOfUtc8 } from '../utils/timeConvert';
 import Project from "../model/projectModels";
 import Option from "../model/optionModels";
 import createError from "http-errors";
@@ -68,8 +69,8 @@ async function doPostOwnerProjectOptions(projectId: string, data: OptionCreateIn
     option_status: 0,
     option_start_date: data.start_date || "",
     option_end_date: data.end_date || "",
-    option_create_date: Date.now(),
-    option_update_date: Date.now(),
+    option_create_date: dateOfUtc8(),
+    option_update_date: dateOfUtc8(),
     delete: false,
     delete_member: null,
   })
@@ -158,7 +159,7 @@ async function doPatchProjectOptions(projectId: string, optionId: string, data: 
   //   option_start_date: data.start_date,
   //   option_end_date: data.end_date,
   //   // option_create_date: '',
-  //   option_update_date: Date.now(),
+  //   option_update_date: dateOfUtc8(),
   //   // option_update_date: data.update_date,
   //   // delete: data.delete,
   //   // delete_member: data.delete_member,
@@ -174,7 +175,7 @@ async function doPatchProjectOptions(projectId: string, optionId: string, data: 
     option_start_date: data.start_date,
     option_end_date: data.end_date,
     // option_create_date: '',
-    option_update_date: Date.now(),
+    option_update_date: dateOfUtc8(),
     // option_update_date: data.update_date,
     // delete: data.delete,
     // delete_member: data.delete_member,
