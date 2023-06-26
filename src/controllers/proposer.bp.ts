@@ -1,3 +1,4 @@
+import { dateOfUtc8 } from '../utils/timeConvert';
 import UserProposer from "../model/userProposerModels";
 import createError from "http-errors";
 
@@ -58,7 +59,7 @@ async function doPostProposer(userId: string, data: ProposerCreateInput) {
   const proposer = await UserProposer.create({
     proposer_create: userId,
     proposer_name: data.proposer_name,
-    proposer_update_date: Date.now(),
+    proposer_update_date: dateOfUtc8(),
     proposer_cover: data.proposer_cover,
     proposer_email: data.proposer_email,
     proposer_phone: data.proposer_phone,
@@ -80,7 +81,7 @@ async function doPutProposer(
     { _id: proposerId, proposer_create: userId },
     {
       proposer_name: data.proposer_name,
-      proposer_update_date: Date.now(),
+      proposer_update_date: dateOfUtc8(),
       proposer_cover: data.proposer_cover,
       proposer_email: data.proposer_email,
       proposer_phone: data.proposer_phone,
