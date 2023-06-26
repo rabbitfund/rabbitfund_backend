@@ -161,7 +161,7 @@ async function doGetMeOrders(userId: string, page: string) {
   
   const order = await Order.find({ user: userId })
   if (!order || order.length === 0) {
-    throw createError(400, "找不到贊助紀錄");
+    return {data:[]}
   }
 
   const orders = await Order.find({ user: userId })
