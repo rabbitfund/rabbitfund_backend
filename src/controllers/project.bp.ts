@@ -329,6 +329,13 @@ async function doGetProjectSupporters(projectId: string) {
       payment_price: 1,
       payment_method: 1,
       payment_status: 1,
+      invoice_type: 1,
+      invoice_carrier: 1,
+      invoice_number: 1,
+      invoice_date: 1,
+      newebpay_timeStamp: 1, 
+      newebpay_payBankCode: 1,
+      newebpay_payTime: 1,
     });
 
   return orders || [];
