@@ -10,7 +10,8 @@
     "swagger": "npx ts-node ./src/swagger.ts",
     "postman": "npx p2o ./doc/倍而兔募資平台.postman_collection.json -f ./doc/postman.json -o ./doc/options.json",
     "create": "node src/db/createData.js",
-    "init": "npx ts-node ./src/connections/init.ts"
+    "init": "npx ts-node ./src/connections/init.ts",
+    "update": "npx ts-node ./src/connections/update.ts"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
