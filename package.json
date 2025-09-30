@@ -2,6 +2,9 @@
   "name": "rabbitfund-backend",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "concurrently \"npx tsc -w\" \"nodemon ./bin/www\"",
     "build": "npx tsc",
