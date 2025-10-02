@@ -1,0 +1,55 @@
+# Exported from Render on 2025-10-02T07:52:04Z
+version: "1"
+services:
+- type: web
+  name: rabbitfund-backend
+  runtime: node
+  repo: https://github.com/rabbitfund/rabbitfund_backend
+  plan: free
+  envVars:
+  - key: Newebpay_redirect
+    sync: false
+  - key: FIREBASE_CLIENT_EMAIL
+    sync: false
+  - key: NODE_ENV
+    sync: false
+  - key: Newebpay_Version
+    sync: false
+  - key: Newebpay_MerchantID
+    sync: false
+  - key: Newebpay_HashKey
+    sync: false
+  - key: FIREBASE_CLIENT_X509_CERT_URL
+    sync: false
+  - key: FIREBASE_AUTH_PROVIDER_X509_CERT_URL
+    sync: false
+  - key: FIREBASE_TOKEN_URI
+    sync: false
+  - key: FIREBASE_AUTH_URI
+    sync: false
+  - key: FIREBASE_CLIENT_ID
+    sync: false
+  - key: FIREBASE_PRIVATE_KEY
+    sync: false
+  - key: FIREBASE_PRIVATE_KEY_ID
+    sync: false
+  - key: FIREBASE_PROJECT_ID
+    sync: false
+  - key: FIREBASE_TYPE
+    sync: false
+  - key: Newebpay_HashIV
+    sync: false
+  - key: MONGODB_USER
+    sync: false
+  - key: MONGODB_PASSWORD
+    sync: false
+  - key: JWT_SECRET
+    sync: false
+  - key: MONGODB_CONNECT_STRING
+    sync: false
+  - key: MONGODB_DATABASE
+    sync: false
+  region: singapore
+  buildCommand: npm install; npx tsc
+  startCommand: node ./bin/www
+  autoDeployTrigger: commit
