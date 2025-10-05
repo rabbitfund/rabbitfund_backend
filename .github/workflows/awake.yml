@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: mikeesto/heroku-awake@1.0.0
         with:
-          URL: "https://rabbitfund-backend.onrender.com"
+          URL: "https://rabbit-newebpay.onrender.com"
       - name: Get current time
         uses: josStorer/get-current-time@v2
         id: current-time
